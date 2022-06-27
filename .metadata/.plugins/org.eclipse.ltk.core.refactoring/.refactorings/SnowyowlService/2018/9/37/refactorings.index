@@ -1,0 +1,6 @@
+1536854428347	Encapsulate field '_roundId'
+1536854515246	Encapsulate field '_roundSequence'
+1536867367490	Encapsulate field '_remainingSavePlayerCount'
+1536876187576	Rename local variable 'scaledRounds'
+1536876659450	Rename local variable 'rounds'
+1536878792714	Rename local variable 'lastClientFrom'

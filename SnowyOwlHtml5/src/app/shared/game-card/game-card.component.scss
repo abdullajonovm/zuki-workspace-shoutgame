@@ -1,0 +1,120 @@
+@import "vars";
+
+.card {
+    width: 100%;
+    border-radius: 0;
+    margin: 0 0 5px;
+    padding: 0;
+}
+
+.content {
+    padding: 15px;
+}
+
+.header {
+    padding: 10px;
+    background: #F5F4F6;
+    position: relative;
+    img {
+        width: 25px;
+        vertical-align: middle;
+    }
+}
+
+.gameName {
+    padding-left: 7px;
+    vertical-align: middle;
+}
+
+.purse {
+    color: #FAB32F;
+    float: right;
+    vertical-align: middle;
+    line-height: 25px;
+}
+
+.gameImg {
+    width: 100%;
+    height: 180px;
+    background-size: cover;
+    background-position: center;
+}
+
+.description {
+    color: #5E5E5E;
+    font-size: 14px;
+}
+
+.categories {
+    text-align: left;
+    .small {
+        margin-right: 5px;
+    }
+}
+
+.small {
+    color: #969696;
+    font-size: 13px;
+}
+
+div.small {
+    margin-bottom: 3px;
+}
+
+.costToJoin {
+    display: inline-block;
+}
+
+.payout {
+    text-align: center;
+    font-size: 16px;
+    color: #FAB32F;
+}
+
+.buttons {
+    width: 260px;
+    display: flex;
+    margin: 0 auto;
+    white-space: nowrap;
+    button {
+        margin-top: 10px;
+    }
+}
+
+.playNow {
+    flex: 2;
+    margin-right: 10px;
+}
+
+.moreInfo {
+    flex: 1;
+}
+
+table {
+    clear: both;
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.top {
+    font-size: 15px;
+    text-align: left;
+}
+
+td {
+    padding: 5px;
+    text-align: center;
+    border-top: 1px solid;
+    border-color: mix($foregroundColor, $backgroundColor, 15%);;
+    &:nth-child(2) {
+        border-left: 1px solid mix($foregroundColor, $backgroundColor, 15%);;;
+        border-right: 1px solid mix($foregroundColor, $backgroundColor, 15%);;;
+    }
+}
+
+@include desktop {
+    .card {
+        border-radius: 5px;
+    }
+}

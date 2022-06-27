@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tv.shout.snowyowl.dao.IXmlDaoMapper">
+
+	<insert id="addBotsToSystem" parameterType="java.util.List">
+		INSERT IGNORE INTO snowyowl.bot_player (subscriber_id) VALUES
+		<foreach collection="botSubscriberIds" item="botSubscriberId" index="index" open="(" separator="),(" close=")">
+			#{botSubscriberId}
+		</foreach>
+	</insert>
+	
+	<update id="addBotsToGame" parameterType="java.util.List">
+		INSERT INTO snowyowl.bot_player (subscriber_id, busy_flag, game_id, last_used_date) VALUES 
+		<foreach collection="botSubscriberIds" item="botSubscriberId" index="index" open="(" separator="),(" close=")">
+			#{botSubscriberId}, 1, #{gameId}, NOW()
+		</foreach>
+		ON DUPLICATE KEY UPDATE busy_flag = 1, game_id = #{gameId}, last_used_date = NOW()
+	</update>
+</mapper>

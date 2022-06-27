@@ -1,0 +1,60 @@
+:host {
+    position: relative;
+    display: block;
+}
+form {
+    height: 100%;
+}
+
+.topInputs {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -5px;
+    vx-autocomplete {
+        flex-grow: 1;
+    }
+}
+
+.topInputs, .slideIn {
+    max-width: 800px;
+}
+
+.poolFieldsWrapper {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+app-image-upload {
+    margin-top: 15px;
+}
+
+input[type="time"] {
+    min-width: 50px;
+}
+
+.gameName, .gameDescription {
+    width: 100%;
+}
+
+.guideUrl {
+    width: 100%;
+}
+
+
+.loading {
+    text-align: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(100% + 30px);
+    height: calc(100% + 30px);
+    background: #0000004d;
+    z-index: 1000;
+    margin: -15px;
+
+    vx-spinner {
+        margin: 0 auto;
+        width: 75px;
+        height: 75px;
+    }
+}

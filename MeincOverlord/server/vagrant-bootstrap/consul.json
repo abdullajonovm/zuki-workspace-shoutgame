@@ -1,0 +1,8 @@
+{
+    "client_addr": "0.0.0.0",
+    "server": true,
+    "bootstrap_expect": ${CLUSTER_HOST_COUNT},
+    "retry_join": [${CONSUL_JOIN_STRING}],
+    "advertise_addr": "${CLUSTER_HOST_PRIVATE_IP}",
+    "log_level": "info"
+} 

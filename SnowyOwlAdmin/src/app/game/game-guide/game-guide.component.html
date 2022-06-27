@@ -1,0 +1,48 @@
+<vx-radio-group [(ngModel)]="guideType" [disabled]="!editable" name="guideType">
+    <vx-radio-button value="none">No Guide Url</vx-radio-button>
+    <vx-radio-button value="url">
+        Guide Url Link
+    </vx-radio-button>
+    <vx-radio-button value="multiple">
+        Multiple Guide Urls
+    </vx-radio-button>
+    <vx-radio-button value="html">
+        Guide HTML
+    </vx-radio-button>
+</vx-radio-group>
+
+<div class="inputs pTop15" *ngIf="guideType === 'url'">
+    <vx-form-field class="guideUrl">
+        <input vxFormField label="Guide Url" name="Guide Url" [(ngModel)]="game.guideUrl"
+               [disabled]="!editable" required>
+    </vx-form-field>
+</div>
+
+<vx-tabs *ngIf="guideType === 'html'" class="mTop15">
+    <vx-tab *ngFor="let code of game.allowableLanguageCodes;" [label]="code | languageName">
+        <vx-form-field class="guideHTML">
+                                <textarea vxFormField label="Guide HTML"
+                                          name="Guide HTML {{code | languageName}}"
+                                          [(ngModel)]="game.guideHtmls[code]" [disabled]="!editable" required>
+                                </textarea>
+        </vx-form-field>
+    </vx-tab>
+</vx-tabs>
+
+<div *ngIf="guideType === 'multiple'" class="mTop15">
+    <button type="button" vx-button (click)="guideUrls.push({text: {}, url: {}})">Add Guide Url</button>
+
+    <vx-tabs class="mTop15">
+        <vx-tab *ngFor="let code of game.allowableLanguageCodes;" [label]="code | languageName">
+            <div *ngFor="let guideUrl of guideUrls; let i = index" class="guideUrl inputs">
+                <vx-form-field>
+                    <input vxFormField label="Text" [(ngModel)]="guideUrl.text[code]" name="{{code | languageName}} Guide Text #{{i + 1}}" required>
+                </vx-form-field>
+                <vx-form-field>
+                    <input vxFormField pattern="https?://.+" label="Url" [(ngModel)]="guideUrl.url[code]"  name="{{code | languageName}} Guide Url #{{i + 1}}" required>
+                </vx-form-field>
+                <button type="button" vx-button (click)="removeGuideUrl(guideUrl)">Remove</button>
+            </div>
+        </vx-tab>
+    </vx-tabs>
+</div>

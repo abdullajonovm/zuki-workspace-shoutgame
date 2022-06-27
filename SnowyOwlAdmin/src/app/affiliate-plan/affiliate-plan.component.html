@@ -1,0 +1,80 @@
+<div class="loader" *ngIf="loading">
+    <vx-spinner></vx-spinner>
+</div>
+
+<div class="sliderTitle">Affiliate Direct % Net</div>
+<div class="slider">
+    <vx-slider [min]="0" [max]="100" [step]="1" [(ngModel)]="affiliatePlan.affiliateDirectPayoutPct"></vx-slider>
+    <span>{{affiliatePlan.affiliateDirectPayoutPct}}%</span>
+</div>
+
+<div class="sliderTitle">Affiliate Secondary % Net</div>
+<div class="slider">
+    <vx-slider [min]="0" [max]="100" [step]="1" [(ngModel)]="affiliatePlan.affiliateSecondaryPayoutPct"></vx-slider>
+    <span>{{affiliatePlan.affiliateSecondaryPayoutPct}}%</span>
+</div>
+
+<div class="sliderTitle">Affiliate Tertiary % Net</div>
+<div class="slider">
+    <vx-slider [min]="0" [max]="100" [step]="1" [(ngModel)]="affiliatePlan.affiliateTertiaryPayoutPct"></vx-slider>
+    <span>{{affiliatePlan.affiliateTertiaryPayoutPct}}%</span>
+</div>
+
+<div class="sliderTitle">Player First Game % Net</div>
+<div class="slider">
+    <vx-slider [min]="0" [max]="100" [step]="1" [(ngModel)]="affiliatePlan.playerInitialPayoutPct"></vx-slider>
+    <span>{{affiliatePlan.playerInitialPayoutPct}}%</span>
+</div>
+
+<button vx-button (click)="savePlan()" [disabled]="isSame">Save Affiliate Plan</button>
+
+<div class="mTop15">
+    <button vx-button routerLink="/affiliate-plan/tree">View Affiliate Tree</button>
+</div>
+
+<ng-template #dialogTemplate>
+    <h2 vxDialogTitle>Confirm</h2>
+    <div vxDialogContent>
+        This <b>immediately</b> affects all affiliates and subscribers.
+        <div>Are you sure you want to do this?</div>
+
+        <div class="mTop15">
+            <b>Affiliate Direct: </b> {{affiliatePlan.affiliateDirectPayoutPct}}%
+        </div>
+        <div class="mTop15">
+            <b>Affiliate Secondary: </b> {{affiliatePlan.affiliateSecondaryPayoutPct}}%
+        </div>
+        <div class="mTop15">
+            <b>Affiliate Tertiary: </b> {{affiliatePlan.affiliateTertiaryPayoutPct}}%
+        </div>
+        <div class="mTop15">
+            <b>Player First Game: </b> {{affiliatePlan.playerInitialPayoutPct}}%
+        </div>
+    </div>
+    <div vxDialogActions="">
+        <button vx-button (click)="confirm()">Confirm</button>
+        <button vx-button (click)="cancel()">Cancel</button>
+    </div>
+</ng-template>
+
+
+<ng-template #errorTemplate>
+    <h2 vxDialogTitle>Error</h2>
+    <div vxDialogContent>
+        The <b>Affiliate {{affiliatePlan.affiliateSecondaryPayoutPct > affiliatePlan.affiliateTertiaryPayoutPct ?
+        'Secondary' : 'Tertiary'}} % Net</b> and the <b>Player First Game % Net</b> cannot add to more than 100%.
+
+        <div class="mTop15" *ngIf="affiliatePlan.affiliateSecondaryPayoutPct > affiliatePlan.affiliateTertiaryPayoutPct">
+            <b>Currently they add to: </b> {{affiliatePlan.affiliateSecondaryPayoutPct +
+            affiliatePlan.playerInitialPayoutPct}}%
+        </div>
+
+        <div class="mTop15" *ngIf="affiliatePlan.affiliateSecondaryPayoutPct < affiliatePlan.affiliateTertiaryPayoutPct">
+            <b>Currently they add to: </b> {{affiliatePlan.affiliateTertiaryPayoutPct +
+            affiliatePlan.playerInitialPayoutPct}}%
+        </div>
+    </div>
+    <div vxDialogActions="">
+        <button vx-button (click)="cancel()">Dismiss</button>
+    </div>
+</ng-template>

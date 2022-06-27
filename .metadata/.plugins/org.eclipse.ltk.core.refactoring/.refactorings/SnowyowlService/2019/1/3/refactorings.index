@@ -1,0 +1,3 @@
+1547487552396	Rename method 'gameAddSponsorPlayers2Dao'
+1547487557131	Rename method 'gameAddSponsorPlayersDao'
+1547845818860	Encapsulate field '_giveSponsorPlayerWinningsBackToSponsor'

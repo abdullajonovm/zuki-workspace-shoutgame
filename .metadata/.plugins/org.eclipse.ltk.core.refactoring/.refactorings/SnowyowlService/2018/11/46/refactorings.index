@@ -1,0 +1,7 @@
+1542043979216	Delete element
+1542044840217	Rename method 'variableRoundMatchQueueEngine'
+1542044880748	Rename method 'variableRoundMatchManagementEngine'
+1542044892616	Rename method 'variableRoundRoundManagementEngine'
+1542044903771	Rename method 'variableroundPayoutManager'
+1542221781953	Encapsulate field '_affiliateId'
+1542394128834	Rename local variable 'percentToGiveToMintParent'

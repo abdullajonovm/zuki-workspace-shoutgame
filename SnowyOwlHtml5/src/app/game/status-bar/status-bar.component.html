@@ -1,0 +1,10 @@
+<div class="bar">
+
+</div>
+<div class="line payout" [style.bottom.%]="100 - payoutPositionPct">
+    <span>Top {{numPayouts}} players win ${{payoutAmount | number:'1.0-2'}}</span>
+</div>
+<div class="line current" [style.bottom.%]="100 - currentPositionPct">
+    <span *ngIf="currentPlayers !== maxPlayers">Current players: {{currentPlayers}}</span>
+    <span *ngIf="currentPlayers === maxPlayers">Total players: {{currentPlayers}}</span>
+</div>

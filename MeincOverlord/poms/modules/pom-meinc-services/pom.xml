@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>meinc</groupId>
+    <artifactId>MeincOverlord-pom-meinc-services</artifactId>
+    <version>3.0</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <!-- ogsi bundles -->
+        <module>../../../../OsgiCommonsCollections</module>
+        <module>../../../../OsgiCommonsPool</module>
+        <!-- <module>../../../../OsgiCommonsDbcp</module> -->
+        <module>../../../../OsgiBoneCp</module>
+        <module>../../../../MrSoaDistributedData</module>
+        <module>../../../../OsgiSpringFramework</module>
+        <module>../../../../OsgiIbatis</module>
+        <module>../../../../OsgiIbatis-dep</module>
+        <module>../../../../OsgiVelocity</module>
+        <!--<module>../../../../OsgiDynamoDb</module>-->
+
+        <!-- foundation -->
+        <module>../../../../HttpConnectorService</module>
+        <module>../../../../EncryptionService</module>
+        <module>../../../../FacebookService</module>
+        <module>../../../../PostOfficeService</module>
+        <module>../../../../IdentityService</module>
+        <!--module>../../../../AuthorizationService</module-->
+        <!--module>../../../../ApplicationClientService</module-->
+        <!--<module>../../../../AccountService</module>-->
+        <!--<module>../../../../TeamDispatcherService</module>-->
+        <!--<module>../../../../HostedTeamService</module>-->
+        <module>../../../../HttpUtils</module>
+        <!--<module>../../../../../Mint2Service</module>-->
+        <!--<module>../../../../GameplayLoadTest</module>-->
+
+        <!-- shout -->
+        <module>../../../../GameplayDomain</module>
+        <!--<module>../../../../AccessControlService</module>-->
+        <module>../../../../WebDataStoreService</module>
+        <module>../../../../TriggerService</module>
+        <!--<module>../../../../AnalyticsService</module>-->
+        <module>../../../../PushService</module>
+        <!-- <module>../../../../MockPushService</module> -->
+        <!--<module>../../../../TxtwireService</module>-->
+        <!--<module>../../../../MockTxtwireService</module>-->
+        <!--<module>../../../../DealService</module>-->
+        <!--<module>../../../../LikeService</module>-->
+        <!--<module>../../../../CommunityService</module>-->
+        <module>../../../../NotificationService</module>
+        <module>../../../../StoreService</module>
+        <!--<module>../../../../VirtualWalletService</module>-->
+        <module>../../../../WebCollectorService</module>
+        <module>../../../../MrSoaSupport</module>
+        <module>../../../../SyncService</module>
+        <module>../../../../UrlShortenerService</module>
+        <!--<module>../../../../PowerupService</module>-->
+        <!--<module>../../../../GameplayMediaService</module>-->
+        <!--<module>../../../../GamePlayService</module>-->
+        <!--<module>../../../../ShoutContestAwardService</module>-->
+        <module>../../../../ShoutContestService</module>
+        <!--<module>../../../../JettyService</module>-->
+        <!--<module>../../../../ToolsService</module>-->
+        <!--<module>../../../../DailyMillionaireService</module>-->
+        <module>../../../../SnowyowlService</module>
+
+        <!-- 
+        <module>../../../../AggregationTeamService</module>
+
+        <module>../../../../PhoenixService</module>
+        <module>../../../../TranscodeService</module>
+        <module>../../../../ImageManipulationService</module>
+
+        <module>../../../../HttpUtils</module>
+
+        <module>../../../../HttpConnector</module>                   
+        -->
+
+        <!-- <module>../../../../MeIncService</module> -->
+        <!-- <module>../../../../MintService</module> -->
+        <!--  <module>../../../../AdService</module> -->
+        <!-- <module>../../../../CommunityIntegrationService</module> -->
+        <!-- <module>../../../../FacebookCommunityService</module> -->
+        <!-- <module>../../../../CouponService</module> -->
+        <!-- <module>../../../../MyCoApplication</module> -->
+        <!-- <module>../../../../Red5Service</module> -->
+        <!-- <module>../../../../Shout2Application</module> -->
+        <!--module>../../../../SCOTeamService</module-->
+    </modules>
+</project>

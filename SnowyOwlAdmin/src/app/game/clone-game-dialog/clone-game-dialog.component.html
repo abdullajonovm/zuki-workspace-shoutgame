@@ -1,0 +1,31 @@
+<form #form="ngForm">
+    <h1 vxDialogTitle="">
+        Clone Game
+    </h1>
+    <div vxDialogContent="">
+        <vx-form-field>
+            <input vxFormField label="Expected Start Date" [(appDate)]="startDate" ngModel name="Expected Start Date" [appMask]="dateMask">
+        </vx-form-field>
+        <vx-form-field>
+            <input vxFormField label="Pool Start Date" [(appDate)]="poolDate" ngModel name="Pool Start Date" [appMask]="dateMask">
+        </vx-form-field>
+
+        <vx-form-field>
+            <input vxFormField label="Tournament Start Date" [(appDate)]="bracketDate" ngModel name="Tournament Start Date" [appMask]="dateMask">
+        </vx-form-field>
+
+        <vx-tabs>
+            <vx-tab *ngFor="let code of game.allowableLanguageCodes;" [label]="code">
+                <vx-form-field>
+                    <input vxFormField [(ngModel)]="gameNames[code]" label="Game Name" [name]="'gameName_' + code"
+                           required>
+                </vx-form-field>
+            </vx-tab>
+        </vx-tabs>
+    </div>
+    <div vxDialogActions="">
+        <button vx-button (click)="advanced()">Advanced</button>
+        <button type="submit" vx-button [disabled]="form.invalid" (click)="submit()">Submit</button>
+        <button vx-button (click)="dialog.close()">Cancel</button>
+    </div>
+</form>

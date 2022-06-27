@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns:tx="http://www.springframework.org/schema/tx"
+     xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                         classpath:/org/springframework/beans/factory/xml/spring-beans-3.0.xsd
+                         http://www.springframework.org/schema/tx 
+                         classpath:/org/springframework/transaction/config/spring-tx-3.0.xsd">
+
+    <!-- ********************************************************************** -->
+    <!-- * JDBC SETTINGS ****************************************************** -->
+    <!-- ********************************************************************** -->
+
+    <!-- Configurer that replaces ${...} placeholders with values from properties 
+        files -->
+    <bean id="propertyConfigurer"
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:/pushservice@jdbc.properties</value>
+            </list>
+        </property>
+        <property name="properties">
+            <bean class="com.meinc.launcher.serverprops.ServerPropertyHolder"
+                factory-method="getProps" />
+        </property>
+    </bean>
+
+  <bean id="dataSource" class="com.meinc.bonecp.BoneCpDataSource" factory-method="getInstance" />
+
+    <!-- Transaction manager for a single JDBC DataSource -->
+    <bean id="transactionManager"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <!-- enable the configuration of transactional behavior based on annotations -->
+    <tx:annotation-driven transaction-manager="transactionManager" />
+
+    <!-- SqlMap setup for iBATIS Database Layer -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="configLocation" value="classpath:/pushservice@sql-map-config.xml"/>
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    
+    <bean class="org.mybatis.spring.SqlSessionTemplate" id="sqlSessionTemplate">
+        <constructor-arg ref="sqlSessionFactory" />
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperFactoryBean" id="pushDaoMapper">
+        <property name="sqlSessionTemplate" ref="sqlSessionTemplate" />
+        <property name="mapperInterface" value="com.meinc.push.dao.IPushServiceDaoMapper" />
+    </bean>
+
+    <bean id="dao" class="com.meinc.push.dao.PushServiceDaoSqlMap">
+        <property name="mapper" ref="pushDaoMapper" />
+    </bean>
+        
+    <!-- <bean id="triggerService" class="clientproxy.triggerservice.TriggerServiceClientProxy" /> -->
+
+    <bean id="pushService" class="com.meinc.push.service.PushService">
+        <property name="dao" ref="dao" />
+        <property name="sandboxNumConnections"><value>1</value></property>
+        <property name="prodNumConnections"><value>5</value></property>
+        <property name="configType" value="${push.configType}" />
+        <property name="inactiveCheckInterval" value="86400000" />
+        <property name="fakeToken" value="2222222222229033665e853a3dc8bc4c5e78f7a6cf8d55910df230567037dcc4" />
+        <property name="transactionManager" ref="transactionManager" />
+        <!-- <property name="triggerService" ref="triggerService" /> -->
+    </bean>
+    
+</beans>

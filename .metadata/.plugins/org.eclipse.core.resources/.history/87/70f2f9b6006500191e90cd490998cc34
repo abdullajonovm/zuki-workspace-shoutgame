@@ -1,0 +1,242 @@
+package com.shout.rpmextractor;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Paths;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+public class RpmExtractor
+implements FileHandler
+{
+    private static final String FILENAME_ALREADY_PROCESSED_FILES_PREFIX = "AlreadyProcessedRpmFiles_";
+    private static final String CONFIG_DIR = "src/main/resources";
+
+    File getAlreadyProcessedFilesDataFile(String sourceDir)
+    {
+        String filename = FILENAME_ALREADY_PROCESSED_FILES_PREFIX + sourceDir + ".dat";
+        File alreadyProcessedFilesDataFile = new File(CONFIG_DIR, filename);
+        return alreadyProcessedFilesDataFile;
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<String> getAlreadyProcessedRpmFiles(String sourceDir)
+    {
+        //get the list of RPM files that have already been processed
+        List<String> alreadyProcessedRpmFiles = new ArrayList<>();
+        File alreadyProcessedFilesDataFile = getAlreadyProcessedFilesDataFile(sourceDir);
+        if (alreadyProcessedFilesDataFile.exists()) {
+            try {
+                alreadyProcessedRpmFiles = (ArrayList<String>) readFromFile(alreadyProcessedFilesDataFile);
+            } catch (ClassNotFoundException | IOException e) {
+                throw new IllegalStateException("unable to read file: " + alreadyProcessedFilesDataFile.getName(), e);
+            }
+        }
+
+        return alreadyProcessedRpmFiles;
+    }
+
+    private List<File> getUnprocessedRpmFiles(String sourceDir, List<String> alreadyProcessedRpmFiles)
+    {
+        //get the list of RPM files
+        List<File> rpmFiles;
+        try {
+            rpmFiles = Files.list(Paths.get(sourceDir))
+                .filter(path -> path.toString().endsWith(".rpm"))
+                .map(path -> {
+                    try {
+                        return path.toRealPath(LinkOption.NOFOLLOW_LINKS).toFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                })
+                .collect(Collectors.toList());
+        } catch (IOException e) {
+            throw new IllegalStateException("unable to read rpm file list", e);
+        }
+
+        //filter out files that have already been processed
+        List<File> unprocessedRpmFiles = new ArrayList<>();
+        rpmFiles.forEach(rpmFile -> {
+            if (!alreadyProcessedRpmFiles.contains(rpmFile.getAbsolutePath())) {
+                unprocessedRpmFiles.add(rpmFile);
+            }
+        });
+
+        return unprocessedRpmFiles;
+        //return unprocessedRpmFiles.subList(0, 1); //just return 1 for initial testing
+    }
+
+    public static String getConsoleInput(String message)
+    {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        System.out.print(message);
+        try {
+            return br.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void processRpmFile(String sourceDir, String outputDir, File rpmFile, List<String> alreadyProcessedRpmFiles)
+    {
+        System.out.println("about to extract: " + rpmFile.getName());
+
+        //don't extract, but get all of the file extensions in the rpm file to see what needs to be extracted
+        Set<String> fileExtensions = new HashSet<>();
+        fileExtensions.addAll(executeCommand(new String[] {"tar", "-tf", rpmFile.getAbsolutePath()}, true));
+        System.out.println(MessageFormat.format("\narchive contains files of the following types: {0}", fileExtensions));
+
+        //ask for user confirmation before proceeding
+        String userInput = getConsoleInput("> proceed? ");
+        if (!"y".equals(userInput)) {
+            return;
+        }
+
+        //untar the rpm file, but only extract files of the following types: *.bz2, *.tar.gz
+        executeCommand(new String[] {"tar", "-xvzf", rpmFile.getAbsolutePath(), "-C", outputDir, "*.bz2"}, false);
+        executeCommand(new String[] {"tar", "-xvzf", rpmFile.getAbsolutePath(), "-C", outputDir, "*.tar.gz"}, false);
+
+        //delete any "." files
+        List<File> dotFiles;
+        try {
+            dotFiles = Files.list(Paths.get(outputDir))
+                .filter(path -> path.getFileName().toString().startsWith("."))
+                .map(path -> {
+                    try {
+                        return path.toRealPath(LinkOption.NOFOLLOW_LINKS).toFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                })
+                .collect(Collectors.toList());
+        } catch (IOException e) {
+            throw new IllegalStateException("unable to read dot file list", e);
+        }
+
+        dotFiles.forEach(f -> {
+            f.delete();
+        });
+
+        //untar each of the *.bz2, *.tar.gz files
+        List<File> tarFiles;
+        try {
+            tarFiles = Files.list(Paths.get(outputDir))
+                .filter(path -> path.getFileName().toString().endsWith(".bz2") || path.getFileName().toString().endsWith(".tar.gz") )
+                .map(path -> {
+                    try {
+                        return path.toRealPath(LinkOption.NOFOLLOW_LINKS).toFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                })
+                .collect(Collectors.toList());
+        } catch (IOException e) {
+            throw new IllegalStateException("unable to read bz2 file list", e);
+        }
+
+        tarFiles.forEach(f -> {
+            executeCommand(new String[] {"tar", "-xvzf", f.getAbsolutePath(), "-C", outputDir}, false);
+        });
+
+        //delete each of the tar files
+        tarFiles.forEach(f -> {
+            f.delete();
+        });
+
+        //mark this rpm file as having been processed
+        alreadyProcessedRpmFiles.add(rpmFile.getAbsolutePath());
+        updateProcessedFileList(sourceDir, alreadyProcessedRpmFiles);
+    }
+
+    private void updateProcessedFileList(String sourceDir, List<String> alreadyProcessedRpmFiles)
+    {
+        //mark this rpm file as having been processed
+        File alreadyProcessedFilesDataFile = getAlreadyProcessedFilesDataFile(sourceDir);
+        try {
+            writeToFile(alreadyProcessedFilesDataFile, alreadyProcessedRpmFiles);
+        } catch (IOException e) {
+            throw new IllegalStateException("unable to write already processed file", e);
+        }
+
+    }
+
+    private Set<String> executeCommand(String[] command, boolean isTarExtraction)
+    {
+        Set<String> fileExtensions = new HashSet<>();
+
+        try {
+            Process proc = Runtime.getRuntime().exec(command);
+
+            ProcessOutputter errorStream = new ProcessOutputter(proc.getErrorStream(), System.err, isTarExtraction);
+            ProcessOutputter outputStream = new ProcessOutputter(proc.getInputStream(), System.out, isTarExtraction);
+
+            errorStream.start();
+            outputStream.start();
+
+            proc.waitFor();
+
+            fileExtensions.addAll(errorStream.getFileExtensionsFromTarExtraction());
+            fileExtensions.addAll(outputStream.getFileExtensionsFromTarExtraction());
+
+        } catch (IOException | InterruptedException e) {
+            throw new IllegalStateException(MessageFormat.format("unable to execute command: {0}", (Object[])command), e);
+        }
+
+        return fileExtensions;
+    }
+
+    public static void main(String[] args)
+    {
+        String sourceDir = "/Volumes/RHEL-6.8 Server.";
+        String outputDir = "/Volumes/redhat/redhat-6.8-source";
+
+        RpmExtractor rpmExtractor = new RpmExtractor();
+
+        List<String> alreadyProcessedRpmFiles = rpmExtractor.getAlreadyProcessedRpmFiles(sourceDir);
+        List<File> unprocessedRpmFiles = rpmExtractor.getUnprocessedRpmFiles(sourceDir, alreadyProcessedRpmFiles);
+
+        for (File rpm : unprocessedRpmFiles) {
+            String userInput = getConsoleInput("\n> continue processing? ");
+            if ("y".equals(userInput)) {
+                rpmExtractor.processRpmFile(sourceDir, outputDir, rpm, alreadyProcessedRpmFiles);
+            } else {
+                break;
+            }
+        }
+    }
+
+    public static void main2(String[] args)
+    {
+        String sourceDir = "/Volumes/RHEL-6.8 Server.";
+
+        RpmExtractor rpmExtractor = new RpmExtractor();
+        List<String> alreadyProcessedRpmFiles = rpmExtractor.getAlreadyProcessedRpmFiles(sourceDir);
+        System.out.println(MessageFormat.format("{0}", alreadyProcessedRpmFiles));
+
+        alreadyProcessedRpmFiles.remove("/Volumes/RHEL-6.8 Server./DeviceKit-power-014-3.el6.src.rpm");
+        rpmExtractor.updateProcessedFileList(sourceDir, alreadyProcessedRpmFiles);
+    }
+
+    /*
+
+to recursively search all files in a directory:
+    grep -r "search string" *
+
+to recursively search some files in a directory:
+    find . -type f -name 'filename_criteria' -exec grep "search string" /dev/null {};
+
+     */
+}

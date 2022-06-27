@@ -1,0 +1,20 @@
+<form #form="ngForm">
+
+    <div class="flex">
+        <input type="text" placeholder="Card Number" pattern="[0-9\s]*" [(ngModel)]="card.cardNumber" #cardInput="ngModel"
+               name="cardNumber" #cNum (ngModelChange)="handleCard(cardInput, cNum)" [style.backgroundImage]="cardImage"
+               required autocomplete="cc-number">
+
+        <input type="text" placeholder="Expiration Date" name="exp-date" #cExp #expModel="ngModel"
+               ngModel (ngModelChange)="handleExpiry(expModel, cExp)" required autocomplete="cc-exp">
+    </div>
+    <div class="flex">
+        <input type="text" placeholder="Name" name="ccname" [(ngModel)]="card.fullName" #cName required name="cc-name">
+
+        <input type="number" pattern="[0-9]*" [placeholder]="cardCodeType" name="cvc" #cCvc #cvcModel="ngModel"
+               [(ngModel)]="card.cardCode" (ngModelChange)="handleCvv(cvcModel, cCvc)" required autocomplete="cc-csc">
+    </div>
+    <div>
+        <vx-checkbox name="saveCard" (ngModelChange)="saveCardChange.emit($event)">Save this card for later.</vx-checkbox>
+    </div>
+</form>

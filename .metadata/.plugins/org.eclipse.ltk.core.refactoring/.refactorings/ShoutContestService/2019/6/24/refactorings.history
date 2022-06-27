@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Encapsulate field &apos;tv.shout.sc.domain.GamePlayer._totalLives&apos; in &apos;tv.shout.sc.domain.GamePlayer&apos;&#x0A;- Original project: &apos;ShoutContestService&apos;&#x0A;- Original element: &apos;tv.shout.sc.domain.GamePlayer._totalLives&apos;&#x0A;- Getter method name: &apos;getTotalLives&apos;&#x0A;- Setter method name: &apos;setTotalLives&apos;&#x0A;- Field visibility: &apos;public&apos;&#x0A;- Use getter and setter methods in declaring type" comments="false" declaring="true" description="Encapsulate field &apos;_totalLives&apos;" flags="589830" getter="getTotalLives" id="org.eclipse.jdt.ui.self.encapsulate" input="/src\/main\/java&lt;tv.shout.sc.domain{GamePlayer.java[GamePlayer^_totalLives" insertion="23" setter="setTotalLives" stamp="1560529147633" version="1.0" visibility="1"/>
+</session>

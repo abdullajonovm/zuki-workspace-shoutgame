@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="var" path="M2_REPO/net/authorize/anet-java-sdk/1.9.3/anet-java-sdk-1.9.3.jar"/>
+	<classpathentry kind="var" path="M2_REPO/commons-logging/commons-logging/1.2/commons-logging-1.2.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/braintreepayments/gateway/braintree-java/2.83.1/braintree-java-2.83.1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/meinc/identity-service/1.0/identity-service-1.0-client.jar"/>
+	<classpathentry kind="var" path="M2_REPO/meinc/store-service/1.0/store-service-1.0-client.jar"/>
+	<classpathentry kind="var" path="M2_REPO/meinc/hazelcast-service/1.0/hazelcast-service-1.0-client.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/hazelcast/hazelcast/3.5.2/hazelcast-3.5.2.jar"/>
+	<classpathentry kind="var" path="M2_REPO/meinc/meinc-commons/3.0/meinc-commons-3.0.jar"/>
+	<classpathentry kind="var" path="M2_REPO/meinc/mrsoa-support/1.0/mrsoa-support-1.0.jar"/>
+	<classpathentry kind="var" path="M2_REPO/meinc/gameplay-domain/3.0/gameplay-domain-3.0.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/fasterxml/jackson/core/jackson-core/2.7.2/jackson-core-2.7.2.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/fasterxml/jackson/core/jackson-databind/2.7.2/jackson-databind-2.7.2.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/fasterxml/jackson/core/jackson-annotations/2.7.2/jackson-annotations-2.7.2.jar"/>
+	<classpathentry kind="var" path="M2_REPO/javax/mail/mail/1.4.4/mail-1.4.4.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/amazonaws/aws-java-sdk/1.2.10/aws-java-sdk-1.2.10.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/apache/httpcomponents/httpclient/4.2.2/httpclient-4.2.2.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/apache/httpcomponents/httpcore/4.2.3/httpcore-4.2.3.jar"/>
+	<classpathentry kind="var" path="M2_REPO/commons-codec/commons-codec/1.7/commons-codec-1.7.jar"/>
+	<classpathentry kind="output" path="target"/>
+</classpath>

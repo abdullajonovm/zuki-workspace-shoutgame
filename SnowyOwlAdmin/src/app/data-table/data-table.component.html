@@ -1,0 +1,47 @@
+<div class="wrapper">
+    <vx-form-field *ngIf="filterable">
+        <input vxFormField label="Filter" [(ngModel)]="filterStr">
+    </vx-form-field>
+    <br *ngIf="filterable">
+    <div class="tableWrapper">
+        <table>
+            <thead>
+            <tr>
+                <th *ngFor="let column of columns" [class.pointer]="column.field" (click)="toggleSortColumn(column)">
+                    {{ column.header }}
+
+                    <span class="arrow-down" *ngIf="sortColumn === column && sortDirection === 'down'"></span>
+                    <span class="arrow-up" *ngIf="sortColumn === column && sortDirection === 'up'"></span>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of (filteredItems | sort:sortDirection:sortColumn | page:pageable:itemsPerPage:currentPage);"
+                (click)="handleRowClick(item)" [class.selected]="item === selectedItem">
+                <td *ngFor="let column of columns">
+                    <app-column-body *ngIf="column.templateRef" [column]="column" [rowData]="item"
+                                     [selected]="selectedItem === item">
+
+                    </app-column-body>
+                    <span *ngIf="!column.templateRef">{{ getValueForField(item, column.field, column.defaultValue) }}</span>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot *ngIf="pageable">
+            <tr>
+                <td [attr.colspan]="columns.length">
+                    <vx-form-field>
+                        <input type="number" vxFormField label="Page" [(ngModel)]="currentPage" min="1"
+                               [max]="maxPage">
+                        <span>/ {{ maxPage }}</span>
+                    </vx-form-field>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+
+        <div class="loadingWrapper" *ngIf="loading">
+            <vx-spinner></vx-spinner>
+        </div>
+    </div>
+</div>

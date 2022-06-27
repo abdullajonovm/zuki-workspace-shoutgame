@@ -1,0 +1,338 @@
+service.waiting.log.stack=false
+
+jetty.log.connection.stats=true
+jetty.log.connection.stats.period.ms=10000
+
+# Default is 8
+jetty.threads.count.min=10
+# Default is 254
+jetty.threads.count.max=100
+# Default is unbounded
+jetty.requests.max.queued=100
+# This number is applied to each server-socket/connector (HTTP, HTTPS, etc.). Default is 0
+jetty.socket.listen.backlog=1000
+# Default is 60000. 1800000 is 30min
+jetty.threads.max.idle.ms=1800000
+# Default is 200000 (3.3 min)
+jetty.socket.timeout.ms=30000
+
+webcollector.port=8080
+webcollector.https.port=8443
+#webcollector.auth-https.port=8334
+
+webcollector.ssl.keystore.file=/opt/meinc/keys/cluster_domain_ssl_cert.jks
+{{$clusterDomainSslCert := key "cluster/domain/ssl/cert" -}}
+webcollector.ssl.keystore.password={{key (printf "ssl/cert/%s/jks/pass" $clusterDomainSslCert)}}
+
+#common
+jdbc.driverClassName=net.sf.log4jdbc.DriverSpy
+jdbc.url=jdbc:log4jdbc:mysql://{{with service "master.snowl-mysql"}}{{with index . 0}}{{.Address}}:{{.Port}}{{end}}{{end}}/
+jdbc.username=meinc
+jdbc.password={{key "mysql/login/meinc"}}
+
+#hazelcast.config.serviceList=GamePlayService,IdentityService,PowerupService
+hazelcast.config.serviceList=IdentityService
+hazelcast.log.stats=false
+hazelcast.log.stats.period.ms=60000
+hazelcast.log.stats.log.configs=false
+
+# The range of client versions that will be signaled to upgrade. Range is [0,N).
+forced.upgrade.version.ios=5.0.5
+forced.upgrade.version.android=5.10.2
+# Of the clients to be upgraded, the range of client versions that will be
+# upgraded manually via push messaging. Range is [0,N).
+manual.forced.upgrade.version.ios=3.6
+manual.forced.upgrade.version.android=3.6
+
+jdbc.conn.pool.partitions=3
+# Min and max values are multiplied by number of partitions
+jdbc.conn.pool.max=133
+jdbc.conn.pool.min=5
+jdbc.conn.pool.idle_max_age_min=30
+jdbc.conn.pool.idle_conn_test_min=10
+jdbc.conn.pool.acquire_increment=5
+jdbc.conn.pool.stmt_cache_size=30000
+jdbc.conn.pool.conn_release_threads=1
+jdbc.conn.pool.stmt_release_threads=1
+jdbc.conn.pool.stats=true
+jdbc.conn.pool.stats_interval_sec=60
+#jdbc.conn.pool.conn_watcher=true
+#jdbc.conn.pool.conn_watcher_timeout_ms=3000
+
+#throttle.active.subs.max=1
+#throttle.message=Yo! The Server, is throttled!
+
+email.directory.path=/opt/meinc/mrsoa/email
+email.hostname=amazonses
+email.user=
+email.pass=
+aws.accessKeyId=AKIAJVMLF4GPLUMHTYOQ
+aws.accessKey=WGW9KjBEBtxgD30FzhfzToIM5jMUlq8O9opi5eDn
+#email.hostname=mail.shoutgameplay.com
+#email.user=mrsoa
+#email.pass=twoculFoc9swasEi
+dkim.domain=shout.tv
+#dkim.selector=oct11
+#dkim.key=MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALNQEOE6ac7ytTXTIE5CC3//slI+YgCx/m5CVISIdgOeyBLDre0gMYrzzmkMViFA4PMf/4fsqdkEZwOvH8+r5ffmWtSLEZxKRlHFB1bJzwbzdeTJzI48ENbAouDZU/3w/eTDe0o8aOO9iYTXgURO0KEOCBmYrkQIeaHsBYjncsV3AgMBAAECgYAlNHGsKdCWbemHd3z2f+Ge91Dqm6L9/fCKtByROzcxXRqqOgu2bb2Z1Sh4x2R/ldSW3YbJjyNWsgEl1IpHLqWSRvYK4kCDjeCdm50rnkgctQ8ee2wAtrpqHY6qnrEOyxhxvRt/cqVJLGjsryaDhLaU2zT7Qy/19smnfDtKfSQscQJBAOiOKgVk0ilTphyjtKmltB3QpSnCEpoacApbB/MOPd0GDW35HEBJdDkJtZmAYbtqbfOP615a7efueTCyZow2wXUCQQDFY855j+nmbr7bNJ6iXoIRBuPuT8LbjLtuT9OG+tTSWqA4FBxStb+I+mLDfzwNitf88++SG71RnLM4Wrn5qgG7AkEAzMVZlPRI5eDlFLTFgNgKuHIe7J0Z2h3LaCLt5gQ1TuhkbOB8EtNbBlpZUHeuFuPJOz0PyD6S27Wtesar62zPfQJAb9WTZyZVhDwcoD+Y3S+ki5cWzq+cHB4JF3/cva4hpCi6e+tQ/L+CjE4oZNESqi2PH/7pLiPPSIz6saQdmEls/wJBAOZMuRfCZ7EgiOpyCTtQrOT4Cl1i43iKmCsKm/cOGnHo6EBKeXjX1Vl+T46zR05GgaYLwnrGehZrCuSQgdcxsu0=
+dkim.selector=may12
+dkim.key=MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBANUUcfpxc81nGeuaGlo06yd0cwM1NGHdcyzU8XrMLHKtaD7Ky1iJX+HF6dKP7eslTQ1UoxX14/BrTept0aN3taU4guj23kK4686HEqHdM19w+TId+73mBJgP3wdvgLBopIJAW6fUJSiWjceTOBHB0pGedNz/US4cpV6d054odnl5AgMBAAECgYEAgC92ihWqds0pmMTySYZAWVICxtFBHAbe/P917kvaCXsslWnmfvLVzbsEeXnAxY+BFR3vpoxwfffvvbInRdIEYbEuxc+NeuNX6b2HdvV3ILJ/uFLxOMRp3HMKwXv3LlSBO9W94zsmrf387Zkr++Ju0FwZYbW/m2c5X6MeX8P5WwECQQD6wuRI4+QvxA/7INPMM0QuXaJdMtGbwA56f92XZ5oskaERJOYzfhCOAJ77PzFLqbXuz6FdE+WQzGG13h3xlNbJAkEA2YgHFHiOCNT2VvPQjcJ/h76Kmy3oIwgohIHzUp6zl6SzgU1smWGEwDYgcAQQbjHGTf1fYLpIVUYeoOJ1BJP1MQJBAJLEewTGjYn/gTME1bIQ13kjyKIv2ksEr/S23iV9t9kaK2FzbWD6CgpzBpobNGkKnbd2wwVNXfHQDeh6ZqA88zECQAbnalIcAWYGXEsmMdhN8/467es+6b8y4xZRiYd1wf1uHMRd0LSNg8kV7rGfb2YP7ltLT1uijekm8JHqngwnJgECQQDCIxt001E22iwl3a0vnanBVk8mRB0UqXrzsxdaGHAwGc0mcRqf/NAqbTip3NxL0j4orro0Z/flZcqv/ox6DuLm
+# this will most likely be different for everyone
+#server.base.url=super.sco.com
+server.base.url={{key "cluster/domain"}}
+server.auth.url=auth.{{key "cluster/domain"}}
+login.token.private.key={{key "login/token/key/private"}}
+auth.primary=false
+
+email.pwreset.email=info@shout.tv
+email.pwreset.display=info@shout.tv
+
+#mrsoa.test-client.servers=test-client-1,test-client-2
+
+mrsoa.distdata.numClusters=1
+mrsoa.distdata.cluster1.name=collector
+mrsoa.distdata.cluster1.basePort=5701
+mrsoa.distdata.cluster1.servers={{range $i,$_ := service "hazelcast.snowl-collector" -}} {{if $i | ne 0}},{{end -}} {{.Address}}:{{.Port}} {{- end}}
+
+shared.cluster.distdata.name=collector
+
+#mrsoa.distdata.mancenter.url=http://admin.shoutgameplay.com:8080/mancenter
+#mrsoa.distdata.servers=
+mrsoa.distdata.map.sessionKeyToSubscriberDeviceSessionMap.eviction-policy=LFU
+mrsoa.distdata.map.sessionKeyToSubscriberDeviceSessionMap.max-size-policy=USED_HEAP_SIZE
+mrsoa.distdata.map.sessionKeyToSubscriberDeviceSessionMap.max-size=10
+#mrsoa.distdata.map.eventMediaByEventId.near-cache-max-size=0
+#mrsoa.distdata.map.questionIdToCampaignMap.near-cache-max-size=0
+mrsoa.distdata.map.subscriberIdToGameplaySubscriberMap.eviction-policy=LFU
+mrsoa.distdata.map.subscriberIdToGameplaySubscriberMap.max-size-policy=USED_HEAP_SIZE
+mrsoa.distdata.map.subscriberIdToGameplaySubscriberMap.max-size=10
+mrsoa.distdata.map.eventIdToEventMap.eviction-policy=LRU
+mrsoa.distdata.map.eventIdToEventMap.max-size-policy=USED_HEAP_SIZE
+mrsoa.distdata.map.eventIdToEventMap.max-size=10
+mrsoa.distdata.map.subscriberIdToSubscriberMap.eviction-policy=LFU
+mrsoa.distdata.map.subscriberIdToSubscriberMap.max-size-policy=USED_HEAP_SIZE
+mrsoa.distdata.map.subscriberIdToSubscriberMap.max-size=10
+mrsoa.distdata.map.questionIdToHasCouponsMap.eviction-policy=LRU
+mrsoa.distdata.map.questionIdToHasCouponsMap.max-size-policy=USED_HEAP_SIZE
+mrsoa.distdata.map.questionIdToHasCouponsMap.max-size=10
+mrsoa.distdata.map.subscriberIdToNicknameMap.eviction-policy=LFU
+mrsoa.distdata.map.subscriberIdToNicknameMap.max-size-policy=USED_HEAP_SIZE
+mrsoa.distdata.map.subscriberIdToNicknameMap.max-size=10
+mrsoa.distdata.map.questionIdToQuestionMap.eviction-policy=LRU
+mrsoa.distdata.map.questionIdToQuestionMap.max-size-policy=USED_HEAP_SIZE
+mrsoa.distdata.map.questionIdToQuestionMap.max-size=10
+mrsoa.distdata.map.questionIdToAnswerCountMap.eviction-policy=LRU
+mrsoa.distdata.map.questionIdToAnswerCountMap.max-size-policy=USED_HEAP_SIZE
+mrsoa.distdata.map.questionIdToAnswerCountMap.max-size=10
+mrsoa.distdata.map.questionIdToEventIdMap.eviction-policy=LRU
+mrsoa.distdata.map.questionIdToEventIdMap.max-size-policy=USED_HEAP_SIZE
+mrsoa.distdata.map.questionIdToEventIdMap.max-size=10
+
+#facebook
+fb.login_url       = http://www.facebook.com/login.php?v=1.0
+# uncomment this line if your app is a desktop app
+fb.desktop         = 0
+fb.api_key         = e42d7a8b81712f9c61f887ace444906b
+fb.secret          = f5788acff3c05658dbe986479276887e
+
+gameplay.push.client=clientproxy.pushservice.PushServiceClientProxy
+
+# push
+push.configType={{key "push/environment"}}
+push.supported_app_ids=tv.shout.snowyowl
+
+#FCM
+push.tv.shout.snowyowl.android.fcm.keyfile=/opt/meinc/keys/firebase_config.json
+push.tv.shout.snowyowl.android.fcm.dbname={{ key "fcm/dbname" }}
+
+#APNs
+push.tv.shout.snowyowl.ios.keyfile=/opt/meinc/keys/apns.keyfile.p12
+push.tv.shout.snowyowl.ios.keyfile.password={{key "apns/password"}}
+
+push.service.rmi.enabled=false
+push.service.rmi.port=43111
+push.service.rmi.device.token.prefix=1997
+
+
+# new facebook
+facebook.app_id = 156964854369573
+facebook.app_secret = 76c7e323638a3acef78d6462ca225d32
+facebook.post_limit=10
+
+# Store service
+store.processor.receipt.itunes.server={{key "store/itunes/environment"}}
+store.processor.receipt.itunes.secret=0367626d88c241d1ae5c4c5c331d6bba
+store.com.meinc.shout.google.play.clientId=1016558683356-rt106dr9quv9n1gpi39shsgab4j0sn1s.apps.googleusercontent.com
+store.com.meinc.shout.google.play.clientSecret=HS1NzVkAJbCc6TFfYyGQKQi5
+store.com.meinc.shout.google.play.refreshToken=1/7bwCYUiAwnNGekc0-0pJ1lHuiOSLUtOTj3-kYtiIe9o
+store.com.meinc.shout.google.play.app.public.key=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA47FYzV3WuUddwZ3zD3SGC22QnJL2gBRvmF8zC4ZONiNPdvKvCbrGb3jWLAyZHKD+DXBVTwdsncXRPm0ppWk9Gsla/r4s3NA1C1a8z2lfuEhW+Tbs1XWjZ0+1Zw/5gh0h0BQmyqGxWCplLfxIyObzGYWFfng6RC2uqE9+SN8JKqaZpxoxzHUB2h/kSNa5A5eeK9Klbw518mlHf5jFDGlOSX94pZV5GItfnEQkMxTb3+kc+Gg9MfCxeI6HXxOQNSmrL/oXjrIl3WyjSKmbsVZLh7sUM5BGkF7KVbtGbvW1t0s5TNn95oteTEGwvbKKt12qDGCa3EYvX5kClaf/5gb8FQIDAQAB
+store.com.meinc.shout.google.play.app.package.name=com.meinc.shout
+store.com.meinc.shout.google.play.app.name=TestDrive/1.0
+store.com.realmadrid.mymadrid.google.play.clientId=438435801472
+store.com.realmadrid.mymadrid.google.play.clientSecret=iM5zwaziOepinJoey5uU1rKE
+store.com.realmadrid.mymadrid.google.play.refreshToken=1/35J7bkihHE0R8z0FsTKoVZMIl2oJ2JNr9Vwt0s1eNRY
+store.com.realmadrid.mymadrid.google.play.app.public.key=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA47FYzV3WuUddwZ3zD3SGC22QnJL2gBRvmF8zC4ZONiNPdvKvCbrGb3jWLAyZHKD+DXBVTwdsncXRPm0ppWk9Gsla/r4s3NA1C1a8z2lfuEhW+Tbs1XWjZ0+1Zw/5gh0h0BQmyqGxWCplLfxIyObzGYWFfng6RC2uqE9+SN8JKqaZpxoxzHUB2h/kSNa5A5eeK9Klbw518mlHf5jFDGlOSX94pZV5GItfnEQkMxTb3+kc+Gg9MfCxeI6HXxOQNSmrL/oXjrIl3WyjSKmbsVZLh7sUM5BGkF7KVbtGbvW1t0s5TNn95oteTEGwvbKKt12qDGCa3EYvX5kClaf/5gb8FQIDAQAB
+store.com.realmadrid.mymadrid.google.play.app.package.name=com.meinc.fctasks
+store.com.realmadrid.mymadrid.google.play.app.name=TestDrive/1.0
+
+store.processor.braintree.environment={{key "store/braintree/environment"}}
+store.processor.braintree.production.merchant.id=wsd844ptx99y22jf
+store.processor.braintree.production.public.key=98yy6h3yfm8mx2hr
+store.processor.braintree.production.private.key.path=/opt/meinc/mrsoa/conf/btree.key
+
+store.processor.braintree2.environment={{key "store/braintree/environment"}}
+store.processor.braintree2.production.merchant.id={{key "store/braintree/merchantid"}}
+store.processor.braintree2.production.public.key={{key "store/braintree/publickey"}}
+store.processor.braintree2.production.private.key={{key "store/braintree/privatekey"}}
+
+#gameplay rest handler
+rest.onTestServer=false
+rest.adminSubId=8
+rest.subSubId=15
+
+gp.analytics.outputDir=/opt/meinc/www/images/analytics
+gnuplotExecutable=/usr/bin/gnuplot
+
+mrsoa.responder.pool.minIdle=1
+mrsoa.responder.pool.maxIdle=10
+mrsoa.responder.pool.maxActive=10
+
+#display prizes on gameplay results page: show or hide.  default is hide
+gp.showprizes=show
+
+#network winner values
+gp.score.cumulative_signup_start_date=2012-03-11
+gp.score.num_signups_required=5
+gp.score.payout_amount_per_signup_batch=10
+
+#The format is link.<user-platform>.<request-path> so link.ios.app.android would kick in for user's running ios requesting /gpwebapi/link/app/android
+link.ios.app.android=https://market.android.com/details?id=com.meinc.shout
+link.android.app.android=https://market.android.com/details?id=com.meinc.shout
+link.other.app.android=https://market.android.com/details?id=com.meinc.shout
+
+link.ios.app.ios=http://itunes.apple.com/us/app/shout/id435657286?mt=8&uo=4
+link.android.app.ios=http://itunes.apple.com/us/app/shout/id435657286?mt=8&uo=4
+link.other.app.ios=http://itunes.apple.com/us/app/shout/id435657286?mt=8&uo=4
+
+team.all_licensed=true
+
+#webcollector
+web.collector.message.buffer.path=/opt/meinc/collector_buffer
+message.processor.thread.count=5
+message.processor.interval.ms=1000
+message.processor.message.threshold=100
+web.collector.signup.persecond=37
+
+# Comma delimited list of special hostnames to origin servers. Each hostname begins with '<n>' where
+# n is the partition number.
+webdatastore.shoutweb.origin.hosts={{range $i,$_ := service "control.snowl-wds-origin" -}} {{if $i | ne 0}},{{end -}} <{{add $i 1}}>{{.Address}}:{{.Port}} {{- end}}
+
+# Comma delimited list of special hostnames to cache servers. Each hostname begins with '<n>' where
+# n is the partition number.
+webdatastore.shoutweb.cache.hosts={{range $i,$_ := service "control.snowl-wds-cache" -}} {{if $i | ne 0}},{{end -}} <{{add $i 1}}>{{.Address}}:{{.Port}} {{- end}}
+
+# Defines a WDS server hostname alias
+# Uses the form: webdatastore.shoutweb.alias.<alias-name>=<wds-server-host>
+{{range $i,$_ := service "control.snowl-wds-origin" -}}
+    webdatastore.shoutweb.alias.snowl-wds-origin--{{$i}}--{{key "cluster/domain/hostname/suffix"}}.{{key "cluster/domain"}}={{.Address}}:{{.Port}}
+{{end}}
+{{range $i,$_ := service "control.snowl-wds-cache" -}}
+    webdatastore.shoutweb.alias.snowl-wds-cache--{{$i}}--{{key "cluster/domain/hostname/suffix"}}.{{key "cluster/domain"}}={{.Address}}:{{.Port}}
+{{end}}
+
+# Comma delimited list of special hostnames to origin servers. Each hostname begins with '<n>' where
+# n is the partition number.
+webmediastore.shoutweb.origin.hosts={{range $i,$_ := service "control.snowl-wms-origin" -}} {{if $i | ne 0}},{{end -}} <{{add $i 1}}>{{.Address}}:{{.Port}} {{- end}}
+
+# Comma delimited list of special hostnames to cache servers. Each hostname begins with '<n>' where
+# n is the partition number.
+webmediastore.shoutweb.cache.hosts={{range $i,$_ := service "control.snowl-wms-cache" -}} {{if $i | ne 0}},{{end -}} <{{add $i 1}}>{{.Address}}:{{.Port}} {{- end}}
+
+# Defines a WMS server hostname alias
+# Uses the form: webdatastore.shoutweb.alias.<alias-name>=<wms-server-host>
+{{range $i,$_ := service "control.snowl-wms-origin" -}}
+    webmediastore.shoutweb.alias.snowl-wms-origin--{{$i}}--{{key "cluster/domain/hostname/suffix"}}.{{key "cluster/domain"}}={{.Address}}:{{.Port}}
+{{end}}
+{{range $i,$_ := service "control.snowl-wms-cache" -}}
+    webmediastore.shoutweb.alias.snowl-wms-cache--{{$i}}--{{key "cluster/domain/hostname/suffix"}}.{{key "cluster/domain"}}={{.Address}}:{{.Port}}
+{{end}}
+
+sync.collector.security.key=4yB23)dg1_qwert
+
+sm.doc.producer=true
+sm.engine.runner=true
+sm.engine.statedir=/opt/meinc/mrsoa/state
+#sm.context.id=1
+#sm.entitlement.uuid=9ef59735-917b-11e6-a032-0242ac110004
+mme.concurrent.threads=4
+mme.tiebreaker.delay.ms=10000
+sm.signup.bonus=0.00
+
+#what percentage to fill up the bracket round with bots if not enough players are in (i.e. 100 = fill it to capacity, 0 = don't add any extra bots)
+sm.fillwithbots=100
+
+sm.maxplayercount=1024
+
+#twilio sms
+twilio.code.length=6
+twilio.from.number=+18773637817
+twilio.account.sid=ACcd342cfe8a1a9d867b40370ce25e748e
+twilio.auth.token=b877890ada3c6836f0fbfefbdb192718
+twilio.verificationCode.duration=30
+
+#email sender information. each item is appId:value,appId:value,...
+from.email.addresses=1:support@shout.tv,5:support@shout.tv,6:support@shout.tv
+from.email.names=1:Shout Support,5:Tipping Point Support,6:Daily Millionaire
+
+#socket.io
+socket.io.ips={{range $i,$_ := service "http.snowl-socketio" -}} {{if $i | ne 0}},{{end -}} {{.Address}}:{{.Port}} {{- end}}
+
+#store service
+
+#AUTHNET_CREDIT_CARD = Authorize.Net, CREDIT_CARD = Braintree
+store.cc.processor=BRAINTREE_CREDIT_CARD
+
+#Authorize.net credentials
+
+# SANDBOX, PRODUCTION
+authorize.net.environment=SANDBOX
+authorize.net.apiloginid=2bX5V6pXaV
+authorize.net.transactionkey=4r236f99pR9FE8MH
+
+#greenMoney
+echeck.client.id={{key "echeck/clientid"}}
+echeck.api.password={{key "echeck/apipassword"}}
+echeck.endpoint={{key "echeck/endpoint"}}
+
+#how many characters to use when generating an sms verification code
+sms.verificationCode.length=6
+#how many minutes an sms verification code is valid
+sms.verificationCode.duration=10
+
+twilio.account.sid=ACcd342cfe8a1a9d867b40370ce25e748e
+twilio.auth.token=b877890ada3c6836f0fbfefbdb192718
+
+hostname.suffix={{key "cluster/domain/hostname/suffix"}}
+sm.logmonitor.logfile=/opt/meinc/mrsoa/logs/meinc_debug.log
+sm.logmonitor.checkintervalMs=300000
+sm.logmonitor.dateformat=MM/dd/yyyy HH:mm:ss:SSS
+sm.logmonitor.emailrecipient.subscriberId=8
+sm.logmonitor.expressions=.* ERROR .*,.*Exception:.*,.*Error:.*,(\\s+)at .*,.*Exception$,.*Detected SQL execution outside of transaction.*
+
+sm.substats.WON_CORRECT=10
+sm.substats.WON_TIME=10
+sm.substats.WON_TIMEOUT=10
+sm.substats.LOST_TIME=5
+sm.substats.LOST_INCORRECT=2
+sm.substats.LOST_TIMEOUT=0
+sm.substats.LOST_ALL_TIMEOUT=0
+
+shorten.url.short.url.prefix={{key "urlshortener/url/prefix" }}
+shorten.url.legal.long.url.domains={{key "urlshortener/legal/domains" }}
+shorten.url.dynamodb.table_name={{key "urlshortener/tablename"}}
+shorten.url.domain={{key "urlshortener/domain"}}
+shorten.url.dynamodb.accesskey={{key "aws/accesskey"}}
+shorten.url.dynamodb.secretkey={{key "aws/secretkey"}}
+
+sm.socketio.monitor.subscriber_ids={{ key "socketio/monitored/subscriberids"}}
+
+sm.app.displayname={{key "app/displayname"}}

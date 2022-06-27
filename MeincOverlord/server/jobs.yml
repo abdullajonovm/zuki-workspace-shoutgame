@@ -1,0 +1,8 @@
+- snowl-mysql
+- snowl-wds-origin
+- snowl-wms-origin
+- snowl-web
+- snowl-socketio
+- snowl-collector
+- snowl-srd-server
+- snowl-nomad-web-proxy

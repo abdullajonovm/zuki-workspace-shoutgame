@@ -1,0 +1,14 @@
+1504645791913	Rename method 'shoutMillionaireDaoMapper'
+1504711445733	Rename local variable 'submittingAnswerTitles'
+1504723111890	Rename local variable 'collectorUrls'
+1504723125122	Rename local variable 'massagedCollectorUrls'
+1504887615568	Move compilation unit
+1504887788801	Move compilation unit
+1504887824029	Move compilation unit
+1504887893834	Move compilation unit
+1504888426107	Rename type 'MatchQueueEngine'
+1504888529339	Rename type 'MatchManagementEngine'
+1504888573206	Rename type 'RoundManagementEngine'
+1504888694597	Rename type 'PayoutCalculator'
+1504894791494	Rename field '_payoutCalculator'
+1504902574475	Rename type 'ShoutMillionaireGameCreator'

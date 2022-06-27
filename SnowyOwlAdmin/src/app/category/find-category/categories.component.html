@@ -1,0 +1,14 @@
+<button vx-button (click)="createOrUpdate()">Create Category</button>
+<app-data-table [items]="categoryService.categories" [(selectedItem)]="selectedCategory" [loading]="loading">
+    <app-column>
+        <ng-template let-selected="selected">
+            <i [vxMenuTrigger]="drop" class="fa fa-cog" tabindex="0"></i>
+        </ng-template>
+    </app-column>
+    <app-column header="Name" field="categoryName.en"></app-column>
+    <app-column header="Key" field="categoryKey"></app-column>
+</app-data-table>
+
+<vx-menu #drop>
+    <vx-item (select)="createOrUpdate(selectedCategory)" [disabled]="!selectedCategory">Update</vx-item>
+</vx-menu>

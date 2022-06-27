@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;uuid&apos; in &apos;com.meinc.commons.encryption.EncryptionService.main(...)&apos; to &apos;key&apos;&#x0A;- Original project: &apos;EncryptionService&apos;&#x0A;- Original element: &apos;com.meinc.commons.encryption.EncryptionService.main(String[]).uuid&apos;&#x0A;- Renamed element: &apos;uuid&apos;&#x0A;- Update references to refactored element" description="Rename local variable &apos;uuid&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src\/main\/java&lt;com.meinc.commons.encryption{EncryptionService.java[EncryptionService~main~\[QString;@uuid!27990!28087!27997!28000!QString;!0!false" name="key" references="true" stamp="1512070438105" version="1.0"/>
+</session>

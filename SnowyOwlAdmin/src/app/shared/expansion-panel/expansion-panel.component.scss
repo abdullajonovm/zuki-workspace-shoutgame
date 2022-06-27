@@ -1,0 +1,31 @@
+.header {
+    cursor: pointer;
+    margin: -20px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+
+    &:hover {
+        background: #f9f9f9;
+    }
+
+    &:active {
+        background: #f0f0f0;
+    }
+}
+
+.close {
+    font-size: 16px;
+    transform: rotate(0);
+    transition: transform .3s ease;
+
+    &.expanded {
+        transform: rotate(-180deg);
+    }
+}
+
+.content {
+    padding-top: 40px;
+}

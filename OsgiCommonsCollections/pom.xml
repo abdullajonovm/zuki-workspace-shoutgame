@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>osgi-commons-collections</artifactId>
+    <version>3.1</version>
+    <packaging>osgi-bundle</packaging>
+
+    <parent>
+        <groupId>meinc</groupId>
+        <artifactId>MeincOverlord-osgi</artifactId>
+        <version>1.0-mvnbuild</version>
+        <relativePath>../MeincOverlord/poms/parents/pom-osgi</relativePath>
+    </parent>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>meinc</groupId>
+                <artifactId>service-assembler</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <osgi>
+                        <require></require>
+                        <export>
+                            org.apache.commons.collections,
+                            org.apache.commons.collections.bag,
+                            org.apache.commons.collections.bidimap,
+                            org.apache.commons.collections.buffer,
+                            org.apache.commons.collections.collection,
+                            org.apache.commons.collections.comparators,
+                            org.apache.commons.collections.functors,
+                            org.apache.commons.collections.iterators,
+                            org.apache.commons.collections.keyvalue,
+                            org.apache.commons.collections.list,
+                            org.apache.commons.collections.map,
+                            org.apache.commons.collections.set
+                        </export>
+                    </osgi>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.1</version>
+        </dependency>
+
+    </dependencies>
+
+</project>

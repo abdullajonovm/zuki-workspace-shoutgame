@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>webcollector-service</artifactId>
+    <version>1.0</version>
+    <packaging>mrsoa-service</packaging>
+
+    <parent>
+        <groupId>meinc</groupId>
+        <artifactId>MeincOverlord-service-springmybatis</artifactId>
+        <version>3.0-mvnbuild</version>
+        <relativePath>../MeincOverlord/poms/parents/pom-service-springmybatis</relativePath>
+    </parent>
+
+    <properties>
+        <osgi.export.package.clientjar>true</osgi.export.package.clientjar>
+        <!-- <osgi.require.bundle>meinc.encryption-service;bundle-version=3.0</osgi.require.bundle> -->
+
+        <plugin.spring.annotation.classes.WebCollectorService>com.meinc.webcollector.service.SpringConfiguration</plugin.spring.annotation.classes.WebCollectorService>
+        <plugin.spring.bean.name.WebCollectorService>webCollectorService</plugin.spring.bean.name.WebCollectorService>
+        <plugin.spring.annotation.classes.WebCollectorMessageBuffer>com.meinc.webcollector.service.SpringConfiguration</plugin.spring.annotation.classes.WebCollectorMessageBuffer>
+        <plugin.spring.bean.name.WebCollectorMessageBuffer>webCollectorMessageBuffer</plugin.spring.bean.name.WebCollectorMessageBuffer>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>meinc</groupId>
+                <artifactId>service-assembler</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <clientJar>
+                        <includes>
+                            <include>com/meinc/webcollector/service/IWebCollectorService*</include>
+                            <include>com/meinc/webcollector/message/IWebCollectorMessageBuffer.*</include>
+                            <include>com/meinc/webcollector/message/InternalMessage.class</include>
+                            <include>com/meinc/webcollector/message/MessageBufferProxy.*</include>
+                            <include>com/meinc/webcollector/message/CollectorMessage.*</include>
+                            <include>com/meinc/webcollector/message/handler/IMessageTypeHandler*</include>
+                            <include>com/meinc/webcollector/message/handler/BadRequestException.*</include>
+                            <include>com/meinc/webcollector/message/handler/CollectorResponseException.*</include>
+                            <include>com/meinc/webcollector/message/handler/CollectorMessageResult.*</include>
+                            <include>com/meinc/webcollector/message/handler/SyncRequest*</include>
+                            <include>com/meinc/webcollector/util/HttpTools*</include>
+                        </includes>
+                    </clientJar>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>premise</id>
+            <url>http://premise.artifactoryonline.com/premise/public</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.eclipse.jetty.aggregate</groupId>
+            <artifactId>jetty-all-server</artifactId>
+            <version>8.1.8.v20121106</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.esotericsoftware.kryo</groupId>
+            <artifactId>kryo</artifactId>
+            <version>2.21</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.esotericsoftware.minlog</groupId>
+            <artifactId>minlog</artifactId>
+            <version>1.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>osgi-bonecp</artifactId>
+            <version>0.8</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.7.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.7.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.7.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+            <version>1.9.11</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.9.11</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>3.3</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>mrsoa-support</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>http-utils</artifactId>
+            <version>3.0</version>
+        </dependency>
+
+        <!-- <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>webdatastore-service</artifactId>
+            <classifier>client</classifier>
+            <version>1.0</version>
+        </dependency> -->
+
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>encryption-service</artifactId>
+            <classifier>client</classifier>
+            <version>3.0</version>
+        </dependency>
+    </dependencies>
+</project>

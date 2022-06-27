@@ -1,0 +1,44 @@
+@import '../../vars';
+
+table {
+    margin-top: 10px;
+    border-collapse: collapse;
+}
+
+td, th {
+    padding: 15px;
+    border: 1px solid black;
+}
+
+th {
+    background: linear-gradient(to bottom, #cecdcd, #dedede)
+}
+
+.selected {
+    background: linear-gradient(to top, $mainColor, darken($mainColor, 10%));
+    color: white;
+}
+
+.viewGame {
+    margin: 10px 10px 0;
+}
+
+.card {
+    margin-top: 10px;
+    display: block;
+    max-width: 550px;
+}
+
+vx-checkbox {
+    margin-left: 10px;
+    margin-top: 5px;
+}
+
+i.fa-cog {
+    font-size: 24px;
+    vertical-align: middle;
+}
+
+vx-item {
+    white-space: nowrap;
+}

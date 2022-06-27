@@ -1,0 +1,19 @@
+<div vxDialogTitle>Payout Table</div>
+<div vxDialogContent>
+    <app-data-table [items]="payouts" [filterable]="false">
+        <app-column header="Winner Nums">
+            <ng-template let-item>
+                {{item.startingPlayerCount | number}} - {{(item.startingPlayerCount - item.eliminatedPlayerCount + 1) | number}}
+            </ng-template>
+
+        </app-column>
+        <app-column header="Amount" field="val">
+            <ng-template let-item>
+                {{item.eliminatedPayoutAmount | currency:'USD':'symbol':'1.0-2'}}
+            </ng-template>
+        </app-column>
+    </app-data-table>
+</div>
+<div vxDialogActions="">
+    <button vx-button (click)="close()">Close</button>
+</div>

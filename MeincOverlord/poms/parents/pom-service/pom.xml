@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>meinc</groupId>
+    <artifactId>MeincOverlord-service</artifactId>
+    <version>3.0-mvnbuild</version>
+    <packaging>pom</packaging>
+
+    <parent>
+        <groupId>meinc</groupId>
+        <artifactId>MeincOverlord-root</artifactId>
+        <version>3.0-mvnbuild</version>
+        <relativePath>../pom-root</relativePath>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>mrsoa-kernel</artifactId>
+            <version>3.6.1-mvnbuild</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>meinc-launcher</artifactId>
+            <version>1.1-mvnbuild</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>osgi-bonecp</artifactId>
+            <version>0.8</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>service-assembler</artifactId>
+            <version>4.0-mvnbuild</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>meinc</groupId>
+                <artifactId>service-assembler</artifactId>
+                <version>4.0-mvnbuild</version>
+                <extensions>true</extensions>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself. -->
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>meinc</groupId>
+                                        <artifactId>service-assembler</artifactId>
+                                        <versionRange>[3.2,)</versionRange>
+                                        <goals>
+                                            <goal>compile-service</goal>
+                                            <goal>package-service</goal>
+                                            <goal>package-osgi</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore/>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>

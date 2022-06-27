@@ -1,0 +1,14 @@
+<div *ngIf="!hidePoolPlay">
+    <ng-container *ngFor="let round of rounds">
+        <sh-round-item *ngIf="!round.isBracketRound" [round]="round" [nextRound]="round === nextRound"
+                       (onPlay)="onPlay.emit(round)">
+        </sh-round-item>
+    </ng-container>
+</div>
+
+<div *ngIf="!hideBracketPlay">
+    <ng-container *ngFor="let round of rounds">
+        <sh-round-item *ngIf="round.isBracketRound" [round]="round" [nextRound]="round === nextRound">
+        </sh-round-item>
+    </ng-container>
+</div>

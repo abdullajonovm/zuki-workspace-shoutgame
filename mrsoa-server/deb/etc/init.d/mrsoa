@@ -1,0 +1,147 @@
+#!/bin/bash
+#
+# /etc/init.d/mrsoa -- startup script for the MrSOA 3
+#
+### BEGIN INIT INFO
+# Provides:          mrsoa
+# Required-Start:    $local_fs $remote_fs $network
+# Required-Stop:     $local_fs $remote_fs $network
+# Should-Start:      $named
+# Should-Stop:       $named
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start MrSOA.
+# Description:       Start the MrSOA server.
+### END INIT INFO
+
+set -e
+
+NAME=mrsoa
+DESC="MrSOA server"
+MRSOA_PID=/var/run/mrsoa/mrsoa.pid
+MRSOA_USER=mrsoa
+MRSOA_GROUP=mrsoa
+MRSOA_HOME=/opt/meinc/mrsoa
+JAVA_DIR="$(dirname $(readlink -f $(which java)))"
+MRSOA_JAVA="$JAVA_DIR/mrsoa_java"
+
+if [ `id -u` -ne 0 ]; then
+    echo "You need root privileges to run this script"
+    exit 1
+fi
+
+if [ ! -x "$MRSOA_JAVA" ]; then
+    if [ ! -d "$JAVA_DIR" -o ! -x "$JAVA_DIR/java" ]; then
+        echo "Could not find Java executable!"
+        exit 1
+    fi
+    ln "$JAVA_DIR/java" "$MRSOA_JAVA"
+    if [ ! -x "$MRSOA_JAVA" ]; then
+        echo "Java does not exist at expected location $MRSOA_JAVA"
+        exit 1
+    fi
+fi
+
+MRSOA_PID_DIR=`dirname "$MRSOA_PID"`
+# We might have a tmpfs /var/run.
+if [ ! -d "$MRSOA_PID_DIR" ]; then
+    mkdir "$MRSOA_PID_DIR"
+fi
+chown $MRSOA_USER:$MRSOA_GROUP "$MRSOA_PID_DIR"
+
+. /lib/lsb/init-functions
+
+if [ -r /etc/default/rcS ]; then
+    . /etc/default/rcS
+fi
+
+case "$1" in
+    start)
+        log_daemon_msg "Starting $DESC" "$NAME"
+        if start-stop-daemon --test --start --pidfile "$MRSOA_PID" \
+                --user $MRSOA_USER --exec "$MRSOA_JAVA" \
+                >/dev/null; then
+
+            #Force ubuntu/bash to propagate process limits
+            ulimit -u unlimited
+            start-stop-daemon --start --user "$MRSOA_USER" --group "$MRSOA_GROUP" \
+                --chuid "$MRSOA_USER" --exec /bin/bash -- "$MRSOA_HOME/bin/mrsoa.sh" "$@"
+            sleep 3
+
+            if start-stop-daemon --test --start --pidfile "$MRSOA_PID" \
+                    --user $MRSOA_USER --exec "$MRSOA_JAVA" >/dev/null; then
+                if [ -f "$MRSOA_PID" ]; then
+                    rm -f "$MRSOA_PID"
+                fi
+                log_end_msg 1
+            else
+                log_end_msg 0
+            fi
+        else
+            log_progress_msg "(already running)"
+            log_end_msg 0
+        fi
+        ;;
+    stop|force-stop)
+        log_daemon_msg "Stopping $DESC" "$NAME"
+
+        set +e
+        #if [ "$1" = "stop" ]; then
+        #    SCHEDULE="ALRM/60"
+        #else
+            SCHEDULE="TERM/10/KILL/5"
+        #fi
+        if [ -f "$MRSOA_PID" ]; then
+            start-stop-daemon --stop --pidfile "$MRSOA_PID" \
+                --user "$MRSOA_USER" \
+                --retry=$SCHEDULE >/dev/null
+            RESULT=$?
+            if [ $RESULT -eq 0 ]; then
+                rm -f "$MRSOA_PID"
+            elif [ $RESULT -eq 1 ]; then
+                log_progress_msg "$DESC is not running but pid file exists, cleaning up"
+                rm -f "$MRSOA_PID"
+            elif [ $RESULT -ge 2 ]; then
+                PID="`cat $MRSOA_PID`"
+                log_failure_msg "Failed to stop $NAME (pid $PID)"
+                exit 1
+            fi
+        else
+            log_progress_msg "(not running)"
+        fi
+        log_end_msg 0
+        set -e
+        ;;
+    status)
+        set +e
+        start-stop-daemon --test --start --pidfile "$MRSOA_PID" \
+            --user $MRSOA_USER --exec "$MRSOA_JAVA" \
+            >/dev/null 2>&1
+        if [ $? -eq 0 ]; then
+            if [ -f "$MRSOA_PID" ]; then
+                log_success_msg "$DESC is not running, but pid file exists."
+                exit 1
+            else
+                log_success_msg "$DESC is not running."
+                exit 3
+            fi
+        else
+            log_success_msg "$DESC is running with pid `cat $MRSOA_PID`"
+        fi
+        set -e
+        ;;
+    restart)
+        if [ -f "$MRSOA_PID" ]; then
+            $0 stop
+            sleep 1
+        fi
+        $0 start
+        ;;
+    *)
+        #log_success_msg "Usage: $0 {start|stop|force-stop|restart|status}"
+        log_success_msg "Usage: $0 {start|stop|restart|status}"
+        exit 1
+        ;;
+esac
+
+exit 0

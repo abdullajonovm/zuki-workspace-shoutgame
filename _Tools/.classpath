@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="var" path="M2_REPO/mysql/mysql-connector-java/5.1.6/mysql-connector-java-5.1.6.jar"/>
+	<classpathentry kind="var" path="M2_REPO/c3p0/c3p0/0.9.1.2/c3p0-0.9.1.2.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/google/code/gson/gson/2.3.1/gson-2.3.1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/meinc/mrsoa-support/1.0/mrsoa-support-1.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ShoutContestService"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/EncryptionService"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/MrSoaSupport"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/GameplayDomain"/>
+	<classpathentry kind="var" path="M2_REPO/com/fasterxml/jackson/core/jackson-core/2.7.2/jackson-core-2.7.2.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/fasterxml/jackson/core/jackson-databind/2.7.2/jackson-databind-2.7.2.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/apache/commons/commons-math3/3.3/commons-math3-3.3.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/SnowyowlService"/>
+	<classpathentry kind="var" path="M2_REPO/com/lambdaworks/scrypt/1.4.0/scrypt-1.4.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/IdentityService"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/StoreService"/>
+	<classpathentry kind="output" path="target"/>
+</classpath>

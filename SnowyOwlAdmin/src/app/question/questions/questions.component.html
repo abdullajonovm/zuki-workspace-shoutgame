@@ -1,0 +1,41 @@
+<div>
+    <button vx-button routerLink="/question/create">Create Question</button>
+</div>
+<vx-autocomplete label="Search Status" [(ngModel)]="state" [searchable]="false">
+    <vx-item value="UNPUBLISHED">Unpublished</vx-item>
+    <vx-item value="PUBLISHED">Published</vx-item>
+    <vx-item value="RETIRED">Retired</vx-item>
+</vx-autocomplete>
+
+<app-data-table [items]="questions" [(selectedItem)]="selectedQuestion" (rowDoubleClick)="editQuestion()" [loading]="loading">
+    <app-column>
+        <ng-template let-selected="selected">
+            <i [vxMenuTrigger]="drop" class="fa fa-cog" tabindex="0"></i>
+
+        </ng-template>
+    </app-column>
+    <app-column header="Question" field="questionText.en"></app-column>
+    <app-column header="Categories" field="questionCategoryUuids" [filterTransform]="boundCategoriesToString">
+        <ng-template let-question>
+            <span *ngFor="let category of question.questionCategoryUuids; let last = last">
+                {{categoryService.keyedCategories[category]?.categoryName?.en || 'UNKNOWN'}}<span *ngIf="!last">, </span>
+            </span>
+        </ng-template>
+    </app-column>
+</app-data-table>
+
+<vx-menu #drop>
+    <vx-item *ngIf="selectedQuestion && selectedQuestion.status === 'UNPUBLISHED'" (select)="publishQuestion()"> Publish
+        Question
+    </vx-item>
+    <vx-item *ngIf="selectedQuestion && selectedQuestion.status === 'PUBLISHED'" (select)="retireQuestion()"> Retire
+        Question
+    </vx-item>
+    <vx-item *ngIf="selectedQuestion && selectedQuestion.status === 'RETIRED'" (select)="republishQuestion()">
+        Republish Question
+    </vx-item>
+    <vx-item *ngIf="selectedQuestion && selectedQuestion.status === 'UNPUBLISHED'" (select)="deleteQuestion()"> Delete
+        Question
+    </vx-item>
+    <vx-item *ngIf="selectedQuestion" (select)="cloneQuestion()"> Clone Question </vx-item>
+</vx-menu>

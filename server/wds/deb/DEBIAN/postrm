@@ -1,0 +1,23 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    remove|purge)
+        if [ -d /etc/nginx/sites-enabled ]; then
+            cd /etc/nginx/sites-enabled
+            rm -f shout_wds_origin
+            cd /etc/nginx/sites-available
+            rm -f shout_wds_origin*
+            rm -rf shout_lua
+        fi
+    ;;
+
+    upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+        # Nothing to do here
+    ;;
+
+    *)
+        echo "$0 called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac

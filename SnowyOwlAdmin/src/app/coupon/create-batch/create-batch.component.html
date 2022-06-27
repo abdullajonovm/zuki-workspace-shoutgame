@@ -1,0 +1,25 @@
+<form #form="ngForm">
+    <h1 vxDialogTitle="">Create Coupon Batch</h1>
+    <div vxDialogContent="">
+        <div class="inputs">
+            <vx-form-field>
+                <input vxFormField label="Batch Name" [(ngModel)]="batch.batchName" name="batchName" required>
+            </vx-form-field>
+            <vx-form-field>
+                <input vxFormField label="Coupon Amount" [appMask]="{mask: moneyMask}" name="amount" ngModel [(appNumber)]="amount" required>
+            </vx-form-field>
+            <vx-form-field>
+                <input type="number" vxFormField label="# Coupons" [(ngModel)]="batch.quantity" name="numCoupons" required>
+            </vx-form-field>
+            <vx-checkbox [(ngModel)]="expires" name="doesExpire">Has Expiration Date</vx-checkbox>
+            <vx-form-field>
+                <input vxFormField  [disabled]="!expires" label="Expiration Date" [(appDate)]="batch.expireDate" ngModel name="expires"
+                       [appMask]="dateMask" required>
+            </vx-form-field>
+        </div>
+    </div>
+    <div vxDialogActions="">
+        <button type="submit" vx-button [disabled]="form.invalid" (click)="submit()">Submit</button>
+        <button vx-button (click)="dialog.close()">Cancel</button>
+    </div>
+</form>

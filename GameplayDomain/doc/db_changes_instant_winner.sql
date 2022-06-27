@@ -1,0 +1,2 @@
+ALTER TABLE `gameplay`.`poll` ADD COLUMN `minutes_to_autoclose` INT UNSIGNED NULL  AFTER `number_of_winners` ;
+ALTER TABLE `gameplay`.`poll` ADD COLUMN `sponsor_message` VARCHAR(254) NULL  AFTER `minutes_to_autoclose` ;

@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>store-service</artifactId>
+    <version>1.0</version>
+    <packaging>mrsoa-service</packaging>
+
+    <parent>
+        <groupId>meinc</groupId>
+        <artifactId>MeincOverlord-service-springmybatis</artifactId>
+        <version>3.0-mvnbuild</version>
+        <relativePath>../MeincOverlord/poms/parents/pom-service-springmybatis</relativePath>
+    </parent>
+
+    <repositories>
+        <repository>
+            <id>google-api-services</id>
+            <url>http://google-api-client-libraries.appspot.com/mavenrepo</url>
+        </repository>
+        <!--<repository>
+            <id>braintree</id>
+            <name>Braintree</name>
+            <url>http://braintree.github.com/braintree_java/releases</url>
+        </repository>-->
+        
+        <!-- needed for Vantiv -->
+        <repository>
+           <snapshots>
+              <enabled>false</enabled>
+           </snapshots>
+           <id>central</id>
+           <name>bintray</name>
+           <url>https://jcenter.bintray.com</url>
+        </repository>
+    </repositories>
+
+    <properties>
+        <plugin.spring.context.path.StoreService>classpath:storeservice@applicationContext.xml</plugin.spring.context.path.StoreService>
+        <plugin.spring.bean.name.StoreService>storeService</plugin.spring.bean.name.StoreService>
+
+        <plugin.spring.context.path.MockStoreService>classpath:storeservice@applicationContext.xml</plugin.spring.context.path.MockStoreService>
+        <plugin.spring.bean.name.MockStoreService>mockStoreService</plugin.spring.bean.name.MockStoreService>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>meinc</groupId>
+                <artifactId>service-assembler</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <clientJar>
+                        <includes>
+                            <include>com/meinc/store/service/IStoreService.*</include>
+                            <include>com/meinc/store/domain/*</include>
+                            <include>com/meinc/store/exception/*</include>
+                        </includes>
+                    </clientJar>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+
+        <!-- <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>client-hosted-team-service</artifactId>
+            <version>3.0</version>
+        </dependency> -->
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+
+        <!-- json -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.7.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.7.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.7.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.8</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>http-utils</artifactId>
+            <version>3.0</version>
+        </dependency>
+
+        <!-- <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>push-service</artifactId>
+            <classifier>client</classifier>
+            <version>1.0</version>
+        </dependency> -->
+
+        <!-- <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>postoffice-service</artifactId>
+            <classifier>client</classifier>
+            <version>3.0</version>
+        </dependency> -->
+
+        <!-- <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>http-connector-service</artifactId>
+            <classifier>client</classifier>
+            <version>3.0</version>
+        </dependency> -->
+
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>gameplay-domain</artifactId>
+            <version>3.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>mrsoa-support</artifactId>
+            <version>1.0</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>identity-service</artifactId>
+            <classifier>client</classifier>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>facebook-service</artifactId>
+            <classifier>client</classifier>
+            <version>2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.2.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.2.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-androidpublisher</artifactId>
+            <version>v1.1-rev18-1.17.0-rc</version> <!-- v1-rev5-1.13.2-beta -->
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.api-client</groupId>
+            <artifactId>google-api-client</artifactId>
+            <version>1.17.0-rc</version> <!-- 1.13.2-beta -->
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.oauth-client</groupId>
+            <artifactId>google-oauth-client</artifactId>
+            <version>1.17.0-rc</version> <!-- 1.13.1-beta -->
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>11.0.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-oauth2</artifactId>
+            <version>v2-rev27-1.13.2-beta</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.http-client</groupId>
+            <artifactId>google-http-client</artifactId>
+            <version>1.17.0-rc</version> <!-- 1.13.1-beta -->
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.http-client</groupId>
+            <artifactId>google-http-client-jackson</artifactId>
+            <version>1.17.0-rc</version> <!-- 1.13.1-beta -->
+        </dependency>
+
+        <!--  Required by Google Play -->        
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+            <version>1.9.11</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.9.11</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.braintreepayments.gateway</groupId>
+            <artifactId>braintree-java</artifactId>
+            <version>2.83.1</version> <!-- 2.63.0 -->
+        </dependency>
+        
+        <!-- Authorize.Net -->
+        <dependency>
+            <groupId>net.authorize</groupId>
+            <artifactId>anet-java-sdk</artifactId>
+            <version>1.9.3</version>
+        </dependency>
+        
+        <!-- Vantiv -->
+        <dependency>
+            <groupId>com.cnp</groupId>
+            <artifactId>cnp-sdk-for-java</artifactId>
+            <version>12.0.3</version>
+        </dependency>                
+    </dependencies>
+
+</project>

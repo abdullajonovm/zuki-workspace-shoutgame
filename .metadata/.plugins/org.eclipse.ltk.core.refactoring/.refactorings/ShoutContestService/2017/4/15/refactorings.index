@@ -1,0 +1,4 @@
+1491927587403	Encapsulate field '_countdownToElimination'
+1491927755720	Encapsulate field '_bracketEliminationCount'
+1492024206127	Rename method 'getRoundPlayerForMatch'
+1492024255918	Rename method 'getRoundPlayerForMatch'

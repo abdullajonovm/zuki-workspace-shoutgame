@@ -1,0 +1,136 @@
+@import "vars";
+
+.top {
+    background: $mainColor;
+    padding: 15px;
+    color: white;
+}
+
+.email {
+    font-weight: bold;
+}
+
+.nick {
+    //font-weight: 100;
+}
+button {
+    margin: 10px 5px 0;
+}
+
+.icon-pencil {
+    position: absolute;
+    right: -3px;
+    bottom: 13px;
+    background: $accentColor;
+    padding: 5px;
+    border-radius: 100%;
+    font-size: 12px;
+}
+
+.imgWrap {
+    position: relative;
+    display: inline-block;
+}
+
+img {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.tabs {
+    display: flex;
+    margin: 10px -15px -15px -15px;
+}
+
+.tab {
+    flex: 1;
+    text-align: center;
+    padding: 10px 5px;
+    background: darken($mainColor, 3%);
+    &.center {
+        background: darken($mainColor, 5%);
+    }
+}
+
+
+.purse {
+    font-size: 20px;
+}
+
+.notificationPref {
+    float: none;
+    margin-top: 10px;
+    margin-left: 0;
+}
+
+
+@include desktop {
+    img {
+        width: 75px;
+        height: 75px;
+    }
+}
+
+.version {
+    text-align: center;
+    margin-top: 10px;
+    color: #6b6b6b;
+    font-size: 13px;
+}
+
+.scroller {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+}
+
+.game {
+    background: #F5F4F6;
+    display: inline-flex;
+    cursor: pointer;
+    &:not(:last-child) {
+        margin-right: 10px;
+    }
+    width: 320px;
+    height: 220px;
+    flex-direction: column;
+
+    .description {
+        white-space: normal;
+        padding: 5px;
+    }
+    .title {
+        white-space: normal;
+        font-size: 16px;
+        padding: 5px;
+    }
+}
+
+.categories {
+    padding: 3px 5px;
+    font-size: 12px;
+    border-bottom: 1px solid #cecece;
+    span {
+        font-weight: bold;
+    }
+}
+
+.gameImg {
+    width: 100%;
+    height: 180px;
+    background-size: cover;
+    background-position: center;
+    flex: 1;
+}
+
+.past {
+    padding: 5px;
+    color: #fff;
+    background: #464646;
+}
+
+.hasNew {
+    text-decoration: underline;
+}

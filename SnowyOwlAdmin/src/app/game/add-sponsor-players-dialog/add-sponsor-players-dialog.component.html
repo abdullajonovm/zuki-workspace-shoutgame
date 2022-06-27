@@ -1,0 +1,30 @@
+<div class="loader" class="dialog-loader" *ngIf="loading">
+    <vx-spinner>
+
+    </vx-spinner>
+</div>
+<form #form="ngForm">
+    <div vxDialogTitle>Add Sponsor Players</div>
+
+    <div vxDialogContent="">
+
+        <div class="inputs">
+            <vx-autocomplete label="Sponsor" [(ngModel)]="sponsorEmail" name="sponsorEmail">
+                <vx-item *ngFor="let sponsor of allSponsors" [value]="sponsor.email"
+                         >
+                    {{sponsor.email}} <br/>
+                    <b>#{{sponsor.nickname}}</b>
+                </vx-item>
+            </vx-autocomplete>
+
+            <vx-form-field>
+                <input vxFormField label="Num Players To Add" name="numPlayers" [disabled]="loading" [(ngModel)]="numPlayers" [appMask]="{mask: numberMask}" [min]="1" required>
+            </vx-form-field>
+        </div>
+    </div>
+
+    <div vxDialogActions>
+        <button [disabled]="form.invalid" vx-button (click)="addPlayers()" type="submit">Submit</button>
+        <button vx-button (click)="dialog.close()" type="button">Close</button>
+    </div>
+</form>

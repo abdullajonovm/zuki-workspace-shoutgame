@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.meinc.identity.dao.IXmlSubscriberDaoMapper">
+    
+    <!-- subscriber -->
+    <resultMap id="subscriberMap" type="com.meinc.identity.domain.Subscriber">
+        <id property="subscriberId" column="subscriber_id" />
+        <result property="firstname" column="firstname" />
+        <result property="lastname" column="lastname" />
+        <result property="nickname" column="nickname" />
+        <result property="nicknameSet" column="nickname_set" />
+        <result property="facebookUserFlag" column="facebook_user_flag" />
+        <result property="photoUrl" column="photo_url" />
+        <result property="photoUrlSmall" column="photo_url_small" />
+        <result property="photoUrlLarge" column="photo_url_large" />
+        <result property="role" column="role" />
+        <result property="adminRole" column="admin_role" />
+        <result property="email" column="email" />
+        <result property="emailVerified" column="email_verified" />
+        <result property="primaryId" column="primary_identifier" />
+        <result property="passwd" column="passwd" />
+        <result property="passwdSet" column="passwd_set" />
+        <result property="changePassword" column="change_password" />
+        <result property="encryptKey" column="encrypt_key" />
+        <result property="emailSha256Hash" column="email_sha256_hash" />
+        <result property="emailHashPrefix" column="email_hash_prefix" />
+        <result property="phone" column="phone" />
+        <result property="phoneVerified" column="phone_verified" />
+        <result property="activeFlag" column="active_flag" />
+        <result property="eulaFlag" column="eula_flag" />
+        <result property="adultFlag" column="is_adult_flag" />
+        <result property="languageCode" column="language_code" />
+        <result property="currencyCode" column="currency_code" />
+        <result property="fromCountryCode" column="from_country_code" />
+        <result property="shipCountryCode" column="ship_country_code" />
+        <result property="mintParentSubscriberId" column="mint_parent_subscriber_id" />
+        <result property="ring1SubscriberId" column="ring1_subscriber_id" />
+        <result property="ring2SubscriberId" column="ring2_subscriber_id" />
+        <result property="ring3SubscriberId" column="ring3_subscriber_id" />
+        <result property="ring4SubscriberId" column="ring4_subscriber_id" />
+        <result property="dateOfBirth" column="date_of_birth" />
+        <result property="createDate" column="create_date" />
+        <result property="updateDate" column="update_date" />
+        <!-- <association property="addresses" column="subscriber_id" javaType="com.meinc.subscriber.domain.SubscriberAddress" select="getSubscriberAddressBySubscriberId" /> -->
+        <!-- <association property="subscriberSession" column="subscriber_id" javaType="com.meinc.subscriber.domain.SubscriberSession" select="getSubscriberSessionBySubscriberId" /> -->
+    </resultMap>
+     
+    <!-- address -->
+    <resultMap id="subscriberAddressMap" type="com.meinc.identity.domain.SubscriberAddress">
+        <id property="addressId" column="address_id" />
+        <result property="subscriberId" column="subscriber_id" />
+        <result property="type" column="addr_type" />
+        <result property="addr1" column="addr1" />
+        <result property="addr2" column="addr2" />
+        <result property="city" column="city" />
+        <result property="state" column="state" />
+        <result property="zip" column="zip" />
+        <result property="countryCode" column="country_code" />
+        <result property="current" column="current_flag" />
+        <result property="createDate" column="create_date" />
+        <result property="updateDate" column="update_date" />
+    </resultMap>
+    
+    <!-- session -->
+    <resultMap id="subscriberSessionMap" type="com.meinc.identity.domain.SubscriberSession">
+        <result property="subscriberId" column="subscriber_id" />
+        <result property="contextId" column="context_id" />
+        <result property="deviceId" column="device_id" />
+        <result property="sessionKey" column="session_key" />
+        <result property="deviceModel" column="device_model" />
+        <result property="deviceName" column="device_name" />
+        <result property="deviceVersion" column="device_version" />
+        <result property="osName" column="os_name" />
+        <result property="osType" column="os_type" />
+        <result property="appId" column="app_id" />
+        <result property="appVersion" column="app_version" />
+        <result property="addedDate" column="added_date" />
+        <result property="lastAuthenticatedDate" column="last_authenticated_date" />
+    </resultMap>
+
+    <resultMap id="subscriberSessionLightMap" type="com.meinc.identity.domain.SubscriberSessionLight">
+        <result property="primaryId" column="primary_identifier" />
+        <result property="encryptKey" column="encrypt_key" />
+        <result property="deviceId" column="device_id" />
+        <result property="subscriberId" column="subscriber_id" />
+        <result property="contextId" column="context_id" />
+        <result property="sessionKey" column="session_key" />
+        <result property="active" column="active" />
+        </resultMap>
+    
+    <resultMap id="facebookIdentityInfoMap" type="com.meinc.identity.domain.FacebookIdentityInfo">
+        <result property="subscriberId" column="subscriber_id" />
+        <result property="facebookId" column="facebook_id" />
+        <result property="facebookAppId" column="facebook_app_id" />
+        <result property="contextId" column="context_id" />
+    </resultMap>
+    
+    <resultMap id="foreignHostIdentityInfoMap" type="com.meinc.identity.domain.ForeignHostIdentityInfo">
+        <result property="subscriberId" column="subscriber_id" />
+        <result property="foreignHostSubscriberId" column="foreign_host_subscriber_id" />
+        <result property="foreignHostAppId" column="foreign_host_app_id" />
+        <result property="contextId" column="context_id" />
+    </resultMap>
+
+    <resultMap id="subscriberProfileMap" type="com.meinc.identity.domain.SubscriberProfile">
+    	<result property="subscriberId" column="subscriber_id" />
+        <result property="facebookId" column="facebook_id" />
+        <result property="nickname" column="nickname" />
+        <result property="photoUrl" column="photo_url" />
+        <result property="countryCode" column="country_code" />
+    </resultMap>    
+    
+    <resultMap id="nicknameContextMap" type="com.meinc.identity.domain.NicknameContext">
+        <result property="contextId" column="context_id" />
+        <result property="nickname" column="nickname" />
+    </resultMap>
+    
+    <select id="getSubscribersForSessionTokens" resultMap="subscriberSessionLightMap">
+        select s.primary_identifier, s.encrypt_key, ss.device_id, ss.subscriber_id, ss.context_id, ss.session_key, s.active_flag as active
+          from gameplay.s_subscriber s, gameplay.s_subscriber_session ss
+         where s.subscriber_id = ss.subscriber_id AND ss.session_key IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    
+    <select id="getSubscribers" resultMap="subscriberMap">
+        select *
+          from gameplay.s_subscriber
+         where subscriber_id IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    
+    <select id="getSubscribersByPhones" resultMap="subscriberMap">
+        select *
+          from gameplay.s_subscriber
+         where phone IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    
+    <select id="getIdentityInfoForFacebookUsers" resultMap="subscriberProfileMap">
+    	select fb.facebook_id, s.subscriber_id, s.from_country_code as country_code,
+    	       s.nickname, s.photo_url
+    	  from gameplay.s_identity_fb fb, gameplay.s_subscriber s
+    	 where fb.context_id = #{contextId}
+    	   AND facebook_id IN
+    	 <foreach item="item" index="index" collection="facebookIds" open="(" separator="," close=")">
+    	 	#{item}
+    	 </foreach>
+    	   AND s.subscriber_id = fb.subscriber_id
+    </select>
+</mapper>

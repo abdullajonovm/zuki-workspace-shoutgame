@@ -1,0 +1,15 @@
+<div vxDialogContent>
+<app-data-table [items]="info" [loading]="loading">
+    <app-column header="Id" field="subscriberId">
+    </app-column>
+    <app-column header="Nickname" field="nickname">
+    </app-column>
+    <app-column header="Email" field="email">
+    </app-column>
+    <app-column header="Paid Player" field="freePlayer" [filterTransform]="parsePaidPlayer">
+        <ng-template let-item>
+            <vx-checkbox [checked]="!item.freePlayer" [disabled]="true"></vx-checkbox>
+        </ng-template>
+    </app-column>
+</app-data-table>
+</div>

@@ -1,0 +1,10 @@
+FROM srd-server:0.2.1
+LABEL maintainer.name="Rafael Solano Martinez"
+LABEL maintainer.mail="rafael.solano@resultier.com"
+LABEL description="Snowy Owl SRD Server"
+
+COPY default.conf.ctmpl /etc/srd-server/
+COPY servers.conf.ctmpl /etc/srd-server/
+
+CMD ["-template", "/etc/srd-server/default.conf.ctmpl:/etc/srd-server/default.conf", \
+     "-template", "/etc/srd-server/servers.conf.ctmpl:/etc/srd-server/servers.conf"]

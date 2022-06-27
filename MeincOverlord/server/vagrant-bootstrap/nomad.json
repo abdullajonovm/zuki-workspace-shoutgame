@@ -1,0 +1,22 @@
+{
+    "bind_addr": "0.0.0.0",
+    "log_level": "info",
+    "advertise": {
+        "http": "${CLUSTER_HOST_PRIVATE_IP}",
+        "rpc": "${CLUSTER_HOST_PRIVATE_IP}",
+        "serf": "${CLUSTER_HOST_PRIVATE_IP}"
+    },
+    "server": {
+        "enabled": true,
+        "bootstrap_expect": ${CLUSTER_HOST_COUNT}
+    },
+    "client": {
+        "enabled": true,
+        "network_interface": "${CLUSTER_HOST_NETWORK_INTERFACE}",
+        "gc_disk_usage_threshold": 90,
+        ${NOMAD_CLIENT_CPU_MHZ}
+        "options": {
+            "docker.cleanup.image": false
+        }
+    } 
+}

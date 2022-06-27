@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.meinc.commons.encryption.IEncryptionDaoMapper">
+
+  <insert id="insertMungeValue" parameterType="map">
+    <![CDATA[
+    	INSERT INTO team.munge (namespace, original_value, munged_value, created_date, expires_date) 
+    	VALUES (#{ns},#{origValue},#{mungeValue},NOW(),#{expiresDate})
+    ]]>
+  </insert>
+  
+  <select id="getMungedValue" resultType="string" parameterType="string">
+    <![CDATA[
+  		SELECT munged_value FROM team.munge WHERE namespace = #{ns} AND original_value = #{origValue} AND NOW() < expires_date ORDER BY created_date DESC
+    ]]>
+  </select>
+	
+  <select id="getUnMungedValue" resultType="string" parameterType="string">
+    <![CDATA[
+  		SELECT original_value FROM team.munge WHERE namespace = #{ns} AND munged_value = #{mungeValue} AND NOW() < expires_date
+    ]]>
+  </select>
+	
+  <select id="deleteMungedValue" resultType="string" parameterType="string">
+    <![CDATA[
+      DELETE FROM team.munge WHERE namespace = #{ns} AND munged_value = #{mungeValue}
+    ]]>
+  </select>
+  
+  <select id="deleteUnMungedValue" resultType="string" parameterType="string">
+    <![CDATA[
+      DELETE FROM team.munge WHERE namespace = #{ns} AND original_value = #{origValue}
+    ]]>
+  </select>
+  
+</mapper>

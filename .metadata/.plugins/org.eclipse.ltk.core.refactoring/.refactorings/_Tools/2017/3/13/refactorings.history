@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename method &apos;tv.shout.tools.scratch.Scratch2.testParsingOfUserMatchedPayloadWrapper()&apos; to &apos;testQuestionWrapperPayload&apos;&#x0A;- Original project: &apos;_Tools&apos;&#x0A;- Original element: &apos;tv.shout.tools.scratch.Scratch2.testParsingOfUserMatchedPayloadWrapper()&apos;&#x0A;- Renamed element: &apos;tv.shout.tools.scratch.Scratch2.testQuestionWrapperPayload()&apos;&#x0A;- Update references to refactored element" delegate="false" deprecate="false" description="Rename method &apos;testParsingOfUserMatchedPayloadWrapper&apos;" flags="589826" id="org.eclipse.jdt.ui.rename.method" input="/src\/main\/java&lt;tv.shout.tools.scratch{Scratch2.java[Scratch2~testParsingOfUserMatchedPayloadWrapper" name="testQuestionWrapperPayload" references="true" stamp="1490638231191" version="1.0"/>
+</session>

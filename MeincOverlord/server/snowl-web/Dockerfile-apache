@@ -1,0 +1,17 @@
+FROM httpd:2.4
+LABEL maintainer.name="Rafael Solano Martinez"
+LABEL maintainer.mail="rafael.solano@resultier.com"
+LABEL description="Snowy Owl Web Server - Apache"
+
+EXPOSE 80/tcp
+ARG HTTP_CONF
+ARG HTTP_DOCS
+
+ADD www/admin /usr/local/apache2/htdocs/admin
+ADD www/clientimages /usr/local/apache2/htdocs/clientimages
+ADD www/legal /usr/local/apache2/htdocs/legal
+ADD www/snowl /usr/local/apache2/htdocs/snowl
+ADD www/play /usr/local/apache2/htdocs/play
+ADD www/snowladmin /usr/local/apache2/htdocs/snowladmin
+COPY apache/httpd.conf /usr/local/apache2/conf/httpd.conf
+

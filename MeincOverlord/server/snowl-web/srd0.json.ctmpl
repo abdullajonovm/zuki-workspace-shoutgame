@@ -1,0 +1,6 @@
+{
+    "mediaUrl":     "https://snowl-wms-origin--0--{{key "cluster/domain/hostname/suffix"}}.{{key "cluster/domain"}}:{{key "cluster/domain/port/https"}}",
+    "socketIOUrl":  "https://snowl-socketio--0--{{key   "cluster/domain/hostname/suffix"}}.{{key "cluster/domain"}}:{{key "cluster/domain/port/https"}}",
+    "wdsUrl":       "https://snowl-wds-origin--0--{{key "cluster/domain/hostname/suffix"}}.{{key "cluster/domain"}}:{{key "cluster/domain/port/https"}}",
+    "collectorUrl": "https://snowl-collector--0--{{key  "cluster/domain/hostname/suffix"}}.{{key "cluster/domain"}}:{{key "cluster/domain/port/https"}}"
+}

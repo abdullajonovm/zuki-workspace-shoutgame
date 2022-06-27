@@ -1,0 +1,19 @@
+<div class="buttons">
+    <button vx-button (click)="createBatch()">Create Batch</button>
+</div>
+
+<app-data-table [items]="couponService.batches" [loading]="loading"
+                (rowDoubleClick)="goToBatch($event)">
+    <app-column header="Name" field="batchName"></app-column>
+    <app-column header="Amount" field="amount">
+        <ng-template let-item>
+            {{item.amount | currency:'USD':'symbol':'1.0-2'}}
+        </ng-template>
+    </app-column>
+    <app-column header="Expires" field="expirationDate">
+        <ng-template let-item>
+            <span *ngIf="item.expireDate">{{item.expireDate | date:'short'}}</span>
+            <span *ngIf="!item.expireDate">Never</span>
+        </ng-template>
+    </app-column>
+</app-data-table>

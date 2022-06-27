@@ -1,0 +1,13 @@
+<ng-container *ngFor="let game of games; trackBy: trackByGame">
+    <sh-game-card (onMoreInfo)="goToGame(game)" (onPlayNow)="goToGame(game, true)"
+                  [game]="game" [playNow]="canPlayNow(game)">
+
+    </sh-game-card>
+</ng-container>
+
+<div *ngIf="!games.length && !gameService.loadingGames">
+    {{'game.noGames' | i18n}}
+</div>
+<div *ngIf="!games.length && gameService.loadingGames">
+    <span class="icon-spinner"></span>
+</div>

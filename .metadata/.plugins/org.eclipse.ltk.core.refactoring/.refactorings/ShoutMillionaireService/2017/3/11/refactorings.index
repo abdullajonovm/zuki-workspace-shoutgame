@@ -1,0 +1,14 @@
+1489425864302	Delete element
+1489427425855	Rename type 'ActivityCategory'
+1489427495156	Rename method 'getActivityCategoryUuidsFromCategoryKeys'
+1489427560255	Rename method 'getActivityCategoryUuidsFromCategoryKeys'
+1489442058722	Rename local variable 'actCats'
+1489442069749	Rename local variable 'ac'
+1489502989770	Rename method 'getQuestionCategoryUuidsFromCategoryKeys'
+1489503009630	Rename method 'getQuestionCategoryUuidsFromCategoryKeys'
+1489505489768	Delete element
+1489506260838	Rename type 'ShoutDbProvider'
+1489508186978	Copy compilation unit
+1489524731336	Rename type 'EventInputter'
+1489617844121	Rename type 'ShoutMillionaireHandler'
+1489618033883	Rename method 'shoutMillionaireHandler'

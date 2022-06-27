@@ -1,0 +1,40 @@
+<div class="wrapper">
+    <div class="title"><img src="assets/img/logo-tall.svg" alt="Daily Millionaire" routerLink="/home/all"></div>
+    <p class="sub">Play in a trivia question tournament and win prizes.</p>
+    <form #form="ngForm" (submit)="submit()" *ngIf="loggingIn">
+        <input type="email" placeholder="Email" name="email" [(ngModel)]="email" required email autocomplete="email">
+        <input type="password" placeholder="Password" name="password" [(ngModel)]="password" required autocomplete="current-password">
+
+        <button type="submit" [disabled]="form.invalid" class="light">
+            {{ loggingIn ? 'Login' : 'Sign Up' }}
+        </button>
+    </form>
+    <form #signup="ngForm" (submit)="submit()" *ngIf="!loggingIn">
+        <input type="email" placeholder="Email" name="email" [(ngModel)]="email" required email autocomplete="email">
+        <input type="password" placeholder="Password" name="password" [(ngModel)]="password" required autocomplete="new-password">
+
+        <input type="password" placeholder="Confirm Password" name="confirm password" [(ngModel)]="passwordConf"
+               required autocomplete="new-password">
+
+        <input placeholder="Username" name="username" [(ngModel)]="username" required autocomplete="username">
+
+        <input [textMask]="dateMask" placeholder="Birth Date (MM/DD/YYYY)" name="birthDate" [(ngModel)]="birthDate"
+               required autocomplete="bday-month bday-day bday-year">
+        <p>By signing up you are agreeing to our <a routerLink="/termsAndConditions">Terms and Conditions</a></p>
+
+        <button type="submit" [disabled]="signup.invalid" class="light">
+            {{ loggingIn ? 'Login' : 'Sign Up' }}
+        </button>
+    </form>
+
+    <div class="or">
+        or
+        <a *ngIf="loggingIn" (click)="loggingIn = false;">Sign Up</a>
+        <a *ngIf="!loggingIn" (click)="loggingIn = true;">Login</a>
+    </div>
+    <div class="links">
+        <a routerLink="/termsAndConditions">Terms and Conditions</a>
+        <a routerLink="/privacy">Privacy</a>
+        <p>A <b>Shout</b><span class="reserved">®</span> company</p>
+    </div>
+</div>

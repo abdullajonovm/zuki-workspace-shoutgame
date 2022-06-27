@@ -1,0 +1,159 @@
+@import 'vars';
+
+$headerH: 60px;
+$sidebarW: 200px;
+
+:host {
+    display: flex;
+    height: 100%;
+}
+
+.sidenav {
+    width: $sidebarW;
+    background: mix($foreground, $background, 7%);
+    color: white;
+    flex-shrink: 0;
+    flex-grow: 0;
+    transform: translateX(0);
+    transition: transform .3s;
+    z-index: 103;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: stretch;
+
+    &.over {
+        position: absolute;
+        height: 100%;
+        margin-left: -$sidebarW;
+
+        &.opened {
+            transform: translateX($sidebarW);
+        }
+
+    }
+
+}
+
+.overlay {
+    position: absolute;
+    z-index: 101;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0, .3);
+}
+
+.body {
+    flex: 1;
+    max-width: 100%;
+    height: 100%;
+}
+
+.header {
+    box-sizing: border-box;
+    height: $headerH;
+    background: $mainColor;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+    border: none;
+    font-size: 25px;
+    z-index: 100;
+    position: relative;
+    box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+
+    .menu {
+        position: absolute;
+        left: 15px;
+        i {
+            vertical-align: middle;
+        }
+    }
+    span {
+        margin-top: 10px;
+        display: inline-block
+    }
+}
+
+.mainContent {
+    padding: 15px;
+    box-sizing: border-box;
+    position: relative;
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
+    height: calc(100% - 60px);
+    & > div {
+        height: calc(100% + 1px);
+    }
+}
+
+.header.inner {
+    cursor: pointer;
+    border-right: 2px solid mix($background, $mainColor, 10%);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px;
+    white-space: nowrap;
+
+    vx-menu {
+        margin-left: 10px;
+        white-space: nowrap;
+        cursor: pointer;
+    }
+
+    img {
+        border-radius: 50%;
+        height: 37px;
+        width: 37px;
+        margin-right: 10px;
+    }
+
+    .username {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin: 0;
+        font-size: 18px;
+    }
+
+}
+
+.links {
+    flex: 1;
+    border-right: 2px solid mix($foreground, $background, 12%);
+
+    a {
+        display: block;
+        width: 100%;
+        text-align: left;
+        margin: 10px;
+        box-sizing: border-box;
+        color: mix($background, $foreground, 30%);
+        text-decoration: none;
+
+        &:hover {
+            color: $mainColor;
+            text-decoration: underline;
+        }
+        &.active {
+            color: $mainColor;
+            font-weight: bold;
+        }
+    }
+    div {
+        text-align: center;
+        margin-top: 10px;
+        color: #272727;
+        font-size: 13px;
+    }
+}
+
+.hasNew {
+    text-decoration: underline;
+}
+
+vx-item {
+    white-space: nowrap;
+}

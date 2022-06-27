@@ -1,0 +1,27 @@
+<h1>{{updating ? 'Update' : 'Create'}} Category</h1>
+<form #form="ngForm">
+    <div class="inputs">
+        <vx-form-field>
+            <input vxFormField label="Category Key" [(ngModel)]="category.categoryKey"
+                   appTooltip="SPORTS, HISTORY, etc..."required name="key" [disabled]="updating">
+        </vx-form-field>
+    </div>
+    <vx-tabs class="mTop15">
+        <vx-tab label="English">
+            <div class="inputs">
+                <vx-form-field>
+                    <input vxFormField label="Category Name" [(ngModel)]="category.categoryName.en" required name="english">
+                </vx-form-field>
+            </div>
+        </vx-tab>
+        <vx-tab label="Spanish">
+            <div class="inputs">
+                <vx-form-field>
+                    <input vxFormField label="Category Name" [(ngModel)]="category.categoryName.es" name="spanish">
+                </vx-form-field>
+            </div>
+        </vx-tab>
+    </vx-tabs>
+
+    <button vx-button (click)="create()" [disabled]="!form.valid">Submit</button>
+</form>

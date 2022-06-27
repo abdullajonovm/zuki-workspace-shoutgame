@@ -1,0 +1,37 @@
+#!/bin/sh
+set -e
+
+update-rc.d mrsoa remove >/dev/null || true
+
+case "$1" in
+    remove)
+        find /opt/meinc/mrsoa -not -path /opt/meinc/mrsoa/deploy/\*  \
+                              -not -path /opt/meinc/mrsoa/webapps/\* \
+                              -not -path /opt/meinc/mrsoa/lib/\*  \
+                              -not -path /opt/meinc/mrsoa/logs/\*  \
+                              -not -path /opt/meinc/mrsoa/email/\* \
+                              -not -path /opt/meinc/mrsoa/www/\*  \
+             -delete >/dev/null 2>&1 || true
+        rm -f /usr/local/bin/clean_logs.sh
+        update-rc.d -f mrsoa remove
+        rm -f /etc/init.d/mrsoa
+    ;;
+
+    purge)
+        rm -rf /opt/meinc >/dev/null 2>&1 || true
+        rm -f /usr/local/bin/clean_logs.sh
+        update-rc.d -f mrsoa remove
+        rm -f /etc/init.d/mrsoa
+        deluser mrsoa || true
+        delgroup mrsoa || true
+    ;;
+
+    upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+        # Nothing to do here
+    ;;
+
+    *)
+        echo "$0 called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac

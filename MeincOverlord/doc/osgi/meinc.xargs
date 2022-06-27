@@ -1,0 +1,57 @@
+-Dorg.knopflerfish.verbosity=0
+-Dorg.knopflerfish.gosg.jars=file:bundles/
+-Dorg.knopflerfish.framework.debug.packages=false
+-Dorg.knopflerfish.framework.debug.errors=true
+-Dorg.knopflerfish.framework.debug.classloader=false
+-Dorg.knopflerfish.framework.debug.startlevel=false
+-Dorg.knopflerfish.framework.system.export.all_13=false
+#-Dorg.osgi.framework.system.packages=
+-Dorg.osgi.framework.system.packages.file=bin/export-packages-to-classpath.txt
+
+-Dorg.knopflerfish.startlevel.use=true
+
+-Dorg.osgi.service.http.port=8181
+
+-Dorg.osgi.fileinstall.dir=deploy/
+-Dorg.osgi.fileinstall.startlevel=1
+-Dorg.osgi.fileinstall.poll=3000
+
+-init
+
+-initlevel 1
+-install log/log_api-2.0.0.jar
+-install console/console_api-2.0.0.jar
+-istart  cm/cm_api-2.0.0.jar
+-istart  log/log-2.0.0.jar
+-istart  console/console-2.0.0.jar
+
+#-istart  consoletty/consoletty-2.0.0.jar
+
+-istart  frameworkcommands/frameworkcommands-2.0.0.jar
+-istart  logcommands/logcommands-2.0.0.jar
+
+#-istart  useradmin/useradmin_api-2.0.0.jar
+#-istart consoletelnet/consoletelnet-2.0.0.jar
+
+-install jsdk/jsdk-2.2.jar
+-istart  http/http_all-2.0.0.jar
+-istart  httpconsole/httpconsole-2.0.0.jar
+
+-initlevel 2
+-install osgi-commons-collections-3.1.jar
+-install osgi-commons-pool-1.3.jar
+-install osgi-spring-3.0.5.RELEASE.jar
+-install osgi-mybatis-3.0.4.jar
+-install osgi-mybatis-dep-1.0.jar
+-install osgi-commons-dbcp-1.2.1.jar
+-install osgi-velocity-1.4.jar
+-istart mrsoa-kernel-3.0.jar
+
+-startlevel 2
+
+-initlevel 3
+-istart dirdeployer/dirdeployer_all-2.0.0.jar
+
+-startlevel 3
+
+-launch

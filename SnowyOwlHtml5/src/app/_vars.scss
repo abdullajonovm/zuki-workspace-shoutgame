@@ -1,0 +1,17 @@
+$mainColor: #093061; //#9825D9
+$errorColor: #b82f2f;
+$backgroundColor: white;
+$pageBackgroundColor: #C1C1C1;
+$foregroundColor: black;
+$accentColor: #D47C01;
+$successColor: green;
+
+$headerHeight: 47px;
+$headerLineHeight: 45px;
+
+$mobile-width: 480px;
+@mixin desktop {
+    @media (min-width: #{$mobile-width + 1}) {
+        @content;
+    }
+}

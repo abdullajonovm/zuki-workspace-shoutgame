@@ -1,0 +1,6 @@
+1520263268775	Encapsulate field '_subscriberId'
+1520263284129	Encapsulate field '_roundId'
+1520263299219	Encapsulate field '_order'
+1520273183553	Delete element
+1520273302810	Rename type 'DaoMapper'
+1520357367818	Rename type 'QuestionSupplier'

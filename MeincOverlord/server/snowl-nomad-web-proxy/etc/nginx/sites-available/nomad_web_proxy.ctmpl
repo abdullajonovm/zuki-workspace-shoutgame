@@ -1,0 +1,141 @@
+proxy_http_version     1.1;
+proxy_set_header       Host $host;
+
+{{- define "++"}}
+    {{- $key := (print "++:" .)}}
+    {{- if scratch.Key $key}}
+        {{- scratch.Set $key (add 1 (scratch.Get $key))}}
+    {{- else}}
+        {{- scratch.Set $key 0}}
+    {{- end}}
+    {{- print (scratch.Get $key)}}
+{{- end}}
+
+{{- define "build-maps-for-service"}}
+    {{- $serviceName := .}}
+    {{- if not ((scratch.MapValues "service-names") | contains $serviceName)}}
+        {{- $i := executeTemplate "++" "i"}}
+        {{- scratch.MapSet "service-names" $i $serviceName}}
+        {{- range $_,$service := service $serviceName}}
+            {{- range $_,$tag := .Tags}}
+                {{- $j := executeTemplate "++" "j"}}
+                {{- scratch.MapSet (print "service-tags:" $service.Name) $j $tag}}
+            {{- end}}
+            {{- if .Tags | contains "http"}}
+                {{- scratch.Set (print "service-http-url-host-port:" .Name) (printf "%s:%d" .Address .Port)}}
+            {{- end}}
+            {{- if .Tags | contains "https"}}
+                {{- scratch.Set (print "service-https-url-host-port:" .Name) (printf "%s:%d" .Address .Port)}}
+            {{- end}}
+        {{- end}}
+    {{- end}}
+{{- end}}
+
+{{- if (env "PROXY_ALL_CLUSTER_SERVERS") | eq "true"}}
+    {{- range services}}
+        {{- template "build-maps-for-service" .Name}}
+    {{- end}}
+{{- else}}
+    {{- with node}}
+        {{- range .Services}}
+            {{- template "build-maps-for-service" .Service}}
+        {{- end}}
+    {{- end}}
+{{- end}}
+
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    server_name _;
+    return 301 https://$host:{{key "cluster/domain/port/https"}}$request_uri;
+}
+
+{{range scratch.MapValues "service-names"}}
+    {{- range service .}}
+        {{- $tags := scratch.MapValues (print "service-tags:" .Name)}}
+        {{- if (($tags | contains "http") or ($tags | contains "https")) | and (not (.Name | regexMatch "nomad"))}}
+            server {
+                {{- if $tags | contains "http"}}
+                    #listen 80;
+                    #listen [::]:80;
+                {{- end}}
+                listen 443 ssl;
+                listen [::]:443 ssl;
+
+                ssl_certificate /etc/ssl/certs/cluster_domain_ssl_cert.crt;
+                ssl_certificate_key /etc/ssl/private/cluster_domain_ssl_key.pem;
+
+                server_name ~^{{.Name}} {{if .Name | eq "snowl-wds-origin--0"}}~^static--{{key "cluster/domain/hostname/suffix"}}.{{end}};
+
+                include letsencrypt;
+
+                {{- if $tags | contains "http"}}
+                    location / {
+                        proxy_pass http://{{scratch.Get (print "service-http-url-host-port:" .Name)}}$request_uri;
+                        proxy_redirect http://$http_host $scheme://$http_host;
+                        proxy_set_header Host $http_host;
+                        proxy_set_header Upgrade $http_upgrade;
+                        proxy_set_header Connection $http_connection;
+                    }
+                {{- else if $tags | contains "https"}}
+                    location / {
+                        proxy_pass https://{{scratch.Get (print "service-https-url-host-port:" .Name)}}$request_uri;
+                        proxy_redirect http://$http_host $scheme://$http_host;
+                        proxy_set_header Host $http_host;
+                        proxy_set_header Upgrade $http_upgrade;
+                        proxy_set_header Connection $http_connection;
+                    }
+                {{- end}}
+            }
+        {{- end}}
+        {{- scratch.Set (print "service-tags:" .Name) ""}}
+    {{- end}}
+{{- end}}
+
+{{with node}}
+    {{- range $_,$sv := .Services}}
+        {{- if not (scratch.Key "found_local_web")}}
+            {{- $serviceIdParts := $sv.Service | split "--"}}
+            {{- $serviceName := index $serviceIdParts 0}}
+            {{- if ($serviceName | eq "snowl-web") | and (.Tags | contains "http")}}
+                {{- scratch.Set "found_local_web" 1}}
+                {{range $i := loop 1 21}}
+                    {{- $domainNameKey := printf "web/domain/%d/name" $i}}
+                    {{- $sslNameKey := printf "web/domain/%d/ssl/cert" $i}}
+                    {{- if (keyExists $domainNameKey) | and (keyExists $sslNameKey)}}
+                        {{- $domainName := key $domainNameKey}}
+                        {{- $sslName := key $sslNameKey}}
+                        {{- $redirectKey := printf "web/domain/redirect/%s" $domainName}}
+                        server {
+                            #listen 80;
+                            #listen [::]:80;
+
+                            listen 443 ssl;
+                            listen [::]:443 ssl;
+
+                            ssl_certificate /etc/ssl/certs/{{$sslName}}.crt;
+                            ssl_certificate_key /etc/ssl/private/{{$sslName}}.pem;
+
+                            server_name {{$domainName}};
+
+                            include letsencrypt;
+
+                            {{- if (keyExists $redirectKey)}}
+                                {{- $redirectDomainName := key $redirectKey}}
+                                return 301 https://{{$redirectDomainName}}:{{key "cluster/domain/port/https"}}$request_uri;
+                            {{- else}}
+                                location / {
+                                    proxy_pass http://{{$sv.Address}}:{{$sv.Port}}$request_uri;
+                                    proxy_redirect http://$http_host $scheme://$http_host;
+                                    proxy_set_header Host $http_host;
+                                    proxy_set_header Upgrade $http_upgrade;
+                                    proxy_set_header Connection $http_connection;
+                                }
+                            {{- end}}
+                        }
+                    {{- end}}
+                {{- end}}
+            {{- end}}
+        {{- end}}
+    {{- end}}
+{{- end}}

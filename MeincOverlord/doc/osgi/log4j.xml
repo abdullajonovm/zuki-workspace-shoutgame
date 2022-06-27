@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<appender name="stdout_info" class="org.apache.log4j.ConsoleAppender">
+		<param name="Threshold" value="info"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{MM/dd HH:mm:ss:SSS} %-5p [%c{1}] %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="meinc_logfile_info" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${logging.base}/logs/meinc.log"/>
+		<param name="Threshold" value="info"/>
+		<param name="MaxFileSize" value="5MB"/>
+		<param name="MaxBackupIndex" value="100"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{MM/dd HH:mm:ss:SSS} %-5p [%c{1}] %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="meinc_debug_logfile_debug" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${logging.base}/logs/meinc_debug.log"/>
+		<param name="Threshold" value="debug"/>
+		<param name="MaxFileSize" value="5MB"/>
+		<param name="MaxBackupIndex" value="100"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{MM/dd HH:mm:ss:SSS} %-5p [%c{1}] %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="meinc_debug_logfile_info" class="com.sco.log4j.tools.appender.ChainAppender">
+		<param name="Threshold" value="info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+	</appender>
+
+	<appender name="meinc_mrsoa_logfile_debug" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${logging.base}/logs/meinc_mrsoa.log"/>
+		<param name="Threshold" value="debug"/>
+		<param name="MaxFileSize" value="5MB"/>
+		<param name="MaxBackupIndex" value="100"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{MM/dd HH:mm:ss:SSS} %-5p [%c{1}] %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="meinc_mrsoa_logfile_info" class="com.sco.log4j.tools.appender.ChainAppender">
+		<param name="Threshold" value="info"/>
+		<appender-ref ref="meinc_mrsoa_logfile_debug"/>
+	</appender>
+
+	<appender name="tomcat_logfile" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${logging.base}/logs/tomcat.log"/>
+		<param name="Threshold" value="error"/>
+		<param name="MaxFileSize" value="5MB"/>
+		<param name="MaxBackupIndex" value="100"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{MM/dd HH:mm:ss:SSS} %-5p [%c{1}] %m%n"/>
+		</layout>
+	</appender>
+
+	<!-- Log Shout2 events -->
+	<logger name="shout2" additivity="false">
+		<!--level value="debug"/-->
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+	</logger>
+	<!-- Log Me Inc events to all appenders to give context to all logs -->
+	<logger name="com.meinc" additivity="false">
+		<!--level value="debug"/-->
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_info"/>
+	</logger>
+	<!-- Log MrSOA adaptor layer events-->
+	<logger name="com.meinc.mrsoa" additivity="false">
+		<!--level value="debug"/-->
+		<level value="info"/>
+		<appender-ref ref="meinc_mrsoa_logfile_debug"/>
+	</logger>
+	<logger name="com.meinc.mrsoa.service" additivity="false">
+		<!--level value="debug"/-->
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_debug"/>
+	</logger>
+	<!-- Log Service Stub events to all appenders to give context to all logs -->
+	<logger name="com.meinc.mrsoa.service.stubs" additivity="false">
+		<!--level value="debug"/-->
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_info"/>
+		<appender-ref ref="meinc_mrsoa_logfile_debug"/>
+	</logger>
+	<!-- Log Tomcat events -->
+	<logger name="org.apache.catalina" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="tomcat_logfile"/>
+	</logger>
+
+	<root>
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_info"/>
+	</root>
+
+</log4j:configuration>

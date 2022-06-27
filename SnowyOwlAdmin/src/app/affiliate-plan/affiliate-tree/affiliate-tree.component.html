@@ -1,0 +1,43 @@
+<div class="loader" *ngIf="loading">
+    <vx-spinner></vx-spinner>
+</div>
+<div *ngIf="currentPerson">
+    <div class="info">
+        <div class="nickname">
+            <span *ngIf="people.length > 1" (click)="people.length = people.length - 1" class="back">
+                <span class="fa fa-chevron-left"></span>Back
+            </span>
+            {{currentPerson?.nickname}}
+            <b *ngIf="currentPerson?.isAffiliate"> (Affiliate)</b>
+        </div>
+        <div class="amounts">
+            <div class="amount">
+                <div>Money Earned</div>
+                {{currentPerson?.amount | currency:'USD'}}
+            </div>
+            <div class="amount">
+                <div>Referred</div>
+                {{currentPerson?.numChildren | number}}
+            </div>
+        </div>
+    </div>
+    <div class="list">
+        <div *ngFor="let event of currentPerson?.events" class="event">
+            <div class="date">{{event.date | date}}</div>
+            Played a game and earned {{currentPerson?.affiliateName}} <b class="textAccent">{{event.amount | currency:'USD'}}</b>
+        </div>
+        <div class="event child" *ngFor="let child of currentPerson?.children" (click)="people.push(child)">
+            <div class="flex1">
+                <div class="date">{{child.date | date}}</div>
+                <div>
+                    <div>
+                        <span *ngIf="currentPerson === child.parent">Referred </span>
+                        <span *ngIf="child.isAffiliate">Affiliate</span>: <b>{{child.nickname}}</b></div>
+                    <div>Earned: <b> {{child.amount | currency:'USD'}}</b></div>
+                    <div *ngIf="child.numChildren">Referred: <b>{{child.numChildren | number}}</b></div>
+                </div>
+            </div>
+            <div><div class="fa fa-chevron-right"></div></div>
+        </div>
+    </div>
+</div>

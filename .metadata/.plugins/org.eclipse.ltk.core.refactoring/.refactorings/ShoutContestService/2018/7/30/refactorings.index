@@ -1,0 +1,4 @@
+1532376074791	Encapsulate field '_productionGame'
+1532620390683	Encapsulate field '_privateGame'
+1532620402705	Encapsulate field '_inviteCode'
+1532620636264	Rename method 'randomString'

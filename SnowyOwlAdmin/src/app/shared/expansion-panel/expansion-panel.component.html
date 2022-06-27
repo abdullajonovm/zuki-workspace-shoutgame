@@ -1,0 +1,10 @@
+<div class="header" (click)="expanded = !expanded">
+    {{title}}
+    <span class="close fa fa-chevron-down" [class.expanded]="expanded"></span>
+</div>
+
+<vx-vertical-expander [expanded]="expanded">
+    <div class="content">
+        <ng-content></ng-content>
+    </div>
+</vx-vertical-expander>

@@ -1,0 +1,41 @@
+<div *ngIf="params.joinGame">
+    <span class="status">
+        <span class="icon-spinner" *ngIf="!joinedGame"></span>
+        <span class="icon-check-circle" *ngIf="joinedGame"></span>
+    </span>
+
+    <span *ngIf="!joinedGame">Joining Game</span>
+    <span *ngIf="joinedGame">Joined Game</span>
+</div>
+
+<div *ngIf="params.joinRound">
+    <span class="status">
+        <span class="icon-circle" *ngIf="!joinedRound && !joinedGame"></span>
+        <span class="icon-spinner" *ngIf="!joinedRound && joinedGame"></span>
+        <span class="icon-check-circle" *ngIf="joinedRound"></span>
+    </span>
+
+    <span *ngIf="!joinedRound">Joining Round</span>
+    <span *ngIf="joinedRound">Joined Round</span>
+</div>
+
+<div *ngIf="countdown">
+    <span class="status">
+        <span class="icon-circle" *ngIf="!countdown.finished && (!joinedRound || !joinedGame)"></span>
+        <span class="icon-spinner" *ngIf="!countdown.finished && joinedRound && joinedGame"></span>
+        <span class="icon-check-circle" *ngIf="countdown?.finished"></span>
+    </span>
+    <span *ngIf="!countdown.finished">Waiting for Tournament Play to begin</span>
+    <div *ngIf="!countdown.finished">Countdown: {{countdown | async | number}}</div>
+    <span *ngIf="countdown?.finished">Tournament Play has begun!</span>
+</div>
+
+<div>
+    <span class="status">
+        <span class="icon-circle" *ngIf="(countdown && !countdown.finished) || !joinedRound || !joinedGame"></span>
+        <span class="icon-spinner" *ngIf="(!countdown || countdown?.finished) && joinedRound && joinedGame"></span>
+    </span>
+
+    <span>Waiting for Match</span>
+</div>
+

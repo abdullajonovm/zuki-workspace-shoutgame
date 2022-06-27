@@ -1,0 +1,28 @@
+<div class="mBottom15">
+    <button vx-button routerLink="/payout-model/create">Create Payout Model</button>
+</div>
+
+<app-data-table [items]="payoutModels" [(selectedItem)]="selectedPayoutModel" [loading]="loading" (rowDoubleClick)="viewModel()">
+    <app-column>
+        <ng-template>
+            <i [vxMenuTrigger]="drop" class="fa fa-cog" tabindex="0"></i>
+        </ng-template>
+    </app-column>
+    <app-column header="Name" field="name">
+    </app-column>
+    <app-column header="Player #" field="basePlayerCount">
+        <ng-template let-model>
+            {{model.basePlayerCount | number}}
+        </ng-template>
+    </app-column>
+    <app-column header="Play Fee" field="entranceFeeAmount">
+        <ng-template let-model>
+            {{model.entranceFeeAmount | currency:'USD'}}
+        </ng-template>
+    </app-column>
+</app-data-table>
+
+<vx-menu #drop>
+    <vx-item (select)="generatePayoutTable()">Generate Payout Table</vx-item>
+    <vx-item (select)="clonePayoutModel()">Clone Payout Model</vx-item>
+</vx-menu>

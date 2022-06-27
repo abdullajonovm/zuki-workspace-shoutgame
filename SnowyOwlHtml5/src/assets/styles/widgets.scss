@@ -1,0 +1,207 @@
+@import "vars";
+
+// ---- BUTTON ----
+button {
+    $hoverColor: mix($foregroundColor, $mainColor, 15%);
+    $activeColor: mix($foregroundColor, $mainColor, 25%);
+    background: $mainColor;
+    border: 0;
+    color: $backgroundColor;
+    padding: 8px 12px;
+    border-radius: 6px;
+    outline: none;
+    font-size: 15px;
+    cursor: pointer;
+
+    &:focus {
+        box-shadow: 0 0 2px 1px transparentize($mainColor, .3);
+    }
+
+    &:hover {
+        background: $hoverColor;
+    }
+
+    &:active {
+        background: $activeColor;
+    }
+
+    &:disabled {
+        cursor: auto;
+        opacity: .65;
+        pointer-events: none;
+    }
+
+    &.accent {
+        $hoverColor: mix($foregroundColor, $accentColor, 15%);
+        $activeColor: mix($foregroundColor, $accentColor, 25%);
+        background: $accentColor;
+        &:focus {
+            box-shadow: 0 0 2px 1px transparentize($accentColor, .3);
+        }
+        &:hover {
+            background: $hoverColor;
+        }
+
+        &:active {
+            background: $activeColor;
+        }
+    }
+    &.light {
+        $hoverColor: mix($foregroundColor, #EBEBEB, 15%);
+        $activeColor: mix($foregroundColor, #EBEBEB, 25%);
+        background: #EBEBEB;
+        color: #5a5a5a;
+        &:focus {
+            box-shadow: 0 0 2px 1px transparentize(#EBEBEB, .3);
+        }
+        &:hover {
+            background: $hoverColor;
+        }
+
+        &:active {
+            background: $activeColor;
+        }
+    }
+}
+
+input, select {
+    $placeholder: mix($foregroundColor, $backgroundColor, 30%);
+    background-color: $backgroundColor;
+    border: 1px solid $placeholder;
+    outline: 0;
+    -webkit-tap-highlight-color: transparent;
+    padding: 7px;
+    font-size: 16px;
+    border-radius: 3px;
+    box-sizing: border-box;
+    color: $foregroundColor;
+
+    &::-webkit-input-placeholder {
+        color: $placeholder;
+    }
+
+    &:focus {
+        border-color: $mainColor;
+        box-shadow: 0 0 3px $mainColor;
+        &::-webkit-input-placeholder {
+            color: mix($foregroundColor, $placeholder, 25%);
+        }
+    }
+
+    &.ng-invalid.ng-touched {
+        border-color: mix($errorColor, $placeholder);
+
+        &::-webkit-input-placeholder {
+            color: mix($errorColor, $placeholder, 30%);
+        }
+
+        &:focus::-webkit-input-placeholder {
+            color: mix($errorColor, $placeholder, 55%);
+        }
+
+        &:focus {
+            box-shadow: 0 0 3px $errorColor;
+        }
+    }
+}
+
+input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    & + label {
+        position: relative;
+        padding-left: 28px;
+        cursor: pointer;
+        line-height: 20px;
+        display: block;
+        margin-top: 10px;
+        color: $foregroundColor;
+        &:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 18px;
+            height: 18px;
+            border: 1px solid mix($foregroundColor, $backgroundColor, 30%);
+            border-radius: 100%;
+            background: #fff;
+        }
+        &:after {
+            content: '';
+            width: 12px;
+            height: 12px;
+            background: $mainColor;
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            border-radius: 100%;
+            transition: all 0.2s ease;
+        }
+    }
+    &:not(:checked) + label:after {
+        opacity: 0;
+        transform: scale(0);
+    }
+    &:checked + label:after {
+        opacity: 1;
+        transform: scale(1);
+    }
+    &:focus + label:before {
+        box-shadow: 0 0 3px $mainColor;
+    }
+}
+
+.icon-spinner {
+    color: $mainColor;
+    display: inline-block;
+    font-size: 30px;
+    width: 1em;
+    height: 1em;
+    line-height: normal!important;
+
+    &::before {
+        animation: rotate 2s linear infinite;
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+
+        @keyframes rotate {
+            from {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg)
+            }
+            to {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg)
+            }
+        }
+    }
+
+}
+
+.questionMark {
+    background: mix($foregroundColor, $backgroundColor, 10%);
+    padding: 8px;
+    border-radius: 50%;
+    width: .75em;
+    height: .75em;
+    line-height: .75em;
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 700;
+    margin-right: 5px;
+    &:hover {
+        background: mix($foregroundColor, $backgroundColor, 16%)
+    }
+    &:active {
+        background: mix($foregroundColor, $backgroundColor, 20%)
+    }
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

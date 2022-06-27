@@ -1,0 +1,112 @@
+<sh-page (onRefresh)="onRefresh($event)" [clickable]="!deviceService.isMobile" (onTitleClicked)="goToHome()">
+    <div shHeaderLeft (click)="goToHome()" *ngIf="deviceService.isMobile">
+        <span class="icon-chevron-left"></span>
+
+        <span *ngIf="navigationService.lastNavigation">Back</span>
+        <span *ngIf="!navigationService.lastNavigation">Home</span>
+    </div>
+    <div shHeaderRight routerLink="/home/me/edit" fragment="wallet">
+        ${{ subscriber.wallet | number }}
+    </div>
+    <div shPageBody *ngIf="game">
+        <sh-game-card [game]="game" [moreInfo]="false"></sh-game-card>
+
+        <div *ngIf="loading" class="loading">
+            <i class="icon-spinner"></i>
+        </div>
+        <div [ngSwitch]="game.gameStatus" *ngIf="!loading">
+            <ng-template ngSwitchCase="OPEN">
+                <div class="action" *ngIf="showGameGuide">
+                    Wondering what this game's questions will be about?
+                    <br>
+                    <button (click)="viewGameGuide()">View the Game Guide</button>
+                </div>
+                <div class="action" *ngIf=" game.hasNoPoolRounds">
+                    <button (click)="joinGame();" *ngIf="!game.userJoinedGame" class="mBottom10">Join game!</button>
+
+                    <div *ngIf="!game.userJoinedGame">There is no POOL play for this game. You have until
+                        {{game.expectedStartDateForBracketPlay | shdate}} to
+                        join in order to play in the tournament!
+                    </div>
+                    <div *ngIf="game.userJoinedGame">We will send an email {{ game.expectedStartDateForBracketPlay |
+                        shdate}} to remind you to play the tournament!
+                    </div>
+                </div>
+                <div class="action" *ngIf="!game.hasNoPoolRounds">  <!-- *ngIf="game.userJoinedGame" -->
+                    <!--TODO: figure out user's rank-->
+                    <button (click)="beginPoolPlay()" *ngIf="nextRound" class="mBottom10">
+                        Play {{ nextRound?.roundNames|i18n }}
+                    </button>
+
+                    <div *ngIf="!nextRound && !game.hasPoolPlayStarted">
+                        Come back {{ game.expectedStartDateForPoolPlay | shdate}} to play Pool play!
+                    </div>
+
+                    <div *ngIf="!nextRound && game.hasPoolPlayStarted">
+                        <p class="status">You have finished Pool play!</p>
+                        <div>
+                            <!--<button (click)="notificationPrefs()" class="notificationPrefs accent">Tournament-->
+                            <!--Notification Preferences-->
+                            <!--</button>-->
+                        </div>
+                        <p class="status">
+                            We will send an email {{ game.expectedStartDateForBracketPlay | shdate}} to remind you
+                            to play the tournament!
+                        </p>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template ngSwitchCase="INPLAY">
+                <div *ngIf="game.userEliminated" class="status">
+                    You were eliminated from the tournament! It will be over shortly and you can see your results.
+                </div>
+                <div *ngIf="lastRound && !game.userEliminated" class="status">
+                    Hang tight! There are still matches being played in {{lastRound?.roundNames | i18n}}.
+                    <!--<sh-status-bar [game]="game"></sh-status-bar>-->
+                </div>
+            </ng-template>
+            <ng-template ngSwitchCase="CLOSED">
+                <div class="status">
+                    <button (click)="viewResults()">View Game Results!</button>
+                </div>
+            </ng-template>
+        </div>
+
+
+        <div class="statuses" *ngIf="!loading">
+            <div *ngIf="!game.hasNoPoolRounds">
+                <h2>Pool Play</h2>
+                <div *ngIf="!game.hasPoolPlayStarted && game.gameStatus === 'OPEN'">
+                    <span
+                        class="expectedStart">Starting {{ game.expectedStartDateForPoolPlay | shdate }}</span>
+                </div>
+                <div *ngIf="game.hasPoolPlayStarted || game.gameStatus !== 'OPEN'">
+                    <sh-round-list [rounds]="game.rounds" [hideBracketPlay]="true"
+                                   [nextRound]="game.gameStatus !== 'OPEN' ? null : nextRound"
+                                   (onPlay)="beginPoolPlay()">
+
+                    </sh-round-list>
+                </div>
+            </div>
+            <h2>Tournament Play</h2>
+            <div [ngSwitch]="game.gameStatus">
+                <ng-template ngSwitchCase="OPEN">
+                    <span
+                        class="expectedStart">Starting {{ game.expectedStartDateForBracketPlay | shdate }}</span>
+                </ng-template>
+                <ng-template ngSwitchDefault>
+                    <sh-round-list [rounds]="game.rounds" [hidePoolPlay]="true">
+
+                    </sh-round-list>
+                </ng-template>
+            </div>
+        </div>
+
+    </div>
+    <div shPageBody *ngIf="!game" class="textCenter">
+        <div class="loading">
+            <i class="icon-spinner"></i>
+        </div>
+    </div>
+
+</sh-page>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+    <settings>
+        <setting name="useGeneratedKeys" value="true" />
+        <setting name="defaultExecutorType" value="REUSE"/>
+    </settings>
+    
+    <typeAliases>
+        <typeAlias alias="map" type="java.util.Map" />
+        <typeAlias alias="notificationCallback" type="com.meinc.notification.domain.NotificationCallback" />
+        <typeAlias alias="notification" type="com.meinc.notification.domain.Notification" />
+        <typeAlias alias="notificationPref" type="com.meinc.notification.domain.NotificationPref" />
+    </typeAliases>
+    
+    <mappers>
+        <mapper resource="com/meinc/notification/dao/notificationservice.xml"  />
+    </mappers>
+
+</configuration>

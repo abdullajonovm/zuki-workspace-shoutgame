@@ -1,0 +1,158 @@
+# the 'set' directive doesn't work in http context so this is a workaround
+map $host $www_path_root            { default '/var/www'; }
+map $host $user_upload_path_root    { default '/var/upload'; }
+map $host $upload_path_hash_spec    { default '1:2'; }
+
+map $host $shout_lua_path { default '/etc/nginx/sites-available/shout_lua'; }
+lua_package_path       '/etc/nginx/sites-available/shout_lua/?.lua';
+lua_package_cpath      '/etc/nginx/sites-available/shout_lua/?.so';
+
+#X # the dollar sign cannot be used in nginx strings as it is always interpolated so this is a workaround
+#X geo $dollar { default '$'; }
+
+lua_code_cache on;
+
+server {
+    listen 81 default_server backlog=16383;
+    listen [::]:81 default_server ipv6only=on;
+
+    # unlimited upload size
+    client_max_body_size 0;
+
+    #? set $www_path_root            '/var/www/www';
+    #? set $user_upload_path_root    '/var/www/upload';
+    #? set $upload_path_hash_spec    '1:2';
+
+    location ~ /UPLOAD(/.*) {
+        set $op_uri_path '$1';
+        set $is_user_upload '0';
+        content_by_lua_file  '$shout_lua_path/upload.lua';
+    }
+
+    location ~ /OPERATE(/.*) {
+        set $op_uri_path '$1';
+        content_by_lua_file  '$shout_lua_path/operate.lua';
+    }
+
+    location ~ /DELETE(/.*) {
+        set $op_uri_path '$1';
+        content_by_lua_file  '$shout_lua_path/delete.lua';
+    }
+
+    location ~ /GETMETA(/.*) {
+        set $get_err '';
+        set $op_uri_path '$1';
+        set $is_getmeta '1';
+        rewrite_by_lua_file '$shout_lua_path/get.lua';
+    }
+
+    location ~ /CLONE {
+        content_by_lua_file '$shout_lua_path/clone.lua';
+    }
+
+    location ~ /VERSION {
+        content_by_lua_file '$shout_lua_path/version.lua';
+    }
+
+    location /EXPIRE_5DAYS {
+        set $max_age_sec '432000'; #5DAYS
+        #set $max_age_sec '3600'; #3HRS
+        #set $max_age_sec '300'; #5MIN
+        content_by_lua_file '$shout_lua_path/expire.lua';
+    }
+
+    #X location ~ /EXIF {
+    #X     content_by_lua_file '$shout_lua_path/exif.lua';
+    #X }
+
+    location / {
+        deny all;
+    }
+}
+
+server {
+    listen 80 default_server backlog=16383;
+    listen [::]:80 default_server ipv6only=on;
+
+    listen 443 default_server ssl;
+    listen [::]:443 default_server ssl ipv6only=on;
+
+    ssl_certificate /etc/ssl/certs/cluster_domain_ssl_cert.crt;
+    ssl_certificate_key /etc/ssl/private/cluster_domain_ssl_key.pem;
+
+    keepalive_timeout 300s 270s;
+    keepalive_requests 1000;
+
+    #? set $www_path_root            '/var/www/www';
+    #? set $user_upload_path_root    '/var/www/upload';
+    #? set $upload_path_hash_spec    '1:2';
+
+    location / {
+        # 20MB max upload size
+        client_max_body_size 20m;
+        rewrite_by_lua '
+            if ngx.req.get_method() == "GET" then
+                ngx.exec("@GET")
+            elseif ngx.req.get_method() == "POST" then
+                ngx.exec("@POST")
+            elseif ngx.req.get_method() == "OPTIONS" then
+                ngx.exec("@OPTIONS")
+            else
+                ngx.status = ngx.HTTP_NOT_ALLOWED
+                return ngx.exit(ngx.ERROR)
+            end
+        ';
+    }
+
+    #X location ~* \.jpg$ {
+    #X     root '$www_path_root';
+    #X }
+
+    location @GET {
+        #X set $cors_hostname_lua_pattern 'flash%.vote$dollar';
+        set $get_err '';
+        set $op_uri_path '$request_uri';
+        set $is_getmeta '0';
+        # this changes $op_uri_path to a local file path and forwards the request to @GET_OK or @GET_ERR
+        rewrite_by_lua_file '$shout_lua_path/get.lua';
+    }
+
+    location @GET_OK {
+        root '$www_path_root';
+        try_files '$op_uri_path' =404;
+        if_modified_since before;
+        add_header 'Access-Control-Expose-Headers' 'Date, Last-Modified, Last-Touched';
+        expires -1h;
+        etag off;
+
+        gzip on;
+        gzip_comp_level 9;
+        gzip_types text/plain application/json application/javascript text/css application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+        gzip_proxied any;
+    }
+
+    location @GET_ERR {
+        content_by_lua '
+            local errr = require("error")
+            local cors = require("cors")
+            cors.handle_cors_response_headers()
+            errr.response(ngx.var.get_err, ngx.status)
+        ';
+    }
+
+    location @POST {
+        #X set $cors_hostname_lua_pattern 'flash%.vote$dollar';
+        set $op_uri_path '$request_uri';
+        set $is_user_upload '1';
+        content_by_lua_file  '$shout_lua_path/upload.lua';
+    }
+
+    location @OPTIONS {
+        #X set $cors_hostname_lua_pattern 'flash%.vote$dollar';
+        rewrite_by_lua '
+            local cors = require("cors")
+            cors.handle_cors_response_headers()
+            return ngx.exit(ngx.HTTP_OK)
+        ';
+    }
+}

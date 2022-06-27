@@ -1,0 +1,21 @@
+<sh-page (onRefresh)="handleRefresh($event)">
+    <div shHeaderLeft><sh-search (onSelect)="categoryFilter = $event"></sh-search></div>
+    <div shHeaderRight routerLink="/home/me/edit" fragment="wallet" class="pointer">
+        ${{ subscriberService.subscriber?.wallet | number }}
+    </div>
+    <div shNavItem routerLink="all" routerLinkActive="selected" #allGamesLink="routerLinkActive">
+        {{'home.allGames'|i18n}}
+    </div>
+    <div shNavItem routerLink="my" routerLinkActive="selected" #myGamesLink="routerLinkActive">
+        {{'home.myGames'|i18n}}
+    </div>
+    <div shNavItem routerLink="me" routerLinkActive="selected" #meLink="routerLinkActive">
+        {{'home.me'|i18n}}
+    </div>
+
+    <div shPageBody>
+        <sh-all-games [hidden]="!allGamesLink.isActive" [categoryFilter]="categoryFilter"></sh-all-games>
+        <sh-my-games [hidden]="!myGamesLink.isActive" [categoryFilter]="categoryFilter"></sh-my-games>
+        <sh-me [hidden]="!meLink.isActive"></sh-me>
+    </div>
+</sh-page>

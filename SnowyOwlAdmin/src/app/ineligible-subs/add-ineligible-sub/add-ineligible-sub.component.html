@@ -1,0 +1,23 @@
+<h2 vxDialogTitle="">Add Ineligible Subscriber</h2>
+<form #form="ngForm" ngForm vxDialogContent="" vxFocusInitial>
+    <vx-autocomplete [(ngModel)]="selectedSub" #codes="ngModel" required label="Subscriber" name="subscriber" required>
+        <vx-item *ngFor="let sub of subs" [value]="sub.email" >
+            {{sub.email}} <br/>
+            <b>#{{sub.nickname}}</b>
+        </vx-item>
+    </vx-autocomplete>
+    <vx-autocomplete label="Reason" [(ngModel)]="reason" class="mTop15" name="reason" required [searchable]="false">
+        <vx-item value="IMMEDIATE_FAMILY_MEMBER">Immediate Family Member</vx-item>
+        <vx-item value="EMPLOYEE">Employee</vx-item>
+    </vx-autocomplete>
+    <vx-autocomplete *ngIf="reason === 'IMMEDIATE_FAMILY_MEMBER'" class="mTop15" label="Employee (Family Member)" [(ngModel)]="linkedSub" name="linked" required>
+        <vx-item *ngFor="let sub of subs" [value]="sub.subscriberId" [disabled]="sub.email === selectedSub" >
+            {{sub.email}} <br/>
+            <b>#{{sub.nickname}}</b>
+        </vx-item>
+    </vx-autocomplete>
+</form>
+<div vxDialogActions>
+    <button vx-button [disabled]="form.invalid" (click)="submit()">Add Ineligible Subscriber</button>
+    <button vx-button (click)="dialog.close()">Cancel</button>
+</div>

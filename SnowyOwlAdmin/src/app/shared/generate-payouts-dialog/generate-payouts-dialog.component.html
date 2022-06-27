@@ -1,0 +1,29 @@
+<h2 vxDialogTitle="">
+    Generate Payout Table
+</h2>
+<form ngForm #form="ngForm" (submit)="generate()">
+    <div vxDialogContent>
+        <div class="inputs">
+            <vx-autocomplete [(ngModel)]="payoutModelId" name="payourModelId" label="Payout Model" required>
+                <vx-item *ngFor="let model of (payoutModels$ | async)" [value]="model.payoutModelId" >
+                    {{model.name}}
+                </vx-item>
+            </vx-autocomplete>
+
+            <vx-form-field>
+                <input vxFormField ngModel [(appNumber)]="minimumPayoutAmount" [appMask]="{mask: moneyMask}"
+                       label="Minimum Payout Amount" name="minPayoutAmount">
+            </vx-form-field>
+
+            <vx-form-field>
+                <input vxFormField label="Expected # Players" ngModel [(appNumber)]="expectedNumPlayers" required
+                       vxFocusInitial required [appMask]="{mask: numberMask}" name="expectedNumPlayers">
+            </vx-form-field>
+        </div>
+    </div>
+
+    <div vxDialogActions="">
+        <button vx-button type="submit" [disabled]="form.invalid">Submit</button>
+        <button vx-button type="button" (click)="close()">Cancel</button>
+    </div>
+</form>

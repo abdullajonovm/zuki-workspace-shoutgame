@@ -1,0 +1,46 @@
+<div class="barContainer" *ngIf="state === 'HAS_QUESTION'">
+    <div class="bar"
+         [style.width.%]="(countdown | async) / round.playerMaximumDurationSeconds * 100"
+         [style.transitionDuration.ms]="countdown?.stepTime || 0"></div>
+</div>
+
+<div class="top">
+    <div class="person">
+        <img [default]="subscriberService.subscriber.photoUrl" alt="" src="./assets/profile.jpg">
+        <span>{{ subscriberService.subscriber.nickname }}</span>
+    </div>
+
+    <div *ngIf="state === 'HAS_QUESTION'">{{ countdown | async | number:'1.1' }}</div>
+    <div class="result" *ngIf="question?.answer">
+        <span *ngIf="question?.answer?.didWin">You Won!</span>
+        <span *ngIf="question?.answer?.didTie">You Tied.</span>
+        <span *ngIf="!question?.answer?.didWin && !question?.answer?.didTie">You Lost.</span>
+    </div>
+
+    <div class="person">
+        <span>{{round.matchedPlayer?.publicProfile?.nickname}}</span>
+        <img [default]="round.matchedPlayer?.publicProfile?.photoUrl" alt="" src="./assets/profile.jpg">
+    </div>
+</div>
+
+<div *ngIf="question">
+    <div class="question">{{ question?.questionText | i18n }}</div>
+    <div class="answers" [class.answered]="answerId" [class.scored]="question?.correctAnswerId">
+        <button *ngFor="let answer of question?.answers" (click)="answerQuestion(answer)"
+                [class.correct]="question?.correctAnswerId === answer.id">
+
+            {{ answer.answerText | i18n }} <span *ngIf="answer.correct">.</span>
+            <span [class.left]="answerId === answer.id"></span>
+            <span [class.right]="answer.id === question?.opponentAnswer?.selectedAnswerId"></span>
+        </button>
+    </div>
+</div>
+
+<div *ngIf="state === 'AWAITING_RESULT'" class="loader">
+    {{ 'round.loadingResults'|i18n:round.matchedPlayer?.publicProfile?.nickname }}
+    <div class="icon-spinner"></div>
+</div>
+<div *ngIf="state === 'AWAITING_QUESTION'" class="loader">
+    {{ game.fetchingActivityTitles | i18n }}
+    <div class="icon-spinner"></div>
+</div>

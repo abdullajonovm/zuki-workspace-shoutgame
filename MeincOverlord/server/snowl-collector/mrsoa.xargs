@@ -1,0 +1,7 @@
+-install osgi/mrsoa-distributed-data-1.0.jar
+-install osgi/osgi-commons-collections-3.1.jar
+-install osgi/osgi-spring-4.2.5.RELEASE.jar
+-install osgi/osgi-mybatis-3.2.1.jar
+-install osgi/osgi-mybatis-dep-1.1.jar
+-install osgi/osgi-bonecp-0.8.jar
+-install osgi/osgi-velocity-1.4.jar

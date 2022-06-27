@@ -1,0 +1,98 @@
+<form #form="ngForm" *ngIf="question">
+    <button vx-button (click)="submit()" [disabled]="!editable" class="mBottom15">
+        Submit
+    </button>
+
+    <div class="inputs">
+        <vx-autocomplete label="Languages" multiple="true" [(ngModel)]="question.languageCodes"
+                         name="languages" required [disabled]="!editable">
+            <vx-item value="en">English</vx-item>
+            <vx-item value="es">Spanish</vx-item>
+        </vx-autocomplete>
+    </div>
+
+    <h2 *ngIf="editingQuestion">Question Status: {{ question.status }}</h2>
+
+    <vx-tabs *ngIf="question.languageCodes.length" class="slideIn">
+        <vx-tab label="Question">
+            <div class="inputs">
+                <vx-autocomplete label="Categories" multiple [(ngModel)]="question.questionCategoryUuids"
+                                 name="categories" required [disabled]="!editable">
+                    <vx-item value="*" (select)="setAllCategories(true)" #all>
+                        All Categories
+                    </vx-item>
+                    <vx-item *ngFor="let category of categoryService.categories" [value]="category.id"
+                             [disabled]="question.allCategories" >
+                        {{ category.categoryName.en }}
+                    </vx-item>
+                </vx-autocomplete>
+            </div>
+
+            <vx-tabs *ngIf="question.languageCodes.length" class="mTop15 mBottom15">
+                <vx-tab *ngFor="let lc of question.languageCodes" [label]="lc | languageName">
+                    <div class="inputs">
+                        <vx-form-field class="questionText">
+                            <textarea vxFormField label="Question Text" [name]="'questionText_' + lc " required
+                                      [(ngModel)]="question.questionText[lc]" [disabled]="!editable"></textarea>
+                        </vx-form-field>
+                    </div>
+                </vx-tab>
+            </vx-tabs>
+
+            <div class="inputs">
+                <vx-form-field>
+                    <input vxFormField type="number" label="Question Difficulty" min="1" max="10"
+                           name="difficulty" [(ngModel)]="question.difficulty" required
+                           appTooltip="0 = Easy, 5 = Medium, 10 = Hard"[disabled]="!editable">
+                </vx-form-field>
+
+
+                <vx-form-field>
+                    <input vxFormField label="Expiration Date" [disabled]="!editable" [(appDate)]="question.expirationDate" ngModel name="Expiration Date" [appMask]="dateMask">
+                </vx-form-field>
+
+                <vx-form-field>
+                    <input vxFormField label="Question Source" appTooltip="Where did the question come from?"
+                           [(ngModel)]="question.source"[disabled]="!editable" name="Question State">
+                </vx-form-field>
+            </div>
+
+        </vx-tab>
+
+        <vx-tab label="Answers">
+            <div class="inputs">
+                <vx-form-field>
+                    <input type="number" vxFormField label="# of Answers" [(ngModel)]="numAnswers" min="2" max="10"
+                           name="numAnswers"
+                           appTooltip="Minimum 2 answers, maximum 10 answers."required
+                           [disabled]="!editable">
+                </vx-form-field>
+
+                <vx-autocomplete label="Correct Answer" [disabled]="!editable || !numAnswers"
+                                 [(ngModel)]="correctAnswer"
+                                 name="correctAnswer" required search="false">
+                    <vx-item *ngFor="let answer of question.answers; let i = index" [value]="answer">
+                        Answer {{ i + 1 }}
+                    </vx-item>
+                </vx-autocomplete>
+            </div>
+
+            <div class="answers">
+                <div *ngFor="let answer of question.answers; let i = index" class="answer">
+                    <h2>Answer {{ i + 1 }} <span *ngIf="answer.correct"> - Correct</span></h2>
+
+                    <vx-tabs>
+                        <vx-tab *ngFor="let lc of question.languageCodes" [label]="lc | languageName">
+                            <div class="inputs">
+                                <vx-form-field class="answerText">
+                                    <textarea vxFormField label="Answer Text" [(ngModel)]="answer.answerText[lc]"
+                                              [name]="'answerText_' + i + '_' + lc" required [disabled]="!editable"></textarea>
+                                </vx-form-field>
+                            </div>
+                        </vx-tab>
+                    </vx-tabs>
+                </div>
+            </div>
+        </vx-tab>
+    </vx-tabs>
+</form>

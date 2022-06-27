@@ -1,0 +1,16 @@
+<h1 vxDialogTitle>Assign Codes</h1>
+<div vxDialogContent="">
+    <p>Select some subscribers to send coupons from the batch to.</p>
+    <p>If more subscribers are selected than there are available coupons, coupons will be created to keep up the demand.</p>
+    <vx-autocomplete [multiple]="true" [(ngModel)]="selected" #codes="ngModel" required label="Subscribers to Send">
+        <vx-item *ngFor="let sub of subscriberService.allSubscribers" [value]="sub.subscriberId"
+                 >
+            {{sub.firstName}} {{sub.lastName}} <br/>
+            <b>#{{sub.nickname}}</b>
+        </vx-item>
+    </vx-autocomplete>
+</div>
+<div vxDialogActions>
+    <button vx-button [disabled]="codes.invalid" (click)="submit()">Assign Codes</button>
+    <button vx-button type="button" (click)="dialog.close(false)" vxFocusInitial>Cancel</button>
+</div>

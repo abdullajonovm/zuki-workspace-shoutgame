@@ -1,0 +1,15 @@
+<!--<sh-status-bar [game]="game"></sh-status-bar>-->
+<span class="icon-times" (click)="dialog.close()"></span>
+<div *ngIf="game?.gamePlayer?.payoutAwardedAmount" class="text">
+    <h1>You won!</h1>
+    <h2>${{game?.gamePlayer?.payoutAwardedAmount | number}}</h2>
+</div>
+<div *ngIf="!game?.gamePlayer?.payoutAwardedAmount" class="text">
+    <h1>Better Luck Next Time!!</h1>
+    <p>You did not win anything from this game.</p>
+</div>
+
+<div class="buttons">
+    <button *ngIf="game?.gamePlayer?.payoutAwardedAmount" routerLink="/home/me/edit" class="accent" fragment="wallet" (click)="dialog.close()">My Wallet</button>
+</div>
+<canvas #canvas></canvas>

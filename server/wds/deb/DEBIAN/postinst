@@ -1,0 +1,19 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    configure)
+        invoke-rc.d nginx stop || true
+        cd /etc/nginx/sites-available
+        HOSTNAME=$(hostname)
+        LUA_PATTERN_HOSTNAME=$(echo "$HOSTNAME" | sed 's/\./%./g')
+        sed -i'.original' "s/<<lua-pattern-hostname>>/$LUA_PATTERN_HOSTNAME/g" shout_wds_origin
+        cd /etc/nginx/sites-enabled
+        rm -f default
+        ln -s ../sites-available/shout_wds_origin
+        mkdir -p /var/www /var/upload
+        chown www-data:www-data /var/www /var/upload
+        invoke-rc.d nginx start
+    ;;
+esac
+

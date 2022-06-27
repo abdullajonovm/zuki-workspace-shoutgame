@@ -1,0 +1,6 @@
+version: '3'
+services:
+    wds:
+        image: scm.shoutgameplay.com:5000/wds:1.2
+        build:
+            context: .

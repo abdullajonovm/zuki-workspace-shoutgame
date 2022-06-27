@@ -1,0 +1,4 @@
+target
+velocity.log
+**/*.DS_Store
+logs/net.authorize.aim.log

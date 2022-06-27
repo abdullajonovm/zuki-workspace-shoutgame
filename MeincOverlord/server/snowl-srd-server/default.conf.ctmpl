@@ -1,0 +1,44 @@
+ttlSeconds: {{keyOrDefault "srd/ttl/seconds" "120"}}
+{{- range ls "srd/action"}}
+action: {{.Key}} -> {{.Value}}
+{{- end}}
+
+# Default servers. These will be merged with and possibly overriden by entries in servers.conf
+# Format:
+#     server: <Server Name 1>
+#     <tab>type: <Server Type>
+#     <tab>base_url: <Base URL>
+#     <tab>base_url_alias: <Optional Alternate Base URL>
+#     server: <Server Name 2>
+#         ...
+# Example:
+#     server: snowl-collector--0
+#     	type: snowl-collector
+#     	base_url: https://snowl-foo--0--nc11-1.shoutgameplay.com:443
+#     	base_url_alias: https://snowl-foo--0--nc11-1.shoutgameplay2.com:443
+
+{{/* Find a local snowl-web and publish a 'staticmedia' server entry for it */}}
+{{- scratch.Set "found-web-service" false}}
+{{- range nodes}}
+    {{- $nodeHostname := .Node}}
+    {{- with node $nodeHostname}}
+        {{- range .Services}}
+            {{- $serviceName := .Service}}
+            {{- $serviceIdParts := $serviceName | split "--"}}
+            {{- if len $serviceIdParts | eq 2}}
+                {{- $serviceType := index $serviceIdParts 0}}
+                {{- $serviceIndex := index $serviceIdParts 1}}
+                {{- if ($serviceType | eq "snowl-web")}}
+                    {{- scratch.Set "found-web-service" true}}
+                    {{- printf "\nserver: snowl-static-media--%s\n" $serviceIndex}}
+                    {{- printf "\ttype: snowl-static-media\n"}}
+                    {{- printf "\tbase_url: https://%s--%s.%s:%s/clientimages\n" $serviceName $nodeHostname (key "cluster/domain") (key "cluster/domain/port/https")}}
+                {{- end}}
+            {{- end}}
+        {{- end}}
+    {{- end}}
+{{- end}}
+
+{{- if (scratch.Get "found-web-service")}}
+    {{- printf "\n\naction: staticmedia -> snowl-static-media\n"}}
+{{- end}}

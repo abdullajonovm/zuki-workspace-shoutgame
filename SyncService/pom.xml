@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>sync-service</artifactId>
+    <version>1.0</version>
+    <packaging>mrsoa-service</packaging>
+
+    <parent>
+        <groupId>meinc</groupId>
+        <artifactId>MeincOverlord-service-springmybatis</artifactId>
+        <version>3.0-mvnbuild</version>
+        <relativePath>../MeincOverlord/poms/parents/pom-service-springmybatis</relativePath>
+    </parent>
+
+    <properties>
+        <osgi.require.bundle>
+            meinc.webcollector-service;bundle-version=1.0,
+            meinc.encryption-service;bundle-version=3.0
+            <!--,osgi-dynamodb;bundle-version=0.3-->
+        </osgi.require.bundle>
+
+        <plugin.spring.annotation.classes.SyncService>tv.shout.sync.service.SpringConfiguration</plugin.spring.annotation.classes.SyncService>
+        <plugin.spring.bean.name.SyncService>syncService</plugin.spring.bean.name.SyncService>
+        
+        <maven.test.skip>true</maven.test.skip> <!-- ignore the src/test/java directory -->
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>meinc</groupId>
+                <artifactId>service-assembler</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <clientJar>
+                        <includes>
+                            <include>tv/shout/sync/service/ISyncService*</include>
+                            <include>tv/shout/sync/domain/*</include>
+                            <!-- <include>tv/shout/sc/collector/*</include>
+                            <include>tv/shout/sc/util/*</include> -->
+                        </includes>
+                    </clientJar>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <reportOutputDirectory>${project.basedir}/doc/javadoc</reportOutputDirectory>
+                    <destDir>/</destDir>
+                    <stylesheetfile>${project.basedir}/doc/javadoc_style/stylesheet.css</stylesheetfile>
+                    <additionalparam>-Xdoclint:none</additionalparam>
+                </configuration>
+            </plugin>            
+        </plugins>
+    </build>
+
+    <dependencies>
+        <!-- logging -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.8</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- json -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.7.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.7.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.7.2</version>
+        </dependency>
+
+        <!-- meinc core -->
+         <!-- <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>gameplay-domain</artifactId>
+            <version>3.0</version>
+        </dependency> -->
+
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>http-utils</artifactId>
+            <version>3.0</version>
+        </dependency>
+
+        <!-- <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>http-connector-service</artifactId>
+            <classifier>client</classifier>
+            <version>3.0</version>
+        </dependency> -->
+
+        <!-- meinc services -->
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>webcollector-service</artifactId>
+            <classifier>client</classifier>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>osgi-dynamodb</artifactId>
+            <version>0.3</version>
+            <scope>provided</scope>
+        </dependency> -->
+       
+         <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>webdatastore-service</artifactId>
+            <classifier>client</classifier>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>identity-service</artifactId>
+            <!-- <classifier>client</classifier> -->
+            <version>1.0</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>trigger-service</artifactId>
+            <classifier>client</classifier>
+            <version>1.0</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>facebook-service</artifactId>
+            <classifier>client</classifier>
+            <version>2.0</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>mrsoa-support</artifactId>
+            <version>1.0</version>
+        </dependency>
+        
+    </dependencies>
+</project>

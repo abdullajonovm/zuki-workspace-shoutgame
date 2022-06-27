@@ -1,0 +1,16 @@
+./g64_bld/bin/xenv/usr/ccs/runlib/libplatform.so
+./usr/src/i386/X11R5lib/libXaw.so
+./usr/src/i386/lib/osrlibs/usr/lib/libxti.so
+./usr/src/i386/lib/osrlibs/usr/lib/librpcsvc.so
+./usr/src/i386/lib/osrlibs/usr/lib/libnsl.so
+./usr/src/i386/lib/osrlibs/usr/lib/libndbm.so
+./usr/src/i386/lib/osrlibs/usr/lib/libcrypt_i.so
+./usr/src/i386/lib/osrlibs/usr/lib/libdl.so
+./usr/src/i386/lib/osrlibs/lib/libndbm.so
+./usr/src/i386/lib/osrlibs/lib/libdl.so
+./usr/src/i386at/cmd/sgs/cplusfe/em64/native/fe.so
+./usr/src/i386at/cmd/sgs/cplusfe/em64/cross/fe.so
+./usr/src/i386at/lib/libcrypt/libcrypt_d.so
+./usr/src/i386at/lib/libcrypt/libcrypt_i.so
+./usr/src/common/subsys/scohelp/verity/bin/vgw_url.so
+./usr/src/common/subsys/scohelp/verity/bin/vtopic.so

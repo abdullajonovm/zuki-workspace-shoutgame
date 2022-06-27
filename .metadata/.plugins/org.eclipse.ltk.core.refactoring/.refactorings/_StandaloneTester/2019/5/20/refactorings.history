@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring accessors="true" comment="Delete element from project &apos;_StandaloneTester&apos;&#x0A;- Original project: &apos;_StandaloneTester&apos;&#x0A;- Original element: &apos;_StandaloneTester/src/main/resources/AlreadyProcessedRpmFiles_.Users.shawker.dev.suse&apos;" description="Delete element" element1="/src\/main\/resources&lt;AlreadyProcessedRpmFiles_.Users.shawker.dev.suse" element2="/src\/main\/resources&lt;AlreadyProcessedRpmFiles_.Users.shawker.dev" element3="/src\/main\/resources&lt;AlreadyProcessedRpmFiles_.Users.shawker" element4="/src\/main\/resources&lt;AlreadyProcessedRpmFiles_.Users" elements="4" flags="589830" id="org.eclipse.jdt.ui.delete" resources="0" stamp="1557865417881" subPackages="false" version="1.0"/>
+</session>

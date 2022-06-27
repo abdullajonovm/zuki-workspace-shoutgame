@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;s&apos; in &apos;tv.shout.snowyowl.collector.SubscriberHandler.subscriberDetails(...)&apos; to &apos;subscriber&apos;&#x0A;- Original project: &apos;SnowyowlService&apos;&#x0A;- Original element: &apos;tv.shout.snowyowl.collector.SubscriberHandler.subscriberDetails(Map&lt;String, String&gt;, String).s&apos;&#x0A;- Renamed element: &apos;s&apos;&#x0A;- Update references to refactored element" description="Rename local variable &apos;s&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src\/main\/java&lt;tv.shout.snowyowl.collector{SubscriberHandler.java[SubscriberHandler~subscriberDetails~QMap\&lt;QString;QString;&gt;;~QString;@s!16047!16102!16058!16058!QSubscriber;!0!false" name="subscriber" references="true" stamp="1540231355675" version="1.0"/>
+</session>

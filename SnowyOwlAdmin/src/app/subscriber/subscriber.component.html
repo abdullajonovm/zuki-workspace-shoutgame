@@ -1,0 +1,51 @@
+<div class="card">
+    <form #form="ngForm"  (submit)="search()">
+        <vx-radio-group [(value)]="searchType" required name="type">
+            <vx-radio-button value="date">Date Range</vx-radio-button>
+            <vx-radio-button value="email">Email</vx-radio-button>
+            <vx-radio-button value="role">Role</vx-radio-button>
+        </vx-radio-group>
+
+        <div *ngIf="searchType === 'date'">
+            <vx-autocomplete search="false" [(ngModel)]="dateRange" label="Date Range" class="mTop15 w100" required name="dateRange">
+                <vx-item value="week">Last Week</vx-item>
+                <vx-item value="month">Last Month</vx-item>
+                <vx-item value="6months">Last 6 Months</vx-item>
+                <vx-item value="year">Last Year</vx-item>
+                <vx-item value="allTime">All Time</vx-item>
+            </vx-autocomplete>
+        </div>
+
+        <div *ngIf="searchType === 'email'">
+            <vx-form-field class="mTop15 w100" required>
+                <input vxFormField label="Email Address" [(ngModel)]="email" name="partialEmail">
+            </vx-form-field>
+        </div>
+
+        <div *ngIf="searchType === 'role'">
+            <vx-autocomplete search="false" [(ngModel)]="role" label="Subscriber Role" required name="role">
+                <vx-item *ngFor="let role of allRoles$ | async" [value]="role">{{role}}</vx-item>
+            </vx-autocomplete>
+        </div>
+
+        <button vx-button class="mTop15" type="submit" [disabled]="loading || form.invalid">Search</button>
+    </form>
+
+</div>
+
+<app-data-table [items]="subscribers" [(selectedItem)]="selectedSubscriber" [loading]="loading">
+    <app-column>
+        <ng-template let-selected="selected">
+            <i [vxMenuTrigger]="drop"  class="fa fa-cog" tabindex="0"></i>
+        </ng-template>
+    </app-column>
+    <app-column header="Id" field="subscriberId"></app-column>
+    <app-column header="Nickname" field="nickname"></app-column>
+    <app-column header="Email" field="email"></app-column>
+</app-data-table>
+
+<vx-menu #drop>
+    <vx-item (select)="sendExtraCash()">Send Bonus Cash</vx-item>
+    <vx-item (select)="addCashToSponsor()">Add Sponsor Cash</vx-item>
+    <vx-item (select)="changeRoles()">Change Roles</vx-item>
+</vx-menu>

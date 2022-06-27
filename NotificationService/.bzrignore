@@ -1,0 +1,5 @@
+lib
+target
+**/*DS_Store
+velocity.log
+.settings

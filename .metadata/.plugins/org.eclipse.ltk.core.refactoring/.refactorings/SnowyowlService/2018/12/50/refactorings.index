@@ -1,0 +1,19 @@
+1544541894821	Rename type 'PayoutManagerCommon'
+1544541979031	Pull up 'getNumberOfSaves(int)' to 'PayoutManagerFixedRoundCommon'
+1544542076610	Pull up 'getNumPayoutModelRounds(int)' to 'PayoutManagerFixedRoundCommon'
+1544542113221	Pull up members to 'PushSender'
+1544542157614	Pull up 'getNumberOfBracketRounds(int)' to 'PayoutManagerFixedRoundCommon'
+1544542286480	Pull up 'createPayoutModelRound(int, int, String, int, int, float, String, CATEGORY, int)' to 'PayoutManagerFixedRoundCommon'
+1544542353914	Pull up 'getDefaultPayoutModelRounds(int)' to 'PayoutManagerFixedRoundCommon'
+1544542628186	Pull up 'getPayoutModel(GamePayout)' to 'PayoutManagerFixedRoundCommon'
+1544542840811	Pull up 'getAdjustedPayoutModelRounds(int, PayoutModel, GamePayout)' to 'PayoutManagerFixedRoundCommon'
+1544545963461	Copy compilation unit
+1544545975985	Rename type 'PayoutManagerFixedRoundSingleLife'
+1544547046950	Copy compilation unit
+1544547061905	Rename type 'MQEFixedRoundSingleLife'
+1544547224620	Copy compilation unit
+1544547239034	Rename type 'RMEFixedRoundSingleLife'
+1544547660086	Copy compilation unit
+1544547668995	Rename type 'RMEFixedRoundSingleLife'
+1544646961449	Delete elements
+1544646994598	Delete element

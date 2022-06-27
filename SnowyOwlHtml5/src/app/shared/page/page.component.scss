@@ -1,0 +1,153 @@
+@import "vars";
+
+$bodyWidth: 600px;
+$navHeight: 38px;
+$refreshDistance: 60px;
+
+:host {
+    height: 100%;
+}
+.headerWrapper {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 2;
+    box-shadow: 1px 0 5px transparentize($foregroundColor, .3);
+    background: $mainColor;
+}
+.header {
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    justify-content: space-between;
+    color: $backgroundColor;
+}
+
+.title {
+    height: $headerHeight;
+    img {
+        height: 100%;
+        padding: 11px;
+        box-sizing: border-box;
+    }
+}
+
+.headerRight {
+    flex: 1;
+    text-align: right;
+}
+
+.headerLeft {
+    flex: 1;
+}
+
+.nav {
+    display: flex;
+    background: mix($foregroundColor, $backgroundColor, 10%);
+    font-size: 14px;
+    text-align: center;
+    color: $foregroundColor;
+    font-weight: 500;
+    > /deep/ div {
+        height: $navHeight;
+        line-height: $navHeight;
+        flex: 1;
+        cursor: pointer;
+        position: relative;
+        outline: none;
+        &:active {
+            background: mix($foregroundColor, $backgroundColor, 20%);
+        }
+        &.selected {
+            color: $mainColor;
+        }
+        &:not(:first-child)::before {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 15%;
+            height: 70%;
+            left: 0;
+            border-left: 1px solid mix($foregroundColor, $backgroundColor, 20%);
+        }
+    }
+}
+
+.body {
+    flex-grow: 1;
+    max-width: $bodyWidth;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: $headerHeight;
+    height: calc(100% - #{$headerHeight});
+    box-sizing: border-box;
+    padding-top: .1px;
+    &.hasNav {
+        margin-top: $headerHeight + $navHeight;
+        height: calc(100% - #{$headerHeight + $navHeight});
+    }
+}
+
+.refresher {
+    position: absolute;
+    bottom: 100%;
+    text-align: center;
+    width: 100%;
+    line-height: $refreshDistance;
+    span {
+        vertical-align: middle;
+    }
+}
+
+.puller {
+    height: 100%;
+}
+
+@include desktop {
+    .headerWrapper {
+        display: flex;
+    }
+    .title {
+        margin: 0 20px;
+        display: inline-block;
+    }
+    .headerLeft {
+        margin-left: 20px;
+        display: inline-block;
+        position: initial;
+    }
+    .headerRight {
+        position: absolute;
+        right: 20px;
+    }
+    .nav {
+        white-space: nowrap;
+        background: none;
+        display: inline-block;
+        > /deep/ div {
+            display: inline-block;
+            padding: 0 8px;
+            line-height: $headerLineHeight;
+            color: mix($mainColor, $backgroundColor, 20%);
+            height: $headerHeight;
+            &:hover {
+                background: mix($backgroundColor, $mainColor, 10%);
+            }
+            &:active {
+                background: mix($foregroundColor, $mainColor, 5%);
+            }
+            &.selected {
+                color: $backgroundColor;
+                font-weight: bold;
+            }
+            &:not(:first-child)::before {
+                border-left: 1px solid mix($foregroundColor, $mainColor, 10%);
+            }
+        }
+    }
+    .body, .body.hasNav {
+        margin-top: $headerHeight;
+        height: calc(100% - #{$headerHeight});
+    }
+}

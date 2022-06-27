@@ -1,0 +1,87 @@
+@import "vars";
+
+input:not(.m0), select:not(.m0) {
+    margin-top: 10px;
+    margin-left: 5px;
+}
+
+.flex {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -5px;
+    :first-child {
+        flex-grow: 1;
+    }
+    :not(:first-child) {
+        flex: 1;
+    }
+}
+
+button {
+    margin-top: 15px;
+    margin-left: 8px;
+    float: right;
+}
+
+button.action {
+    float: none;
+    margin-left: 0;
+    width: 100%;
+}
+
+.loader {
+    text-align: center;
+    font-size: 40px;
+}
+
+vx-checkbox {
+    margin-top: 10px;
+    display: block;
+    margin-left: 5px;
+}
+
+.withdrawInfo > div {
+    flex: 0;
+    text-align: center;
+    margin-top: -10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    margin-bottom: -15px;
+    position: relative;
+
+    &:first-child {
+        border-right: 1px solid #c1c1c1;
+    }
+
+    div {
+        font-size: 20px;
+    }
+}
+
+.icon-question {
+    width: 1em;
+    font-size: 12px;
+    display: inline-block;
+    border-radius: 50%;
+    background: #0680E9;
+    color: #fff;
+    padding: 5px;
+}
+
+.purse {
+    font-size: 30px;
+    text-align: center;
+}
+
+vx-radio-button {
+    display: block;
+    margin-top: 10px;
+}
+
+@include desktop {
+    .withdrawInfo > div {
+        margin-top: -15px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+}

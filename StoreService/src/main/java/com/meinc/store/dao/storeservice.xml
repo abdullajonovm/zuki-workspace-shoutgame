@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.meinc.store.dao.IStoreServiceDaoMapper">
+
+    <resultMap type="storeItem" id="storeItemMap">
+        <id property="itemId" column="item_id" />
+        <result property="storeBundleId" column="store_bundle_id" />
+        <result property="uuid" column="uuid" />
+        <result property="title" column="title" />
+        <result property="description" column="description" />
+        <result property="price" column="price" />
+        <result property="active" column="active" />
+        <result property="durationQuantity" column="duration_quantity" />
+        <result property="durationUnit" column="duration_unit" />
+        <collection property="itemPrice" column="item_id" javaType="arrayList" ofType="itemPrice" select="getItemPrices" />
+    </resultMap>
+    
+    <resultMap type="itemPrice" id="itemPriceMap">
+        <result property="currencyCode" column="currency_code" />
+        <result property="price" column="price" />
+        <result property="formattedPrice" column="formatted_price" />
+    </resultMap>
+
+    <resultMap type="subscriberEntitlement" id="subscriberEntitlementMap">
+        <id property="subscriberEntitlementId" column="subscriber_entitlement_id" />
+        <association property="receipt" column="receipt_id" javaType="receipt" select="getReceiptById" />
+    </resultMap>
+
+    <resultMap type="subscriberEntitlement" id="simpleSubscriberEntitlementMap">
+        <id property="subscriberEntitlementId" column="subscriber_entitlement_id" />
+        <result property="uuid" column="uuid" />
+        <result property="subscriberId" column="subscriber_id" />
+        <result property="entitlementId" column="entitlement_id" />
+        <result property="entitlementUuid" column="entitlement_uuid" />
+        <result property="deleteDate" column="delete_date" />
+        <result property="reservedDate" column="reserved_date" />
+        <result property="consumedDate" column="consumed_date" />
+        <result property="contextId" column="context_id" />
+    </resultMap>
+
+    <resultMap type="entitlement" id="entitlementMap">
+        <id property="entitlementId" column="entitlement_id" />
+        <result property="uuid" column="uuid" />
+        <result property="name" column="name" />
+        <result property="quantity" column="quantity" />
+    </resultMap>
+
+    <resultMap type="receipt" id="receiptMap">
+        <id property="receiptId" column="receipt_id" />
+        <result property="uuid" column="uuid" />
+        <result property="type" column="type" />
+        <result property="itemUuid" column="item_uuid" />
+        <result property="storeUid" column="store_uid" />
+        <result property="subscriberId" column="subscriber_id" />
+        <result property="payload" column="payload" />
+        <result property="expirationDate" column="expiration_date" />
+        <result property="createdDate" column="created_date"/>
+        <result property="updatedDate" column="updated_date"/>
+        <result property="subscriptionState" column="subscriptionState"/>
+    </resultMap>
+
+    <!-- <resultMap type="couponCode" id="couponCodeMap">
+        <id property="couponId" column="coupon_code_id" />
+        <result property="code" column="coupon_code" />
+        <result property="itemUuid" column="item_uuid" />
+        <result property="createDate" column="create_date" />
+        <result property="redeemDate" column="redeem_date" />
+        <result property="cancelDate" column="cancel_date" />
+    </resultMap> -->
+
+    <resultMap type="com.meinc.store.domain.ReceiptItem" id="receiptItemMap">
+        <id property="receiptId" column="receipt_id" />
+        <result property="receiptUuid" column="uuid" />
+        <result property="itemUuid" column="item_uuid" />
+        <result property="itemName" column="title" />
+        <result property="itemPrice" column="price" />
+        <result property="purchaseType" column="type" />
+        <result property="purchaseDate" column="created_date" />        
+        <result property="purchaseCurrency" column="currency_code" />
+        <result property="subscriberId" column="subscriber_id" />
+    </resultMap>
+
+    <select id="getReceiptById" parameterType="int" resultMap="receiptMap">
+        SELECT * from `store`.`receipt`
+        WHERE receipt_id = #{value};
+    </select>
+
+    <select id="getReceiptByUuid" parameterType="string" resultMap="receiptMap">
+        SELECT * from `store`.`receipt`
+        WHERE uuid = #{value};
+    </select>
+    
+    <select id="getReceiptsBySubscriberId" parameterType="long" resultMap="receiptMap">
+        SELECT * from `store`.`receipt`
+        WHERE subscriber_id = #{value}
+        ORDER BY updated_date DESC;
+    </select>
+
+    <select id="getReceiptByStoreUid" parameterType="map" resultMap="receiptMap">
+        SELECT * from `store`.`receipt`
+        WHERE type = #{receiptType}
+          AND store_uid = #{storeUid};
+    </select>
+
+    <insert id="addReceipt" parameterType="receipt" keyProperty="receiptId">
+        <![CDATA[
+            INSERT INTO `store`.`receipt` (`uuid`, `type`, `item_uuid`, `subscriber_id`, `payload`, `store_uid`, `expiration_date`, `skip_verify`, `created_date`, `updated_date`, `subscription_state`)
+            VALUES (#{uuid}, #{type}, #{itemUuid}, #{subscriberId}, #{payload}, #{storeUid}, #{expirationDate}, #{skipVerify}, NOW(), NOW(), #{subscriptionState})
+        ]]>
+    </insert>
+
+    <update id="updateReceipt" parameterType="receipt">
+        <![CDATA[
+        UPDATE `store`.`receipt`
+          SET uuid = #{uuid}, `type` = #{type}, item_uuid = #{itemUuid},
+              subscriber_id = #{subscriberId}, payload = #{payload}, expiration_date = #{expirationDate}, updated_date = NOW(), subscription_state = #{subscriptionState} 
+        WHERE receipt_id = #{receiptId}
+        ]]>
+    </update>
+
+    <insert id="addSubscriberEntitlement" parameterType="subscriberEntitlement" keyProperty="subscriberEntitlementId">
+        <![CDATA[
+            INSERT INTO `store`.`subscriber_entitlement` (`uuid`, `subscriber_id`, `entitlement_id`, `entitlement_uuid`, `receipt_id`)
+            VALUES (#{uuid}, #{subscriberId}, #{entitlementId}, #{entitlementUuid}, #{receipt.receiptId})
+        ]]>
+    </insert>
+    
+    <insert id="addSubscriberEntitlementWithContext" parameterType="subscriberEntitlement">
+        <![CDATA[
+            INSERT INTO `store`.`subscriber_entitlement` (`uuid`, `subscriber_id`, `entitlement_id`, `entitlement_uuid`, `context_id`)
+            VALUES (#{uuid}, #{subscriberId}, #{entitlementId}, #{entitlementUuid}, #{contextId})
+        ]]>
+    </insert>
+
+    <insert id="addSubscriberEntitlementsWithContext" parameterType="subscriberEntitlement" useGeneratedKeys="false">
+            INSERT INTO `store`.`subscriber_entitlement` (`uuid`, `subscriber_id`, `entitlement_id`, `entitlement_uuid`, `context_id`)
+            VALUES 
+        <foreach collection="list" item="se" separator=","> 
+            (#{se.uuid}, #{se.subscriberId}, #{se.entitlementId}, #{se.entitlementUuid}, #{se.contextId})
+        </foreach>
+    </insert>
+
+    <select id="getAllActiveItems" resultMap="storeItemMap">
+        SELECT * from `store`.`item`
+        WHERE active = 1;
+    </select>
+
+    <select id="getItemUuids" resultType="string">
+        SELECT uuid from `store`.`item`
+    </select>
+    
+    <select id="getItemIds" resultType="int">
+        SELECT item_id from `store`.`item`
+    </select>
+
+    <select id="getItemById" parameterType="int" resultMap="storeItemMap">
+        SELECT * from `store`.`item`
+        WHERE item_id = #{value};
+    </select>
+
+    <select id="getItemByUuid" parameterType="string" resultMap="storeItemMap">
+        SELECT * from `store`.`item`
+        WHERE uuid = #{value};
+    </select>
+
+    <select id="getEntitlements" resultMap="entitlementMap">
+        SELECT entitlement_id, uuid, name, 1 as quantity FROM `store`.`entitlement`
+    </select>
+    
+    <select id="getEntitlementUuids" resultType="string">
+        SELECT uuid FROM `store`.`entitlement`
+    </select>
+
+    <select id="getEntitlementById" parameterType="int" resultMap="entitlementMap">
+        SELECT entitlement_id, uuid, name, 1 as quantity 
+          FROM `store`.`entitlement`
+         WHERE entitlement_id = #{value}
+    </select>
+    
+    <select id="getItemsForEntitlement" parameterType="int" resultMap="storeItemMap">
+        select i.* from `store`.`item` i, `store`.`item_entitlement` ie
+        WHERE ie.entitlement_id = #{value}
+          AND i.item_id = ie.item_id
+    </select>    
+    
+    <select id="getEntitlement" parameterType="string" resultMap="entitlementMap">
+        SELECT entitlement_id, uuid, name, 1 as quantity 
+          FROM `store`.`entitlement`
+         WHERE uuid = #{value}
+    </select>
+    
+    <select id="getEntitlementsForItem" parameterType="int" resultMap="entitlementMap">
+        SELECT e.*, ie.quantity
+          FROM `store`.`entitlement` e,
+               `store`.`item_entitlement` ie
+         WHERE ie.item_id = #{value}
+          AND  ie.entitlement_id = e.entitlement_id
+    </select>
+
+    <select id="getCurrentEntitlementsForSubscriber" parameterType="long" resultMap="subscriberEntitlementMap">
+        SELECT se.*, e.uuid AS entitlement_uuid from `store`.`subscriber_entitlement` se, `store`.entitlement e
+         WHERE delete_date IS NULL AND subscriber_id = #{value}
+          AND  se.entitlement_id = e.entitlement_id
+    </select>
+    
+    <select id="getUnreservedEntitlementsForSubscriber" parameterType="long" resultMap="subscriberEntitlementMap">
+        SELECT se.*, e.uuid AS entitlement_uuid from `store`.`subscriber_entitlement` se, `store`.entitlement e
+         WHERE delete_date IS NULL AND reserved_date IS NULL
+           AND subscriber_id = #{value} AND se.entitlement_id = e.entitlement_id
+    </select>
+
+    <select id="getUnreservedEntitlementsForSubscribers" resultMap="subscriberEntitlementMap">
+        SELECT se.*, e.uuid AS entitlement_uuid
+          FROM `store`.`subscriber_entitlement` se
+          JOIN `store`.entitlement e USING (entitlement_id)
+         WHERE delete_date IS NULL AND reserved_date IS NULL
+           AND subscriber_id IN
+               <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+                   #{item}
+               </foreach>
+    </select>
+
+    <select id="getExpiredEntitlementsForSubscriber" parameterType="long" resultMap="subscriberEntitlementMap">
+        <![CDATA[
+        SELECT subent.*
+         FROM `store`.subscriber_entitlement subent, `store`.receipt
+         WHERE receipt.subscriber_id = #{value}
+          AND  receipt.expiration_date IS NOT NULL
+          AND  receipt.expiration_date <= NOW()
+          AND  subent.delete_date IS NOT NULL
+          AND  subent.receipt_id IS NOT NULL
+          AND  subent.receipt_id = receipt.receipt_id
+        ]]>
+    </select>
+
+    <select id="getExpiredSubscriberEntitlements" resultMap="subscriberEntitlementMap">
+        <![CDATA[
+        SELECT subent.*
+         FROM `store`.subscriber_entitlement subent, `store`.receipt
+         WHERE receipt.expiration_date IS NOT NULL
+          AND  receipt.expiration_date <= NOW()
+          AND  subent.delete_date IS NULL
+          AND  subent.receipt_id IS NOT NULL
+          AND  subent.receipt_id = receipt.receipt_id
+        ]]>
+    </select>
+
+    <delete id="removeSubscriberEntitlement" parameterType="int">
+        <![CDATA[
+            UPDATE `store`.`subscriber_entitlement`
+            SET delete_date = NOW() WHERE subscriber_entitlement_id = #{value}
+        ]]>
+    </delete>
+
+    <!-- <select id="getMatchingCouponCodes" parameterType="set" resultType="String">
+        SELECT coupon_code FROM store.coupon_code WHERE coupon_code IN (
+        <foreach collection="codes" item="code" open="" close="" separator=",">#{code}</foreach> );
+    </select> -->
+    
+    <!-- <insert id="addCouponCodesForItem" parameterType="set">
+        INSERT IGNORE INTO store.coupon_code (coupon_code, item_uuid, create_date) VALUES (
+        <foreach collection="codeUuids" item="codeUuid" open="" close="" separator="),(">#{codeUuid}, #{itemUuid}, NOW()</foreach> );
+    </insert> -->
+
+    <!-- <select id="getCouponByCode" parameterType="String" resultMap="couponCodeMap">
+        SELECT coupon_code.* FROM store.coupon_code WHERE coupon_code=#{value};
+    </select> -->
+    
+    <!-- <insert id="markCouponRedeemed" parameterType="int">
+        UPDATE store.coupon_code SET redeem_date=NOW() WHERE coupon_code_id=#{value};
+    </insert> -->
+    
+    <select id="getSubscriberEntitlement" parameterType="string" resultMap="simpleSubscriberEntitlementMap">
+        SELECT *
+          FROM store.subscriber_entitlement
+         WHERE uuid = #{value}
+         FOR UPDATE
+    </select>
+    
+    <select id="getSubscriberEntitlementConsumed" parameterType="map" resultMap="simpleSubscriberEntitlementMap">
+        SELECT *
+          FROM store.subscriber_entitlement
+         WHERE consumed_date IS NOT NULL 
+           AND delete_date IS NOT NULL
+           AND subscriber_id = #{subscriberId}
+           AND entitilement_uuid = #{entitlementUuid}
+         ORDER BY delete_date DESC
+    </select>
+    
+    <update id="reserveSubscriberEntitlement" parameterType="int">
+        UPDATE store.subscriber_entitlement
+           SET reserved_date = NOW()
+         WHERE subscriber_entitlement_id = #{value}
+    </update>
+    
+    <update id="unreserveSubscriberEntitlement" parameterType="string">
+        UPDATE store.subscriber_entitlement
+           SET reserved_date = null
+         WHERE uuid = #{value}
+    </update>
+    
+    <update id="consumeSubscriberEntitlement" parameterType="int">
+        UPDATE store.subscriber_entitlement
+           SET consumed_date = NOW(), delete_date = NOW()
+         WHERE subscriber_entitlement_id = #{value}
+    </update>
+    
+    <update id="restoreSubscriberEntitlement" parameterType="string">
+        UPDATE store.subscriber_entitlement
+           SET reserved_date = NULL, consumed_date = NULL, delete_date = NULL
+         WHERE uuid = #{value}
+    </update>
+    
+    <select id="getItemPrices" parameterType="int" resultMap="itemPriceMap">
+        SELECT * FROM store.item_price WHERE item_id = #{value}
+    </select>
+
+    <select id="getReceiptsBySubscriberIdFromDate" parameterType="map" resultMap="receiptItemMap">
+        SELECT r.receipt_id, r.uuid, r.item_uuid, i.title, i.price, r.type, ip.currency_code, r.created_date, r.subscriber_id
+          FROM store.receipt r
+          JOIN store.item i ON r.item_uuid = i.uuid
+          JOIN store.item_price ip ON i.item_id = ip.item_id AND i.price = ip.price
+         WHERE r.subscriber_id = #{subscriberId}
+           AND r.created_date > #{fromDate}
+         ORDER BY r.created_date ASC
+    </select>
+
+    <select id="getReceiptItemForReceiptId" parameterType="int" resultMap="receiptItemMap">
+        SELECT r.receipt_id, r.uuid, r.item_uuid, i.title, i.price, r.type, ip.currency_code, r.created_date, r.subscriber_id
+          FROM store.receipt r
+          JOIN store.item i ON r.item_uuid = i.uuid
+          JOIN store.item_price ip ON i.item_id = ip.item_id AND i.price = ip.price
+         WHERE r.receipt_id = #{receiptId}
+    </select>
+    
+    <!-- external customer profile mapping -->
+    
+    <insert id="insertCustomerProfileMapping" parameterType="map">
+        INSERT INTO store.customer_profile_mapping (subscriber_id, customer_profile_id) 
+        VALUES (#{subscriberId}, #{customerProfileId}) 
+        ON DUPLICATE KEY UPDATE customer_profile_id = #{customerProfileId}
+    </insert>
+    
+    <select id="getCustomerProfileMapping" parameterType="long" resultType="string">
+        SELECT customer_profile_id 
+          FROM store.customer_profile_mapping 
+         WHERE subscriber_id = #{value}
+    </select>
+    
+    <delete id="deleteCustomerProfileMapping" parameterType="long">
+        DELETE FROM store.customer_profile_mapping WHERE subscriber_id = #{value}
+    </delete>
+    
+    <insert id="setBraintreeCustomerId" parameterType="map">
+    	INSERT INTO store.braintree_customer (subscriber_id, customer_id)
+    	VALUES (#{subscriberId}, #{customerId})
+    </insert>
+    
+    <select id="getBraintreeCustomerId" parameterType="long" resultType="string">
+    	SELECT customer_id FROM store.braintree_customer WHERE subscriber_id = #{value}
+    </select>
+    
+    <delete id="removeBraintreeCustomerId" parameterType="long">
+    	DELETE FROM store.braintree_customer WHERE subscriber_id = #{value}
+    </delete>
+    
+</mapper>

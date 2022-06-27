@@ -1,0 +1,128 @@
+@import "vars";
+
+:host {
+    z-index: 100;
+}
+
+[shPageBody] {
+    display: block;
+    background: #f7f7f7;
+    height: 100%;
+    padding-bottom: 10px;
+    box-sizing: border-box;
+}
+
+.statuses {
+    div {
+        margin-bottom: 5px;
+    }
+    h2 {
+        font-size: 15px;
+        margin: 15px 10px 8px;
+    }
+}
+
+.status {
+    margin: 10px;
+    text-align: center;
+}
+
+.action {
+    text-align: center;
+    margin-top: 10px;
+    div {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}
+
+.icon-chevron-left {
+    vertical-align: text-top;
+    margin-top: 1px;
+    display: inline-block;
+}
+
+button {
+    margin-top: 10px;
+}
+
+.rounds {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    overflow-x: auto;
+    padding: 3px 0;
+    span {
+        display: inline-block;
+        margin: 0 5px;
+        background: mix($foregroundColor, $backgroundColor, 10%);
+        padding: 3px 7px;
+        border-radius: 3px;
+        &.current {
+            box-shadow: 0 0 3px transparentize($foregroundColor, .3);
+            background: $accentColor;
+            color: $backgroundColor;
+        }
+    }
+}
+
+.levels {
+    position: relative;
+}
+
+.level {
+    border-top: 1px solid black;
+    padding: 3px;
+    position: relative;
+}
+
+.bg {
+    background: rgba(0, 0, 0, .2);
+    position: absolute;
+    top: 0;
+    width: 100%;
+    max-height: 100%;
+    transition: height .5s;
+}
+
+.loading {
+    font-size: 65px;
+    text-align: center;
+}
+
+img {
+    width: 100px;
+    height: 75px;
+    display: inline-block;
+    border: 1px solid mix($foregroundColor, $backgroundColor, 15%);
+    border-radius: 3px;
+    float: left;
+    margin-right: 15px;
+    margin-bottom: 10px;
+}
+
+.gameName {
+    text-align: center;
+    margin: 15px 10px;
+    font-size: 18px;
+}
+
+.notificationPrefs {
+    margin-bottom: 15px;
+}
+
+.payout {
+    font-size: 24px;
+    text-align: center;
+}
+
+.expectedStart {
+    margin-left: 30px;
+    margin-top: 10px;
+}
+
+p {
+    padding-left: 10px;
+    padding-right: 10px;
+}

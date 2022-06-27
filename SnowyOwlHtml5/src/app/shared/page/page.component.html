@@ -1,0 +1,26 @@
+<div class="headerWrapper">
+    <div class="header">
+        <div class="headerLeft">
+            <ng-content select="[shHeaderLeft]"></ng-content>
+        </div>
+        <div class="title" [class.pointer]="clickable" (click)="onTitleClick()">
+            <img src="assets/img/logo.svg" alt="">
+        </div>
+        <div class="headerRight">
+            <ng-content select="[shHeaderRight]"></ng-content>
+        </div>
+    </div>
+    <div class="nav">
+        <ng-content select="[shNavItem]"></ng-content>
+    </div>
+</div>
+<div class="body" [class.hasNav]="navItems.length" (touchmove)="onTouchMove($event)" (touchend)="onTouchEnd()">
+    <div #puller class="puller">
+        <div class="refresher" [ngSwitch]="pullState" [hidden]="noRefresh">
+            <ng-template ngSwitchCase="default"><span class="icon-angle-up"></span></ng-template>
+            <ng-template ngSwitchCase="pulled"><span class="icon-angle-down"></span></ng-template>
+            <ng-template ngSwitchCase="refreshing"><span class="icon-spinner"></span></ng-template>
+        </div>
+        <ng-content select="[shPageBody]"></ng-content>
+    </div>
+</div>

@@ -1,0 +1,45 @@
+<div class="sidenav" [class.over]="deviceService.isMobile" *ngIf="subscriberService.isLoggedIn()"
+     [class.opened]="opened && deviceService.isMobile && subscriberService.isLoggedIn()">
+
+    <div class="header inner" [vxMenuTrigger]="drop">
+        <img *ngIf="subscriberService.subscriber?.photoUrl" [src]="subscriberService.subscriber?.photoUrl">
+        <span class="username">{{ subscriberService.subscriber?.nickname }}</span>
+
+        <vx-menu #drop>
+            <vx-item (select)="logout()">
+                <i class="fa fa-sign-out"></i>
+                <span>Logout {{ subscriberService.subscriber?.nickname }}</span>
+            </vx-item>
+        </vx-menu>
+    </div>
+
+    <div class="links">
+        <a routerLink="/game" routerLinkActive="active" (click)="opened = false;">Games</a>
+        <a routerLink="/payout-model" routerLinkActive="active" (click)="opened = false;">Payout Models</a>
+        <a routerLink="/question" routerLinkActive="active" (click)="opened = false;">Questions</a>
+        <a routerLink="/category/" routerLinkActive="active" (click)="opened = false;">Categories</a>
+        <a routerLink="/subscriber" routerLinkActive="active" (click)="opened = false;">Subscriber</a>
+        <a routerLink="/coupon" routerLinkActive="active" (click)="opened = false;">Coupon</a>
+        <a routerLink="/payouts" routerLinkActive="active" (click)="opened = false;">Payouts</a>
+        <a routerLink="/ineligible-subs" routerLinkActive="active" (click)="opened = false;">Ineligible Subscribers</a>
+        <a routerLink="/affiliate-plan" routerLinkActive="active" (click)="opened = false;">Affiliate Plan</a>
+        <a routerLink="/other" routerLinkActive="active" (click)="opened = false;">Other</a>
+        <div [class.hasNew]="hasNewChangelog" (click)="versionClick()">Version: {{appVersion}}</div>
+    </div>
+
+</div>
+<div class="overlay" (click)="opened = false;" *ngIf="opened && deviceService.isMobile && subscriberService.isLoggedIn()"></div>
+<div class="body">
+    <div class="header">
+        <span class="menu" *ngIf="deviceService.isMobile && subscriberService.isLoggedIn()" (click)="opened = true;">
+            <i class="fa fa-bars"></i>
+        </span>
+        <span>{{ titleService.title }}</span>
+    </div>
+    <!--<button (click)="push()">PUSH TEST</button>-->
+    <div class="mainContent">
+        <div>
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

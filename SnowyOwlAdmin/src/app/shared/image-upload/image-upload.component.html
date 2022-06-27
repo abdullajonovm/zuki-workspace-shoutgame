@@ -1,0 +1,4 @@
+<img #img alt="">
+Drop file or click to upload image.
+<input type="file" name="myImage" accept="image/*" hidden (change)="handleFile(input.files[0])" #input/>
+<div class="loading" *ngIf="loading"><vx-spinner></vx-spinner></div>

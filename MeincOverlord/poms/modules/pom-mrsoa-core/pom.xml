@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>meinc</groupId>
+    <artifactId>MeincOverlord-mrsoa-core</artifactId>
+    <version>3.0-mvnbuild</version>
+    <packaging>pom</packaging>
+
+    <parent>
+        <groupId>meinc</groupId>
+        <artifactId>MeincOverlord-root-repos</artifactId>
+        <version>3.0-mvnbuild</version>
+        <relativePath>../../parents/pom-root-repos</relativePath>
+    </parent>
+
+    <modules>
+        <!-- core -->
+        <module>../../../../MeincLauncher</module>
+        <module>../../../../MrSoaKernel</module>
+        <module>../../../../MeincCommons</module>
+        <module>../../../../MrSoaServiceAssembler</module>
+        <module>../../../../ServiceAssemblerPlugin</module>
+        <module>../../../../SpringAssemblerPlugin</module>
+    </modules>
+
+</project>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<!-- This file must have a unique name so that it does not interfere with
+     other application context files down the classpath hierarchy -->
+
+<beans>
+
+    <!-- ========================= GENERAL DEFINITIONS ========================= -->
+
+
+    <!-- Configurer that replaces ${...} placeholders with values from properties files -->
+    <!-- (in this case, mail and JDBC related properties) -->
+    <bean id="propertyConfigurer"
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:postoffice@jdbc.properties</value>
+            </list>
+        </property>
+    <property name="properties">
+      <bean class="com.meinc.launcher.serverprops.ServerPropertyHolder" factory-method="getProps" />
+    </property>
+    </bean>
+
+    <!-- ========================= BUSINESS OBJECT DEFINITIONS ======================== -->
+
+    <!--
+    - A parent bean definition which is a base definition for transaction proxies.
+    - It's marked as abstract, since it's not supposed to be instantiated itself.
+    - We set shared transaction attributes here, following our naming patterns.
+    - The attributes can still be overridden in child bean definitions.
+    -->
+    <bean id="baseTransactionProxy"
+        class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"
+        abstract="true">
+        <property name="transactionManager">
+            <ref bean="transactionManager"/>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="add*">PROPAGATION_NESTED</prop>
+                <prop key="remove*">PROPAGATION_NESTED</prop>
+                <prop key="send*">PROPAGATION_NESTED</prop>
+                <prop key="is*">PROPAGATION_NESTED,readOnly</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- ========================= DATA SOURCE DEFINITIONS ======================== -->
+
+  <bean id="dataSource" class="com.meinc.bonecp.BoneCpDataSource" factory-method="getInstance" />
+
+    <!-- Transaction manager for a single JDBC DataSource -->
+
+    <bean id="transactionManager"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- SqlMap setup for iBATIS Database Layer -->
+    
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="configLocation" value="classpath:postoffice@sql-map-config.xml"/>
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    
+    <bean class="org.mybatis.spring.SqlSessionTemplate" id="sqlSessionTemplate">
+        <constructor-arg ref="sqlSessionFactory" />
+    </bean>
+
+    <!-- ========================= DAO DEFINITIONS: IBATIS IMPLEMENTATIONS ========================= -->
+
+    <bean class="org.mybatis.spring.mapper.MapperFactoryBean" id="postofficeDaoMapper">
+        <property name="sqlSessionTemplate" ref="sqlSessionTemplate" />
+        <property name="mapperInterface" value="com.meinc.commons.postoffice.dao.IPostOfficeDaoMapper" />
+    </bean>
+
+  <bean id="postOfficeDirectory" class="com.meinc.commons.postoffice.directory.PostOfficeDirectory">
+    <property name="directoryRootPath" value="${email.directory.path}"/>
+  </bean>
+  
+  <bean id="emailGenerator" class="com.meinc.commons.postoffice.smtp.SmtpEmailGenerator">
+    <property name="serverHostname" value="${server.base.url}" />
+        <property name="dkimDomain" value="${dkim.domain}" />
+        <property name="dkimSelector" value="${dkim.selector}" />
+        <property name="dkimKey" value="${dkim.key}" />
+  </bean>
+  
+  <bean id="awsSesSender" class="com.meinc.commons.postoffice.ses.AwsSesSender">
+    <property name="awsAccessKeyId" value="${aws.accessKeyId}" />
+    <property name="awsAccessKey" value="${aws.accessKey}" />
+  </bean>
+  
+  <bean id="smtpSender" class="com.meinc.commons.postoffice.smtp.SmtpSender">
+    <property name="emailServerUsername" value="${email.user}" />
+    <property name="emailServerPassword" value="${email.pass}" />
+    <property name="emailOriginHostname" value="${server.base.url}" />
+    <!-- The server hostname setter uses username, password, and origin hostname so it must be last -->
+    <property name="emailServerHostname" value="${email.hostname}" />
+  </bean>
+  
+  <bean id="shoutHttpToSmtpSender" class="com.meinc.commons.postoffice.shout.ShoutHttpToSmtpSender">
+  </bean>
+  
+  <bean id="emailSenderThread" class="com.meinc.commons.postoffice.sender.EmailSenderThread">
+    <property name="batchIntervalMs" value="20000"/>
+    <property name="maxEmailsPerBatch" value="100"/>
+    <property name="postOfficeDirectory" ref="postOfficeDirectory"/>
+  </bean>
+  
+   <bean id="postOffice" class="com.meinc.commons.postoffice.service.PostOfficeService">
+      <property name="serverBaseUrl" value="${server.base.url}" />
+            <property name="dao" ref="postofficeDaoMapper"/>
+            <property name="emailServerHostname" value="${email.hostname}" />
+            <property name="awsSesSender" ref="awsSesSender"/>
+            <property name="smtpSender" ref="smtpSender"/>
+            <property name="shoutHttpToSmtpSender" ref="shoutHttpToSmtpSender"/>
+            <property name="postOfficeDirectory" ref="postOfficeDirectory"/>
+            <property name="emailGenerator" ref="emailGenerator"/>
+            <property name="emailSenderThread" ref="emailSenderThread"/>
+     </bean>
+
+  <bean id="postofficeProxy" parent="baseTransactionProxy">
+    <property name="target" ref="postOffice"/>
+  </bean>
+
+</beans>

@@ -1,0 +1,6 @@
+version: '3'
+services:
+    shout-mysql:
+        image: snowl-mysql:1.0
+        build:
+            context: .

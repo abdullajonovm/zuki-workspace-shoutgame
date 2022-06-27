@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Encapsulate field &apos;tv.shout.sc.domain.Game._canAppearInMobile&apos; in &apos;tv.shout.sc.domain.Game&apos;&#x0A;- Original project: &apos;ShoutContestService&apos;&#x0A;- Original element: &apos;tv.shout.sc.domain.Game._canAppearInMobile&apos;&#x0A;- Getter method name: &apos;isCanAppearInMobile&apos;&#x0A;- Setter method name: &apos;setCanAppearInMobile&apos;&#x0A;- Field visibility: &apos;public&apos;&#x0A;- Use getter and setter methods in declaring type" comments="false" declaring="true" description="Encapsulate field &apos;_canAppearInMobile&apos;" flags="589830" getter="isCanAppearInMobile" id="org.eclipse.jdt.ui.self.encapsulate" input="/src\/main\/java&lt;tv.shout.sc.domain{Game.java[Game^_canAppearInMobile" insertion="27" setter="setCanAppearInMobile" stamp="1529098159604" version="1.0" visibility="1"/>
+</session>

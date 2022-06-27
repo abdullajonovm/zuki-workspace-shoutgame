@@ -1,0 +1,145 @@
+@import "vars";
+@import "~offline-js/themes/offline-theme-default.css";
+@import "~offline-js/themes/offline-language-english.css";
+@import "~vx-components/theming";
+
+$colors: (
+    primary: $mainColor,
+    background: $backgroundColor,
+    foreground: $foregroundColor,
+    accent: $accentColor
+);
+@include vx-checkbox-theme($colors);
+@include vx-stepper-theme($colors);
+@include vx-radio-theme($colors);
+@include vx-dropdown-theme($colors);
+
+html {
+    display: flex;
+    min-height: 100%;
+    background: $mainColor;
+    //background: url('assets/clouds.jpg') fixed;
+    background-size: cover;
+    background: $pageBackgroundColor;
+    font-size: 14px;
+}
+
+html, body {
+    font-family: HelveticaNeue-Light, 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+    margin: 0;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+}
+
+.textCenter {
+    text-align: center;
+}
+
+.floatLeft {
+    float: left;
+}
+
+.floatRight {
+    float: right;
+}
+
+.block {
+    display: block;
+}
+.mTop0 {
+    margin-top: 0;
+}
+.w100 {
+    width: 100%;
+}
+
+.mTop10 {
+    margin-top: 10px;
+}
+
+.mBottom10 {
+    margin-bottom: 10px;
+}
+
+.hideMobile {
+    display: none;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+@include desktop {
+    .hideDesktop {
+        display: none;
+    }
+    .hideMobile {
+        display: block;
+    }
+}
+
+.card {
+    width: calc(100% - 30px);
+    margin: 15px;
+    background: $backgroundColor;
+    color: $foregroundColor;
+    border-radius: 5px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, .2);
+    padding: 10px;
+    box-sizing: border-box;
+    font-size: 15px;
+    h1 {
+        font-weight: bold;
+        font-size: 18px;
+        margin-top: 0;
+    }
+    h2 {
+        font-size: 17px;
+        margin-top: 0;
+    }
+}
+
+.cardLine {
+    border-top: 1px solid #c1c1c1;
+    margin: 15px -10px;
+}
+
+.textAccent {
+    color: $accentColor;
+}
+
+.clear {
+    clear: both;
+}
+
+a {
+    text-decoration: underline;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+vx-stepper {
+    margin: -10px;
+}
+
+@include desktop {
+    .card {
+        margin-left: 0;
+        width: 100%;
+        font-size: 16px;
+        padding: 15px;
+        h1 {
+            font-size: 19px;
+        }
+        h2 {
+            font-size: 18px;
+        }
+    }
+    .cardLine {
+        border-top: 1px solid #c1c1c1;
+        margin: 15px -15px;
+    }
+    vx-stepper {
+        margin: -15px;
+    }
+}

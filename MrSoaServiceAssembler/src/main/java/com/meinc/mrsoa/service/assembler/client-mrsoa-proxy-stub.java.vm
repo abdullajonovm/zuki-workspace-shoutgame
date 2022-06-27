@@ -1,0 +1,66 @@
+package $clientproxy_package;
+
+import com.meinc.mrsoa.service.ServiceEndpoint;
+import com.meinc.mrsoa.service.ServiceMessage;
+import com.meinc.mrsoa.service.IMrSoaProxy;
+
+public class ${target_classname}ClientProxy implements IMrSoaProxy
+#if($expose_as)
+    #if($expose_as_is_interface)
+    , $expose_as
+    #else
+    extends $expose_as
+    #end
+#end
+{
+    public static final ServiceEndpoint endpoint = makeEndpoint();
+    
+    public ${target_classname}ClientProxy() {
+        ServiceMessage.waitForServiceRegistration(endpoint);
+    }
+    
+    public ${target_classname}ClientProxy(boolean wait) {
+        if (wait)
+          ServiceMessage.waitForServiceRegistration(endpoint);
+    }
+    
+    private static ServiceEndpoint makeEndpoint()
+    {
+        //TODO: inject from spring or JNDI.
+        ServiceEndpoint ep = new ServiceEndpoint();
+        ep.setNamespace("$service_namespace");
+        ep.setServiceName("$service_name");
+        #if($version)
+        ep.setVersion("$version");
+        #end
+        return ep;
+    }
+
+    #foreach($m in $service_methods)
+    @SuppressWarnings("unchecked")
+    public ${m.generic_types} ${m.return_type} $m.serviceMethodName(
+        #foreach($a in $m.args)
+            $a.realType $a.name
+            #if($velocityCount < $m.args.size()), #end
+        #end
+        )
+        #if(!$m.throws.isEmpty())
+            throws
+            #foreach($t in $m.throws)
+                $t
+                #if($velocityCount < $m.throws.size()), #end
+            #end
+        #end
+    {
+        #if(!$m.returnsVoid) return ($m.proper_return_type) #end ServiceMessage.send#if($fast_copy)Fast#end(${target_classname}ClientProxy.endpoint, "$m.serviceMethodName"
+            #foreach($a in $m.args)
+                , $a.name
+            #end
+        );
+    }
+
+    #end
+    public ServiceEndpoint getEndpoint() {
+        return endpoint;
+    }
+}

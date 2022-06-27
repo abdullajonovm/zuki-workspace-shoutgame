@@ -1,0 +1,20 @@
+<project default="doit">
+
+   <target name="doit">
+      <property name="propfile" value="test.properties"/>
+
+      <unjar src="${archive}" dest="${basedir}">
+         <patternset includes="${propfile}"/>
+      </unjar>
+
+      <replace file="${propfile}"
+         token="bar"
+         value="zing"/>
+
+      <jar destfile="${archive}"
+         basedir="${basedir}"
+         update="true"
+         includes="${propfile}"/>
+   </target>
+
+</project>

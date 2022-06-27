@@ -1,0 +1,13 @@
+build_script:
+  - mrsoa-server/docker/build-local.sh
+  - MeincOverlord/server/snowl-collector/build-local.sh
+  - MeincOverlord/server/snowl-mysql/build-local.sh
+  - MeincOverlord/server/snowl-socketio/build-local.sh
+  - server/nginx-lua/build-local.sh
+  - server/wds/docker/build-local.sh
+  - MeincOverlord/server/snowl-nomad-web-proxy/build-local.sh
+  - MeincOverlord/server/snowl-wds-origin/build-local.sh
+  - MeincOverlord/server/snowl-web/build-local.sh
+  - MeincOverlord/server/snowl-wms-origin/build-local.sh
+  - server/srd-server/docker/build-local.sh
+  - MeincOverlord/server/snowl-srd-server/build-local.sh

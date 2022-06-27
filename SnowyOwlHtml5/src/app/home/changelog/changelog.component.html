@@ -1,0 +1,8 @@
+<h2>Changelog</h2>
+<div *ngFor="let version of versions; let first = first" [class.first]="first">
+    <h4>Version {{version.number}}</h4>
+    <ul>
+        <li *ngFor="let change of version.changes">{{change}}</li>
+    </ul>
+</div>
+<button (click)="dialog.close()">Close</button>

@@ -1,0 +1,4 @@
+1490036284340	Rename field 'jsonMapper'
+1490195137910	Rename method 'publishGame'
+1490364235282	Encapsulate field '_skillAnswerCorrectPct'
+1490364247840	Encapsulate field '_skillAverageAnswerSec'

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns:tx="http://www.springframework.org/schema/tx"
+     xmlns:task="http://www.springframework.org/schema/task"
+     xsi:schemaLocation="http://www.springframework.org/schema/beans
+                         classpath:/org/springframework/beans/factory/xml/spring-beans-3.0.xsd
+                         http://www.springframework.org/schema/tx
+                         classpath:/org/springframework/transaction/config/spring-tx-3.0.xsd
+                         http://www.springframework.org/schema/task
+                         classpath:/org/springframework/scheduling/config/spring-task-3.1.xsd">
+     
+    <!-- ********************************************************************** -->
+    <!-- * JDBC SETTINGS ****************************************************** -->
+    <!-- ********************************************************************** -->
+
+    <!-- Configurer that replaces ${...} placeholders with values from properties
+        files -->
+    <bean id="propertyConfigurer"
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:/storeservice@jdbc.properties</value>
+            </list>
+        </property>
+        <property name="properties">
+            <bean class="com.meinc.launcher.serverprops.ServerPropertyHolder"
+                factory-method="getProps" />
+        </property>
+    </bean>
+
+  <bean id="dataSource" class="com.meinc.bonecp.BoneCpDataSource" factory-method="getInstance" />
+
+    <!-- Transaction manager for a single JDBC DataSource -->
+    <bean id="transactionManager"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <!-- enable the configuration of transactional behavior based on annotations -->
+    <tx:annotation-driven transaction-manager="transactionManager" />
+
+    <!-- SqlMap setup for iBATIS Database Layer -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="configLocation" value="classpath:/storeservice@sql-map-config.xml"/>
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <bean class="org.mybatis.spring.SqlSessionTemplate" id="sqlSessionTemplate">
+        <constructor-arg ref="sqlSessionFactory" />
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperFactoryBean" id="storeDaoMapper">
+        <property name="sqlSessionTemplate" ref="sqlSessionTemplate" />
+        <property name="mapperInterface" value="com.meinc.store.dao.IStoreServiceDaoMapper" />
+    </bean>
+
+    <bean id="dao" class="com.meinc.store.dao.StoreServiceDaoSqlMap">
+        <property name="mapper" ref="storeDaoMapper" />
+    </bean>
+    
+   	<!-- <bean id="entitlementMapStore" class="com.meinc.store.dao.EntitlementMapStore">
+        <property name="dao" ref="dao" />
+        <property name="transactionManager" ref="transactionManager" />
+   	</bean> -->
+   	
+   	<!-- <bean id="itemMapStore" class="com.meinc.store.dao.ItemMapStore">
+        <property name="dao" ref="dao" />
+        <property name="transactionManager" ref="transactionManager" />
+   	</bean> -->
+
+   	<!-- <bean id="itemToEntitlementMapStore" class="com.meinc.store.dao.ItemToEntitlementMapStore">
+        <property name="dao" ref="dao" />
+        <property name="transactionManager" ref="transactionManager" />
+   	</bean> -->
+
+   	<!-- <bean id="entitlementToItemMapStore" class="com.meinc.store.dao.EntitlementToItemMapStore">
+        <property name="dao" ref="dao" />
+        <property name="transactionManager" ref="transactionManager" />
+   	</bean> -->
+   	
+   	<bean id="identityService" class="clientproxy.identityservice.IdentityServiceClientProxy" />
+
+    <bean id="storeService" class="com.meinc.store.service.StoreService">
+        <!-- <property name="entitlementMapStore" ref="entitlementMapStore" /> -->
+        <!-- <property name="itemMapStore" ref="itemMapStore" /> -->
+        <!-- <property name="itemToEntitlementMapStore" ref="itemToEntitlementMapStore" /> -->
+        <!-- <property name="entitlementToItemMapStore" ref="entitlementToItemMapStore" /> -->
+        <property name="ccProcessor" value="${store.cc.processor}" />
+        <property name="dao" ref="dao" />
+        <property name="braintreeProcessor" ref="braintreeProcessor" />
+        <property name="braintreeProcessor2" ref="braintreeProcessor2" />
+        <property name="authorizeDotNetProcessor" ref="authorizeDotNetProcessor" />
+        <property name="transactionManager" ref="transactionManager" />
+    </bean>
+    
+    <bean id="mockStoreService" class="com.meinc.store.service.MockStoreService">
+    	<property name="stateDir" value="${sm.engine.statedir}" />
+    </bean>
+    
+    <bean id="iTunesProcessor" class="com.meinc.store.processor.ITunesProcessor">
+        <property name="dao" ref="dao" />
+        <property name="iTunesServer" value="${store.processor.receipt.itunes.server}" />
+        <property name="appleSharedSecret" value="${store.processor.receipt.itunes.secret}" />
+    </bean>
+    
+    <bean id="googlePlayProcessor" class="com.meinc.store.processor.GooglePlayProcessor">
+        <property name="dao" ref="dao" />
+    </bean>
+
+    <bean id="winStoreProcessor" class="com.meinc.store.processor.WinStoreProcessor">
+        <!-- <property name="dao" ref="dao" /> -->
+    </bean>
+
+    <!-- <bean id="couponProcessor" class="com.meinc.store.processor.CouponProcessor">
+        <property name="dao" ref="dao" />
+    </bean> -->
+
+    <bean id="braintreeProcessor" class="com.meinc.store.processor.BraintreeProcessor">
+        <property name="dao" ref="dao" />
+    </bean>
+    
+    <bean id="braintreeProcessor2" class="com.meinc.store.processor.BraintreeProcessor2">
+        <property name="dao" ref="dao" />
+        <property name="identityService" ref="identityService" />
+    </bean>
+    
+    <bean id="internalProcessor" class="com.meinc.store.processor.InternalProcessor">
+        <property name="dao" ref="dao" />
+    </bean>
+    
+    <bean id="authorizeDotNetProcessor" class="com.meinc.store.processor.AuthorizeDotNetProcessor">
+    	<property name="dao" ref="dao" />
+    	<property name="identityService" ref="identityService" />
+    	<property name="environment" value="${authorize.net.environment}" />
+    	<property name="apiLoginId" value="${authorize.net.apiloginid}" />
+    	<property name="transactionKey" value="${authorize.net.transactionkey}" />
+    </bean>
+    
+    <bean id="entitlementVerifier" class="com.meinc.store.processor.EntitlementVerifyDaemon">
+        <property name="dao" ref="dao" />
+    </bean>
+    
+    <task:scheduler id="scheduler" pool-size="1" />
+    
+    <!-- <task:scheduled-tasks scheduler="scheduler">
+        <task:scheduled ref="entitlementVerifier" method="run" cron="0 * * * * *" />
+    </task:scheduled-tasks> -->
+</beans>

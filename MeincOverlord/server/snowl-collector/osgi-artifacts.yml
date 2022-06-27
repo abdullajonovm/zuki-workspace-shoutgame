@@ -1,0 +1,9 @@
+- MrSoaDistributedData/target/mrsoa-distributed-data-1.0.jar
+- MrSoaKernel/target/mrsoa-kernel-3.6.1-mvnbuild.jar
+- OsgiBoneCp/target/osgi-bonecp-0.8.jar
+- OsgiCommonsCollections/target/osgi-commons-collections-3.1.jar
+- OsgiCommonsPool/target/osgi-commons-pool-1.3.jar
+- OsgiIbatis-dep/target/osgi-mybatis-dep-1.1.jar
+- OsgiIbatis/target/osgi-mybatis-3.2.1.jar
+- OsgiSpringFramework/target/osgi-spring-4.2.5.RELEASE.jar
+- OsgiVelocity/target/osgi-velocity-1.4.jar

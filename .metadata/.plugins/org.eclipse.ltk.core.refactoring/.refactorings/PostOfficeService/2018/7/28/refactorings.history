@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;PostOfficeService/src/main/resources/email_templates/snowyowl_password_reset_en.html&apos; to &apos;shoutcontest_password_reset_en.html&apos;" description="Rename resource &apos;snowyowl_password_reset_en.html&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/main/resources/email_templates/snowyowl_password_reset_en.html" name="shoutcontest_password_reset_en.html" stamp="1531416178976" updateReferences="true"/>
+</session>

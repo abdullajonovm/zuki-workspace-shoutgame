@@ -1,0 +1,47 @@
+<div class="steps">
+    <div [class.active]="activeStep === 1" [class.left]="activeStep > 1">
+        {{'notification.howRoundStart' | i18n}}
+
+        <form #pref="ngForm">
+            <input id="smsPref" type="radio" [(ngModel)]="preference" name="roundStart" value="SMS" required><label
+            for="smsPref">Text Message (SMS) <span class="questionMark" (click)="showInfoSms($event)">?</span></label>
+            <input id="emailPref" type="radio" [(ngModel)]="preference" name="roundStart" value="EMAIL" required><label
+            for="emailPref">Email <span class="questionMark" (click)="showInfoEmail($event)">?</span></label>
+            <input id="noPref" type="radio" [(ngModel)]="preference" name="roundStart" value="NONE" required><label
+            for="noPref">Don't Notify Me</label>
+            <button *ngIf="hasPreference" class="floatLeft" (click)="dialog?.close(); onFinish.emit();">Cancel</button>
+            <button [disabled]="!pref.valid || !pref.dirty" [ngSwitch]="preference" (click)="goToStep2()"
+                    class="floatRight">
+                <ng-container *ngSwitchDefault>Save</ng-container>
+                <ng-container *ngSwitchCase="'SMS'">Next</ng-container>
+            </button>
+        </form>
+    </div>
+    <div [class.active]="activeStep === 2" [class.left]="activeStep > 2" [class.right]="activeStep < 2">
+        <form #phoneForm="ngForm">
+            <input type="text" [textMask]="{mask: phoneMask}" placeholder="Phone Number" [(ngModel)]="phone"
+                   name="phone" validPhone>
+            <button type="submit" (click)="sendCode()" class="block accent" [disabled]="!phoneForm.valid">Send
+                Verification Code
+            </button>
+        </form>
+        <button (click)="activeStep = 1" class="floatLeft">Back</button>
+        <button class="floatRight" (click)="activeStep = 3" [disabled]="!verified">Next</button>
+    </div>
+    <div [class.active]="activeStep === 3" [class.left]="activeStep > 3" [class.right]="activeStep < 3">
+        <div>
+            <input [textMask]="{mask: codeMask}" placeholder="Verification Code" [(ngModel)]="code"
+                   [class.verified]="validState !== 'none'" [disabled]="validState === 'correct'">
+            <i class="icon-check-circle" *ngIf="validState === 'correct'"></i>
+            <i class="icon-times-circle" *ngIf="validState === 'incorrect'"></i>
+            <i class="icon-spinner" *ngIf="validState === 'loading'"></i>
+
+            <button (click)='verify()' class="block accent w100" [disabled]="!code || validState === 'correct'">Verify
+            </button>
+        </div>
+        <button (click)="activeStep = 2" class="floatLeft">{{'core.back' | i18n}}</button>
+        <button class="floatRight" [disabled]="validState !== 'correct'" (click)="savePrefs()">{{ 'core.save' | i18n
+            }}
+        </button>
+    </div>
+</div>

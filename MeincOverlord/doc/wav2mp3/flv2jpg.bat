@@ -1,0 +1,1 @@
+ffmpeg -i %1\%3.flv -vframes 1 -f mjpeg %2\%3.jpg

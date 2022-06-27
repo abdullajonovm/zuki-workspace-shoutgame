@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/ConversationTree/src/main/java/com/scotthawker/convotree/ConverstaionManager.java"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="1"/>
+</listAttribute>
+<booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.scotthawker.convotree.ConverstaionManager"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-awsAccessKey AKIAIE27PQPXCPK3TNEA -awsSecretKey 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 -region US_EAST_1"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="ConversationTree"/>
+</launchConfiguration>

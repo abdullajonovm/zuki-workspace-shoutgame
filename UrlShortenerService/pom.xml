@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>url-shortener-service</artifactId>
+    <version>1.0</version>
+    <packaging>mrsoa-service</packaging>
+
+    <parent>
+        <groupId>meinc</groupId>
+        <artifactId>MeincOverlord-service-spring</artifactId>
+        <version>3.0-mvnbuild</version>
+        <relativePath>../MeincOverlord/poms/parents/pom-service-spring</relativePath>
+    </parent>
+
+    <properties>
+        <osgi.require.bundle>meinc.webcollector-service;bundle-version=1.0</osgi.require.bundle>
+
+        <plugin.spring.annotation.classes.UrlShortenerService>com.meinc.urlshorten.service.SpringConfiguration</plugin.spring.annotation.classes.UrlShortenerService>
+        <plugin.spring.bean.name.UrlShortenerService>urlShortenerService</plugin.spring.bean.name.UrlShortenerService>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>meinc</groupId>
+                <artifactId>service-assembler</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <clientJar>
+                        <includes>
+                            <include>com/meinc/urlshorten/service/IUrlShortenerService.*</include>
+                            <include>com/meinc/urlshorten/exception/*</include>
+                        </includes>
+                    </clientJar>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <!-- logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.12</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- DynamoDb -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-dynamodb</artifactId>
+            <version>1.10.40</version>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-core</artifactId>
+            <version>1.10.40</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.8.1</version>
+        </dependency>
+
+        <!-- meinc core -->
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>http-utils</artifactId>
+            <version>3.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>webcollector-service</artifactId>
+            <classifier>client</classifier>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+    </dependencies>
+</project>

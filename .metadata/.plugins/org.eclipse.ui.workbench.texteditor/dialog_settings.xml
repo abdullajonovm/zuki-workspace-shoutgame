@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.GotoLineAction$GotoLineDialog_dialogBounds">
+		<item value="724" key="DIALOG_X_ORIGIN"/>
+		<item value="475" key="DIALOG_Y_ORIGIN"/>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item value="false" key="isRegEx"/>
+		<item value="" key="selection"/>
+		<item value="false" key="casesensitive"/>
+		<item value="false" key="incremental"/>
+		<item value="true" key="wrap"/>
+		<item value="false" key="wholeword"/>
+		<list key="findhistory">
+			<item value="twilio"/>
+			<item value="production"/>
+			<item value="short"/>
+			<item value="populateCacheWithSubscriber"/>
+			<item value="_subscriberByEmailAndContextId"/>
+			<item value="_subscriberByNicknameAndContextId"/>
+			<item value="subscriberMap"/>
+			<item value="_subscriberById"/>
+			<item value="_methodInvocationCounts"/>
+			<item value="_scheduledExecutor"/>
+			<item value="nicknameContextMap"/>
+		</list>
+		<list key="replacehistory">
+			<item value="\t"/>
+			<item value="());"/>
+			<item value="System.out.println"/>
+			<item value=""/>
+			<item value="q2"/>
+			<item value="long subscriberId"/>
+			<item value="//_buf."/>
+			<item value="//StatViewer._buf"/>
+			<item value="ADMIN"/>
+			<item value="SUPERUSER"/>
+			<item value="PAYOUT_MODEL"/>
+			<item value="    "/>
+			<item value="docType"/>
+			<item value="   "/>
+			<item value="FILE_PREFIX"/>
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item value="290" key="DIALOG_WIDTH"/>
+		<item value="1|.AppleSystemUIFont|11.0|0|COCOA|1|.AppleSystemUIFont" key="DIALOG_FONT_NAME"/>
+		<item value="409" key="DIALOG_HEIGHT"/>
+		<item value="1529" key="DIALOG_X_ORIGIN"/>
+		<item value="367" key="DIALOG_Y_ORIGIN"/>
+	</section>
+</section>

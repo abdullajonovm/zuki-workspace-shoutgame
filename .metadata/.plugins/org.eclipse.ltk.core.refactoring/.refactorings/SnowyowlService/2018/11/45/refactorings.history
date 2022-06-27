@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename field &apos;_serverBaseUrl&apos; in &apos;tv.shout.snowyowl.collector.AdminHandler&apos; to &apos;_shortUrlDomain&apos;&#x0A;- Original project: &apos;SnowyowlService&apos;&#x0A;- Original element: &apos;tv.shout.snowyowl.collector.AdminHandler._serverBaseUrl&apos;&#x0A;- Renamed element: &apos;tv.shout.snowyowl.collector.AdminHandler._shortUrlDomain&apos;&#x0A;- Update references to refactored element&#x0A;- Update textual occurrences in comments and strings" delegate="false" deprecate="false" description="Rename field &apos;_serverBaseUrl&apos;" flags="589826" getter="false" id="org.eclipse.jdt.ui.rename.field" input="/src\/main\/java&lt;tv.shout.snowyowl.collector{AdminHandler.java[AdminHandler^_serverBaseUrl" name="_shortUrlDomain" references="true" setter="false" stamp="1541521516895" textual="false" version="1.0"/>
+</session>

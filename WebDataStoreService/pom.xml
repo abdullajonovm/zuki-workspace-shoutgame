@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>webdatastore-service</artifactId>
+    <version>1.0</version>
+    <packaging>mrsoa-service</packaging>
+
+    <parent>
+        <groupId>meinc</groupId>
+        <artifactId>MeincOverlord-service-springmybatis</artifactId>
+        <version>3.0-mvnbuild</version>
+        <relativePath>../MeincOverlord/poms/parents/pom-service-springmybatis</relativePath>
+    </parent>
+
+    <properties>
+        <osgi.require.bundle>meinc.encryption-service;bundle-version=3.0</osgi.require.bundle>
+
+        <plugin.spring.annotation.classes.WebDataStoreService>com.meinc.webdatastore.service.SpringConfiguration</plugin.spring.annotation.classes.WebDataStoreService>
+        <plugin.spring.bean.name.WebDataStoreService>webDataStoreService</plugin.spring.bean.name.WebDataStoreService>
+        <plugin.spring.annotation.classes.WebMediaStoreService>com.meinc.webdatastore.service.SpringConfiguration</plugin.spring.annotation.classes.WebMediaStoreService>
+        <plugin.spring.bean.name.WebMediaStoreService>webMediaStoreService</plugin.spring.bean.name.WebMediaStoreService>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>meinc</groupId>
+                <artifactId>service-assembler</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <clientJar>
+                        <includes>
+                            <include>com/meinc/webdatastore/service/IWebDataStoreService*</include>
+                            <include>com/meinc/webdatastore/service/IWebDataStoreCallback*</include>
+                            <include>com/meinc/webdatastore/domain/WebDataStoreObject*</include>
+                            <include>com/meinc/webdatastore/domain/RepeatWebDataStoreObject*</include>
+                            <include>com/meinc/webdatastore/service/WebDataStoreException*</include>
+                            <include>com/meinc/webdatastore/service/RepeatWebDataStoreException*</include>
+                            <include>com/meinc/webdatastore/service/WebDataStoreWrapperException.*</include>
+                            <include>com/meinc/webdatastore/util/WdsTools.*</include>
+                        </includes>
+                    </clientJar>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>encryption-service</artifactId>
+            <classifier>client</classifier>
+            <version>3.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>mrsoa-support</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <!-- <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk</artifactId>
+            <version>1.7.2</version>
+        </dependency> -->
+ 
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.3.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.3.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>4.3.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.3.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore-nio</artifactId>
+            <version>4.3.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.3.3</version>
+        </dependency>
+    </dependencies>
+</project>

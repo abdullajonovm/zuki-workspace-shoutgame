@@ -1,0 +1,47 @@
+<div class="roundHeader" (click)="headerClick()" [class.pointer]="round.questions.length"
+     [class.expanded]="expanded">
+    <span class="title">
+        {{ round.roundNames|i18n }}
+        <span class="icon-check-circle" *ngIf="didWinRound()"></span>
+        <span class="icon-times-circle" *ngIf="didOpponentWin()"></span>
+    </span>
+    <div *ngIf="!nextRound && round.matchedPlayer?.publicProfile" class="people">
+        <img [default]="subscriberService.subscriber.photoUrl" src="assets/profile.jpg">
+
+        <span class="vs">vs</span>
+
+        <img [default]="round.matchedPlayer?.publicProfile?.photoUrl" src="assets/profile.jpg">
+    </div>
+    <button *ngIf="nextRound" (click)="onPlay.emit()">
+        {{ 'round.playNow' | i18n }}
+    </button>
+    <div class="arrow" *ngIf="round.questions.length">
+        <span class="icon-angle-up"></span>
+        <span class="icon-angle-down"></span>
+    </div>
+</div>
+<div class="roundBody" [class.expanded]="expanded" #body>
+    <div>
+        <div *ngFor="let question of round.questions" class="question" (click)="toggleQuestion(question)"
+             [class.expanded]="isExpanded(question)">
+            <div class="questionHeader">
+                <ng-container [ngSwitch]="question.answer?.isCorrect" class="answerResult">
+                    <span *ngSwitchCase="true" class="icon-check-circle"></span>
+                    <span *ngSwitchCase="false" class="icon-times-circle"></span>
+                </ng-container>
+                <span class="icon-angle-up"></span>
+                <span class="text">{{ question.questionText|i18n }}</span>
+                <span class="icon-angle-down"></span>
+            </div>
+            <div>
+                <div *ngFor="let answer of question.answers" class="answer" [class.correct]="answer.correct">
+                    <span [ngSwitch]="question.answer?.isCorrect" *ngIf="answer.id === question.answer?.selectedAnswerId">
+                        <span *ngSwitchCase="true" class="icon-check-circle"></span>
+                        <span *ngSwitchCase="false" class="icon-times-circle"></span>
+                    </span>
+                    {{ answer.answerText|i18n }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

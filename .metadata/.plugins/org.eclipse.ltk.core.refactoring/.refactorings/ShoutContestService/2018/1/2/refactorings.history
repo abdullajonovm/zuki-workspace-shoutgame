@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Encapsulate field &apos;tv.shout.sc.domain.CouponCode._couponId&apos; in &apos;tv.shout.sc.domain.CouponCode&apos;&#x0A;- Original project: &apos;ShoutContestService&apos;&#x0A;- Original element: &apos;tv.shout.sc.domain.CouponCode._couponId&apos;&#x0A;- Getter method name: &apos;getCouponId&apos;&#x0A;- Setter method name: &apos;setCouponId&apos;&#x0A;- Field visibility: &apos;public&apos;&#x0A;- Do not use getter and setter methods in declaring type" comments="false" declaring="false" description="Encapsulate field &apos;_couponId&apos;" flags="589830" getter="getCouponId" id="org.eclipse.jdt.ui.self.encapsulate" input="/src\/main\/java&lt;tv.shout.sc.domain{CouponCode.java[CouponCode^_couponId" insertion="-1" setter="setCouponId" stamp="1515622147330" version="1.0" visibility="1"/>
+</session>

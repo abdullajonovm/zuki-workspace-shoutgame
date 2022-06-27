@@ -1,0 +1,9 @@
+1566838706053	Delete element
+1566838763699	Delete element
+1566838823173	Delete element
+1566839438684	Rename field 'queue'
+1566839450855	Rename field 'consumer'
+1566839457536	Rename field 'consumerThread'
+1566839471499	Rename field 'workQueueConsumer'
+1566839474977	Rename field 'workQueueConsumerThread'
+1566839491172	Rename type 'Consumer'

@@ -1,0 +1,28 @@
+
+
+10.0.0.212	static--dev1.shoutgameplay.com
+10.0.0.212	static--dev1
+
+10.0.0.212  nomad--dev1.shoutgameplay.com
+10.0.0.212  nomad--dev1
+10.0.0.212  nomad-client--dev1.shoutgameplay.com
+10.0.0.212  nomad-client--dev1
+10.0.0.212  snowl-collector--0--dev1.shoutgameplay.com
+10.0.0.212  snowl-collector--0--dev1
+10.0.0.212  snowl-mysql--dev1.shoutgameplay.com
+10.0.0.212  snowl-mysql--dev1
+10.0.0.212  snowl-socketio--dev1.shoutgameplay.com
+10.0.0.212  snowl-socketio--dev1
+10.0.0.212  snowl-socketio--0--dev1.shoutgameplay.com
+10.0.0.212  snowl-socketio--0--dev1
+10.0.0.212  snowl-srd-server--0--dev1.shoutgameplay.com
+10.0.0.212  snowl-srd-server--0--dev1
+10.0.0.212  snowl-vscollector--dev1.shoutgameplay.com
+10.0.0.212  snowl-vscollector--dev1
+10.0.0.212  snowl-wds-origin--0--dev1.shoutgameplay.com
+10.0.0.212  snowl-wds-origin--0--dev1
+10.0.0.212  snowl-web--0--dev1.shoutgameplay.com
+10.0.0.212  snowl-web--0--dev1
+10.0.0.212  snowl-wms-origin--0--dev1.shoutgameplay.com
+10.0.0.212  snowl-wms-origin--0--dev1
+

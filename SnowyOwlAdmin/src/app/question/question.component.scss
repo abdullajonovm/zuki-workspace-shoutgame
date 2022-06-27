@@ -1,0 +1,18 @@
+.answer {
+    h2 {
+        display: inline-block;
+        margin-bottom: 10px;
+    }
+}
+
+.answerText, .questionText {
+    width: 100%;
+}
+
+.answer:first-child h2 {
+    margin-top: 0;
+}
+
+.answers {
+    margin-top: 10px;
+}

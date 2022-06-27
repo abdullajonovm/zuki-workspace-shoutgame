@@ -1,0 +1,37 @@
+@import "vars";
+
+$barWidth: 12px;
+:host {
+    display: block;
+    position: relative;
+}
+
+.bar {
+    margin-left: 10px;
+    width: $barWidth;
+    height: 160px;
+    border: 1px solid #000;
+    background: linear-gradient(to bottom, #fff, #008000);
+}
+
+.line {
+    position: absolute;
+    padding-left: $barWidth + 10px;
+    margin-left: 10px;
+    border-bottom: 1px solid red;
+    width: 230px;
+    text-align: right;
+    pointer-events: none;
+    span {
+        background: #f7f7f7;
+    }
+}
+
+.current {
+    z-index: 1;
+}
+
+.payout {
+    bottom: 25%;
+    z-index: 2;
+}

@@ -1,0 +1,6 @@
+version: '3'
+services:
+    snowl-socketio:
+        image: scm.shoutgameplay.com:5000/snowl-socketio:${DOCKER_IMAGE_TAG:-dev}
+        build:
+            context: .

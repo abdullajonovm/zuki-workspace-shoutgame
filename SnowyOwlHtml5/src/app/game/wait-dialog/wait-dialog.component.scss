@@ -1,0 +1,27 @@
+@import "vars";
+
+.status span:not(.icon-circle) {
+    font-size: inherit;
+    font-weight: bold;
+    margin-right: 5px;
+    vertical-align: text-bottom;
+}
+
+.icon-check-circle {
+    color: $successColor;
+}
+
+.icon-circle {
+    color: mix($backgroundColor, $foregroundColor, 35%);
+    font-size: 10px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+div {
+    margin: 15px 0;
+    text-align: center;
+    div {
+        margin: 3px 0;
+    }
+}

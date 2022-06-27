@@ -1,0 +1,7 @@
+./usr/src/i386at/nws/lib/libatb/libatb.so
+./usr/src/i386at/nws/lib/libatb/libserver_atb.so
+./usr/src/i386at/nws/lib/libatb.so
+./usr/src/i386at/nws/lib/libserver_atb.so
+./usr/src/i386at/lib/libnw5Atb/libNwAtb.so
+./usr/src/common/volbin/4.10/public/unix/libbtrv.so
+./usr/src/common/volbin/4.10/public/unix/libcomm.so

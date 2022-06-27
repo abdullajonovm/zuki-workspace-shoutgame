@@ -1,0 +1,6 @@
+1499812924937	Rename method 'signupAndGetCommonSubscriber'
+1499813226666	Rename method 'loginAndGetCommonSubscriber'
+1499813605384	Rename method 'updateAndGetCommonSubscriber'
+1499813764250	Rename method 'getCommonSubscriberPayload'
+1499814372952	Rename type 'AuthenticationHandler'
+1499814395549	Rename method 'authenticationHandler'

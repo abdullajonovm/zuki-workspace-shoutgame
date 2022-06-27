@@ -1,0 +1,45 @@
+[package]
+name = "srd-server"
+version = "0.2.1"
+authors = ["Matt Pontius <mpontius@shout.tv>"]
+description = "Small and speedy SRD server"
+
+[dependencies]
+chan = "0.1.19"
+chan-signal = "0.3.1"
+chrono = "0.4.0"
+core_affinity = "0.5.9"
+#crossbeam = "0.2.12"
+crossbeam-channel = "0.1.2"
+fern = "0.5.2"
+futures = "0.1.17"
+#futures-cpupool = "0.1.8"
+#http-box = "0.1.5"
+hyper = "0.11.14"
+#log = "0.3.8"
+log = "0.4.1"
+log-panics = { version="2.0.0", features=["with-backtrace"] }
+mio = "0.6.11"
+#multiqueue = "0.3.2"
+native-tls = "0.1.4"
+net2 = "0.2.31"
+num_cpus = "1.0"
+qstring = "0.5.2"
+regex = "0.2.6"
+serde = "1.0.24"
+serde_derive = "1.0.24"
+serde_json = "1.0.8"
+siphasher = "0.2.2"
+#stderrlog = "0.2.3"
+structopt = "0.1.6"
+structopt-derive = "0.1.6"
+thread-control = "0.1.2"
+tokio-core = "0.1.10"
+#tokio-io = "0.1"
+tokio-tls = "0.1.4"
+#rustls = "0.11.0"
+#tokio-rustls = "0.4.0"
+unicase="^2.0"
+
+[replace]
+"native-tls:0.1.4" = { git = "https://github.com/blackbeam/rust-native-tls" }

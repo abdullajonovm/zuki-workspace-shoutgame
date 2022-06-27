@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<psf version="2.0">
+    <provider id="org.vcs.bazaar.eclipse.core.repository.BazaarTeamProvider"/>
+    <workingSets editPageId="org.eclipse.ui.resourceWorkingSetPage" id="1325696480347_4" label="Mobile" name="Mobile">
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/ShoutAndroid" type="4"/>
+    </workingSets>
+    <workingSets editPageId="org.eclipse.ui.resourceWorkingSetPage" id="1325664436266_3" label="MrSOA" name="MrSOA">
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/OsgiCommonsCollections" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/MrSoaDistributedData" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/OsgiIbatis-dep" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/MrSoaServiceAssembler" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/OsgiVelocity" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/OsgiSpringFramework" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/MeincLauncher" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/OsgiIbatis" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/MeincDeployPlugin" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/MrSoaKernel" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/OsgiCommonsDbcp" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/OsgiCommonsPool" type="4"/>
+    </workingSets>
+    <workingSets editPageId="org.eclipse.ui.resourceWorkingSetPage" id="1325664356747_1" label="Services" name="Services">
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/FacebookService" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/TxtwireService" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/MeincCommons" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/LikeService" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/NotificationService" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/Mint2Service" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/AnalyticsService" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/MockPushService" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/TeamDispatcherService" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/PostOfficeService" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/GamePlayService" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/HttpConnectorService" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/CommunityService" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/MockTxtwireService" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/DealService" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/EncryptionService" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/HostedTeamService" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/AccountService" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/PushService" type="4"/>
+    </workingSets>
+    <workingSets editPageId="org.eclipse.ui.resourceWorkingSetPage" id="1325664391491_2" label="Web" name="Web">
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/GameplayWebStatic" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/GameplayWebGateway" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/GameplaySmsGateway" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/HttpUtils" type="4"/>
+        <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/HttpConnector" type="4"/>
+    </workingSets>
+</psf>

@@ -1,0 +1,36 @@
+<form #form="ngForm">
+    <h2>E-Check</h2>
+    <p *ngIf="withdrawing">Using an E-Check to withdraw your money directly into your bank account is the fastest, most secure method of getting your winnings and it's free.</p>
+    <div class="flex">
+        <input type="text" name="fullName" placeholder="Full Name*" [(ngModel)]="bank.checkingAccountName" required>
+        <input type="text" name="phoneNumber" [textMask]="{mask: phoneMask}" placeholder="Phone Number*"
+               [(ngModel)]="echeck.phone" *ngIf="!withdrawing" required>
+    </div>
+    <div class="flex">
+        <input type="number" pattern="[0-9]*" name="routingNumber" placeholder="Routing Number*"
+               [(ngModel)]="bank.routingNumber" (ngModelChange)="routingNumberChange.next()"
+               required>
+        <input type="number" pattern="[0-9]*" name="accountNumber" placeholder="Account Number*"
+               [(ngModel)]="bank.accountNumber"
+               required>
+        <input type="text" name="bankName" placeholder="Bank Name*" [(ngModel)]="bank.bankName" required>
+    </div>
+    <div class="cardLine"></div>
+    <div><b>Billing Address</b></div>
+    <div class="flex">
+        <input type="text" name="address1" placeholder="Address 1*" [(ngModel)]="address.addr1" required autocomplete="address-line1">
+        <input type="text" name="address2" placeholder="Address 2" [(ngModel)]="address.addr2" autocomplete="address-line2">
+    </div>
+    <div class="flex">
+        <input type="text" name="city" placeholder="City*" [(ngModel)]="address.city" required autocomplete="address-level2">
+        <select name="state" [(ngModel)]="address.state" required autocomplete="address-level1" title="Choose a State">
+            <option value="">Choose a State*</option>
+            <option *ngFor='let state of states' [value]="state.val">{{state.name}}</option>
+        </select>
+        <select name="country" [(ngModel)]="address.countryCode" required autocomplete="country">
+            <option value="">Choose a Country*</option>
+            <option *ngFor='let country of countries' [value]="country.countryCode">{{country.countryNames | i18n}}</option>
+        </select>
+        <input type="text" name="zip" placeholder="Zip Code*" [(ngModel)]="address.zip" required autocomplete="postal-code">
+    </div>
+</form>

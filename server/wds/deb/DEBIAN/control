@@ -1,0 +1,9 @@
+Package: wds-origin
+Version: 1.0-1
+Section: base
+Priority: optional
+Architecture: all
+Depends: nginx (>= 1.10.0), nginx-extras (>= 1.10.0)
+Maintainer: Matt Pontius <mpontius@shout.tv>
+Description: Web Data Store Origin server
+ Provides the Web Data Store Origin server.

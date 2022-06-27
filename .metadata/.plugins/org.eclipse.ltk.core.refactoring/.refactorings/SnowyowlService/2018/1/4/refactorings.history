@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename method &apos;meinc.zztasks.MoveGoogleToZzTasks.removeErgoData(...)&apos; to &apos;deleteErgoData&apos;&#x0A;- Original project: &apos;SnowyowlService&apos;&#x0A;- Original element: &apos;meinc.zztasks.MoveGoogleToZzTasks.removeErgoData(...)&apos;&#x0A;- Renamed element: &apos;meinc.zztasks.MoveGoogleToZzTasks.deleteErgoData(...)&apos;&#x0A;- Update references to refactored element" delegate="false" deprecate="false" description="Rename method &apos;removeErgoData&apos;" flags="589826" id="org.eclipse.jdt.ui.rename.method" input="/src\/test\/java&lt;meinc.zztasks{MoveGoogleToZzTasks.java[MoveGoogleToZzTasks~removeErgoData~QConnection;~I" name="deleteErgoData" references="true" stamp="1516657699084" version="1.0"/>
+</session>

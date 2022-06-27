@@ -1,0 +1,94 @@
+<div class="inputs">
+    <vx-autocomplete label="# of Pool Rounds" [(ngModel)]="numPoolRounds"
+                     name="# of Pool Rounds" required [disabled]="!editable" search="false">
+        <vx-item [value]="0">No Pool Rounds</vx-item>
+        <vx-item [value]="1">1</vx-item>
+        <vx-item [value]="2">2</vx-item>
+        <vx-item [value]="3">3</vx-item>
+        <vx-item [value]="4">4</vx-item>
+        <vx-item [value]="5">5</vx-item>
+        <vx-item [value]="6">6</vx-item>
+        <vx-item [value]="7">7</vx-item>
+        <vx-item [value]="8">8</vx-item>
+        <vx-item [value]="9">9</vx-item>
+        <vx-item [value]="10">10</vx-item>
+    </vx-autocomplete>
+
+    <vx-form-field>
+        <input vxFormField label="Seconds Between Questions" type="number" min="3"
+               [(ngModel)]="secondsBetween" [disabled]="!editable"
+               name="Seconds Between Questions" required appTooltip="Minimum 3, 5-10 is preferable.">
+    </vx-form-field>
+
+    <vx-autocomplete label="POOL Play Categories" multiple [(ngModel)]="selectedCategoriesPOOL"
+                     name="POOL Play Categories" [disabled]="!editable" required
+                     class="categories">
+        <vx-item value="*" (select)="setAllCategories('pool')">
+            <div></div>All Categories
+        </vx-item>
+
+        <vx-item *ngFor="let category of categories" [value]="category.id"
+                 [disabled]="allCategoriesPool" >
+            {{ category.categoryName.en }}
+        </vx-item>
+    </vx-autocomplete>
+
+    <vx-autocomplete label="Tournament Categories" multiple [(ngModel)]="selectedCategories"
+                     name="Tournament Categories" [disabled]="!editable" required
+                     class="categories">
+        <vx-item value="*" (select)="setAllCategories('bracket')">
+            All Categories
+        </vx-item>
+
+        <vx-item *ngFor="let category of categories" [value]="category.id"
+                 [disabled]="allCategories" >
+            {{ category.categoryName.en }}
+        </vx-item>
+    </vx-autocomplete>
+
+<!--    <vx-form-field>-->
+<!--        <input vxFormField [(ngModel)]="minimumActivity" required [disabled]="!editable"-->
+<!--               name="Round Questions to Win" label="Questions to Win"-->
+<!--               type="number"-->
+<!--               min="1"-->
+<!--               appTooltip="I.e., 2 correct questions to win a match. Minimum 1">-->
+<!--    </vx-form-field>-->
+
+<!--    <vx-form-field>-->
+<!--        <input vxFormField [(ngModel)]="maximumActivity" required-->
+<!--               name="Round Questions to Lose" [disabled]="!editable"-->
+<!--               [min]="minimumActivity"-->
+<!--               label="Questions to Lose" type="number" min="0"-->
+<!--               appTooltip="Max questions to lose before giving up (I.e., if they play more than 5 and don't win, they lose. 0 = no limit). Must be more than Questions to win."-->
+<!--              >-->
+<!--    </vx-form-field>-->
+
+    <vx-form-field>
+        <input vxFormField [(ngModel)]="maximumDuration" required
+               label="Acknowledge Timeout" [disabled]="!editable"
+               min="10" type="number"
+               appTooltip="In Seconds. If player client doesn't acknowledge receiving question after x seconds, player loses. Min 10"
+              name="Round Acknowledge Timeout">
+    </vx-form-field>
+
+    <vx-form-field>
+        <input vxFormField [(ngModel)]="playerMaxDuration" required
+               name="Round Answer Timeout" label="Answer Timeout"
+               type="number" [disabled]="!editable"
+               min="5"
+               appTooltip="In Seconds. If player client doesn't answer question after x seconds, player loses. Min 5 (10 - 15 is preferable)">
+    </vx-form-field>
+</div>
+
+<!--<vx-tabs class="mTop15">-->
+    <!--<vx-tab *ngFor="let code of languageCodes;" [label]="code | languageName">-->
+        <!--<div class="inputs">-->
+            <!--<vx-form-field class="roundName" *ngIf="currentRound === round">-->
+                <!--<input vxFormField label="Round Name" [(ngModel)]="round.roundNames[code]"-->
+                       <!--name="Round {{i + 1}} {{code | languageName}} Round Name"-->
+                       <!--[disabled]="!editable"-->
+                       <!--required>-->
+            <!--</vx-form-field>-->
+        <!--</div>-->
+    <!--</vx-tab>-->
+<!--</vx-tabs>-->

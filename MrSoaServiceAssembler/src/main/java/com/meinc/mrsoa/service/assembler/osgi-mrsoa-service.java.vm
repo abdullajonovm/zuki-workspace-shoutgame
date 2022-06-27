@@ -1,0 +1,362 @@
+package com.meinc.mrsoa.service.stubs.$target_package;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import com.meinc.mrsoa.service.ServiceCallStackRow;
+import com.meinc.mrsoa.service.ServiceEndpoint;
+import com.meinc.mrsoa.service.ServiceMethod;
+import com.meinc.mrsoa.monitor.MrSoaServerMonitor;
+import com.meinc.mrsoa.monitor.MrSoaServiceMonitor;
+import com.meinc.mrsoa.net.inbound.IMrSoaService;
+import com.meinc.mrsoa.net.inbound.LocalServiceRegistry;
+import com.meinc.mrsoa.net.inbound.MrSoaRequest;
+import com.meinc.mrsoa.net.inbound.MrSoaServiceMethodNotFoundException;
+
+import com.meinc.mrsoa.service.CallStackSetter;
+import com.meinc.mrsoa.service.exception.AdaptorException;
+
+#if($plugin_factory_qualified_classname)
+import com.meinc.bus.plugin.IAssemblerPlugin;
+#end
+
+import $target_qualified_classname;
+
+public class ${target_classname}Stub implements Runnable, IMrSoaService {
+    private static Log log = LogFactory.getLog(${target_classname}Stub.class);
+
+    #if($expose_as)
+    private $expose_as service;
+    #else
+    private $target_classname service;
+    #end
+
+    private boolean onstartThreadStarted = false;
+    private boolean onstartThreadFinished = false;
+    private Object onstartThreadFinishedMonitor = new Object();
+    
+    private boolean started = false;
+    private boolean stopped = true;
+
+    private Thread loadThread;
+    private ArrayList<ServiceEndpoint> localServices = new ArrayList<ServiceEndpoint>();
+    private ServiceEndpoint myEndpoint;
+    private List<ServiceEndpoint> onStopProxyDependencies = new ArrayList<ServiceEndpoint>();
+
+    private Map<String,ServiceMethod> serviceMethods = new HashMap<String,ServiceMethod>();
+
+    private List<String> interfaces;
+    String version = null;
+
+    private Random rand = new Random();
+
+    public ${target_classname}Stub() {
+        ServiceMethod method;
+
+        #foreach($service_method in $service_methods)
+        #if(!$service_method.isNoSer)
+        method = new ServiceMethod() {
+            public String toString() {
+                return ServiceMethod.getMethodKey("$service_method.serviceMethodName", $service_method.args.size());
+            }
+            public Object invoke(MrSoaRequest request, Object... args) throws Throwable {
+                Object result = null;
+                logServiceCall(logId, request, args);
+                ClassLoader originalLoader = Thread.currentThread().getContextClassLoader();
+                try {
+                        Thread.currentThread().setContextClassLoader(${target_classname}Stub.class.getClassLoader());
+
+                        #if(!$service_method.returnsVoid) result = #end
+                        #if($service_method.isExposedObjectMethod)
+                            service.${service_method.exposeObjectMethod}().$service_method.name(
+                        #else
+                            service.$service_method.name(
+                        #end
+                                #foreach($arg in $service_method.args) #set($i = $velocityCount - 1)
+                                ($arg.type)args[$i]#if($velocityCount<$service_method.args.size()), #end
+                                #end
+                            );
+
+                        if (log.isDebugEnabled()) {
+                            StringBuffer debugString = new StringBuffer();
+                            debugString.append("\n<<<<<<<<<<< Service method call return (thread-id=" + Thread.currentThread().getName() + ", log-id=" + logId + ")");
+                            if (result == null) {
+                                #if(!$service_method.returnsVoid)
+                                    debugString.append("\n<  RETURN < [null]");
+                                #end
+                            } else
+                                debugString.append("\n<  RETURN < [" + result.getClass().getName() + "] " + result);
+                            log.debug(debugString);
+                        }
+
+                        return result;
+                //} catch (Throwable e) {
+                //  if (log.isDebugEnabled())
+                //      log.error("Service application code threw exception - returning it to client (log-id="+logId+")", e);
+                //  throw e;
+                } finally {
+                    Thread.currentThread().setContextClassLoader(originalLoader);
+                }
+            }
+        };
+        serviceMethods.put(method.toString(), method);
+
+        #end
+        #end
+    }
+
+    public void run() {
+        try {
+            Thread.currentThread().setContextClassLoader(${target_classname}Stub.class.getClassLoader());
+            #if($plugin_factory_qualified_classname)
+                Map<String,String> pluginParms = new HashMap<String,String>();
+                #foreach($parmKey in $plugin_parms.keySet())
+                pluginParms.put("$parmKey","$plugin_parms.get($parmKey)");
+                #end
+                IAssemblerPlugin plugin = null;
+                try {
+                    plugin = ${plugin_factory_qualified_classname}.getInstance("$service_name", "$service_namespace", interfaces, version, pluginParms);
+                    if (plugin == null)
+                        // There was an error and the factory already handled it
+                        return;
+    
+                    #if($expose_as)
+                    service = ($expose_as) plugin.initService();
+                    #else
+                    service = ($target_classname) plugin.initService();
+                    #end
+                } catch (Throwable t) {
+                    log.error("Error while creating Spring Assembler Plugin for service $service_name - service startup aborted", t);
+                    //TODO: Explicitly stop this OSGI bundle so that this service is unregistered and is never invoked
+                    return;
+                }
+            #else
+                service = new $target_classname();
+            #end
+    
+            #if(!$onstart_methods.isEmpty())
+                String version = null;
+                #if($version)
+                    version = "$version";
+                #end
+                // Each thread needs its own copy of the current service
+                CallStackSetter.setCurrentService( new ServiceEndpoint(
+                                                                                            "$service_namespace", "$service_name", version),
+                                                                                            ${target_classname}Stub.class.getClassLoader());
+    
+                #foreach($method in $onstart_methods)
+                    try {
+                        service.$method();
+                    } catch (Throwable e) {
+                        log.error("Exception thrown in OnStart method $method of service $service_name", e);
+                    }
+                #end
+            #end
+    
+            synchronized (onstartThreadFinishedMonitor) {
+                onstartThreadFinished = true;
+                onstartThreadFinishedMonitor.notifyAll();
+            }
+        } catch (Throwable t) {
+            log.error("Error during service $service_name start: " + t.getMessage(), t);
+        }
+    }
+
+    public synchronized void start() throws Exception {
+        if (started) return;
+        stopped = false;
+        started = true;
+
+        log.info("Starting service $service_name");
+
+        Thread.currentThread().setContextClassLoader(${target_classname}Stub.class.getClassLoader());
+
+        interfaces = new ArrayList<String>();
+        #foreach($interface in $interfaces)
+        interfaces.add("$interface");
+        #end
+
+        #if($version)
+            version = "$version";
+        #end
+
+        ServiceEndpoint serviceEndpoint;
+        serviceEndpoint = new ServiceEndpoint();
+        serviceEndpoint.setNamespace("$service_namespace");
+        serviceEndpoint.setServiceName("$service_name");
+        #if($version)
+        serviceEndpoint.setVersion(version);
+        #end
+
+        myEndpoint = serviceEndpoint;
+
+        if (!onstartThreadStarted) {
+            loadThread = new Thread(this);
+            loadThread.setDaemon(false);
+            loadThread.start();
+            onstartThreadStarted = true;
+        }
+
+        localServices.add(serviceEndpoint);
+        MrSoaServerMonitor.getInstance().registerLocalService(serviceEndpoint);
+        LocalServiceRegistry.registerService(serviceEndpoint.toString(), this);
+        MrSoaServiceMonitor.getInstance().registerNewService(serviceEndpoint, interfaces);
+
+        #foreach($proxy_class in $onstopproxy_classes)
+            onStopProxyDependencies.add(${proxy_class}.endpoint);
+        #end
+
+        log.info("Service $service_name started");
+    }
+
+    public synchronized void stop() throws Exception {
+        if (stopped || !started) return;
+        waitForLoad();
+        
+        log.info("Stopping service $service_name");
+
+        stopped = true;
+        started = false;
+        
+        onstartThreadStarted = false;
+        synchronized (onstartThreadFinishedMonitor) {
+            onstartThreadFinished = false;
+        }
+        
+        for (ServiceEndpoint localService : localServices) {
+            MrSoaServiceMonitor.getInstance().deregisterService(localService);
+            MrSoaServerMonitor.getInstance().unregisterLocalService(localService);
+            LocalServiceRegistry.deregisterService(localService.toString());
+        }
+
+        try {
+            #if(!$onstop_methods.isEmpty())
+                #foreach($method in $onstop_methods)
+                try {
+                    service.$method();
+                } catch (Throwable e) {
+                    log.error("Exception thrown in OnStop method $method of service $service_name", e);
+                }
+                #end
+            #end
+        } catch (Throwable e) {
+            log.error(e.getMessage(), e);
+        }
+
+        service = null;
+        log.info("Service $service_name stopped");
+    }
+    
+    public synchronized List<ServiceEndpoint> getOnStopDependencies() {
+        return onStopProxyDependencies;
+    }
+    
+    public synchronized boolean isStarted() {
+        return started;
+    }
+
+    public synchronized boolean isStopped() {
+        return stopped;
+    }
+    
+    public synchronized ServiceEndpoint getEndpoint() {
+        return myEndpoint;
+    }
+    
+    private void logServiceCall( long logId, MrSoaRequest request, Object[] args) throws Throwable {
+        if (log.isDebugEnabled()) {
+            try {
+                /* BEGIN DEBUG OUTPUT */
+                        
+                StringBuffer debugString = new StringBuffer();
+                String from = "[unknown]";
+                if (request.from != null && !request.from.isEmpty())
+                    from = request.from;
+                debugString.append("\n>>>>>>>>>>> Service method call (thread-id=" + Thread.currentThread().getName() + ", log-id=" + logId + ")\n");
+                debugString.append(">  FROM     > " + from + "\n");
+                debugString.append(">        TO     > " + request.destination + "[" + request.methodName + "]\n");
+                for (int i = 0; i < args.length; i++) {
+                    if (args[i] == null)
+                        debugString.append(">       ARG     > [null]\n");
+                    else
+                        debugString.append(">       ARG     > [" + args[i].getClass().getName() + "] " + args[i].toString() + "\n");
+                }
+                log.debug(debugString.substring(0, debugString.length()-1));
+                /* END DEBUG OUTPUT */
+            } catch (Throwable e) {
+                Exception exception = new AdaptorException("Logging exception in '" + request.methodName + "' in service '$service_name'");
+                log.error(exception.getMessage(), exception);
+                throw exception;
+            }
+        }  
+    }
+
+    private boolean skipOnstartCheck = false;
+
+    private void waitForLoad() {
+        if (!skipOnstartCheck) {
+            synchronized (onstartThreadFinishedMonitor) {
+                if (!onstartThreadFinished) {
+                    try {
+                        onstartThreadFinishedMonitor.wait();
+                    } catch (InterruptedException e) {
+                        log.error(e);
+                    }
+                }
+                skipOnstartCheck = true;
+            }
+        }
+    }
+    
+    public Object invokeMethod(MrSoaRequest request, Object[] args) throws Throwable {
+        long logId = System.currentTimeMillis() + rand.nextLong();
+
+        waitForLoad();
+
+        // Set callstack
+        if (request.callStack == null)
+            request.callStack = new ArrayList<ServiceCallStackRow>();
+
+        request.callStack.add(new ServiceCallStackRow(myEndpoint, request.methodName, ${target_classname}Stub.class.getClassLoader()));
+        CallStackSetter.setCallStack(request.callStack);
+
+        try {
+            if (request.isInternalMethodCall) {
+                if (log.isDebugEnabled()) {
+                    log.debug("]]]]]]]]]]] INTERNAL service method call: $service_name:" + request.methodName + "");
+                }
+                if ("getInterfaceNames".equals(request.methodName)) {
+                    ArrayList<String> interfaces = new ArrayList<String>();
+                    #foreach($interface in $interfaces)
+                        interfaces.add("$interface");
+                    #end
+                    return interfaces;
+                }
+                throw new MrSoaServiceMethodNotFoundException("$service_name", request.methodName);
+
+            } else {
+                ServiceMethod method = serviceMethods.get(ServiceMethod.getMethodKey(request.methodName, args.length));
+                if (method != null) {
+                    method.setLogId(logId);
+                    return method.invoke(request, args);
+                }
+            }
+
+        } finally {
+            // Keep the callstack accurate as chains of local service invocations
+            // rely on this
+            request.callStack.remove(request.callStack.size() - 1);
+        }
+
+        throw new MrSoaServiceMethodNotFoundException("$service_name", request.methodName+"("+args.length+" args)");
+    }
+}

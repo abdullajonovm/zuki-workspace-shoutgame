@@ -1,0 +1,10 @@
+1546972321380	Delete element
+1547043724293	Rename method 'state'
+1547059953853	Copy compilation unit
+1547064042187	Copy compilation unit
+1547064081154	Rename type 'NotEnoughSponsorPoolCash'
+1547224613203	Rename method 'releaseSponsorsForGame'
+1547229652965	Rename type 'BotQuestionBundle'
+1547229662656	Rename local variable 'botSubscriberId'
+1547229669445	Rename field 'botSubscriberId'
+1547230120999	Rename local variable 'botQuestionList'

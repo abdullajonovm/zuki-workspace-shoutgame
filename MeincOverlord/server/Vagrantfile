@@ -1,0 +1,150 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+require 'io/console'
+
+Dir.chdir File.dirname(__FILE__)
+
+HTTP_PORT=8080
+HTTPS_PORT=8443
+
+def forward_ports(cfg, host_index)
+    host_port_additive = (host_index - 1) * 10000
+    # nomad-dns
+    #cfg.vm.network "forwarded_port", guest: 53, host: 53+host_port_additive, protocol: "tcp"
+    #cfg.vm.network "forwarded_port", guest: 53, host: 53+host_port_additive, protocol: "udp"
+    # http/s
+    cfg.vm.network "forwarded_port", guest: 80, host: HTTP_PORT+host_port_additive
+    cfg.vm.network "forwarded_port", guest: 443, host: HTTPS_PORT+host_port_additive
+    # mysql port
+    cfg.vm.network "forwarded_port", guest: 3306, host: 3306+host_port_additive
+    # nomad client http
+    cfg.vm.network "forwarded_port", guest: 4646, host: 4646+host_port_additive
+    # nomad server rpc
+    cfg.vm.network "forwarded_port", guest: 4647, host: 4647+host_port_additive
+    # nomad-serf
+    cfg.vm.network "forwarded_port", guest: 4648, host: 4648+host_port_additive
+    # consul server rpc
+    cfg.vm.network "forwarded_port", guest: 8300, host: 8300+host_port_additive
+    # consul-serf lan
+    cfg.vm.network "forwarded_port", guest: 8301, host: 8301+host_port_additive, protocol: "tcp"
+    cfg.vm.network "forwarded_port", guest: 8301, host: 8301+host_port_additive, protocol: "udp"
+    # consul-serf wan
+    cfg.vm.network "forwarded_port", guest: 8302, host: 8302+host_port_additive, protocol: "tcp"
+    cfg.vm.network "forwarded_port", guest: 8302, host: 8302+host_port_additive, protocol: "udp"
+    # consul client http
+    cfg.vm.network "forwarded_port", guest: 8500, host: 8500+host_port_additive
+    # java debug ports
+    # 8000-8002 = auth servers
+    cfg.vm.network "forwarded_port", guest: 8000, host: 8000+host_port_additive
+    cfg.vm.network "forwarded_port", guest: 8001, host: 8001+host_port_additive
+    cfg.vm.network "forwarded_port", guest: 8002, host: 8002+host_port_additive
+    # java debug ports
+    # 8010-8012 = collector servers
+    cfg.vm.network "forwarded_port", guest: 8010, host: 8010+host_port_additive
+    cfg.vm.network "forwarded_port", guest: 8011, host: 8011+host_port_additive
+    cfg.vm.network "forwarded_port", guest: 8012, host: 8012+host_port_additive
+    # java debug ports
+    # 8020-8022 = sync servers
+    cfg.vm.network "forwarded_port", guest: 8020, host: 8020+host_port_additive
+    cfg.vm.network "forwarded_port", guest: 8021, host: 8021+host_port_additive
+    cfg.vm.network "forwarded_port", guest: 8022, host: 8022+host_port_additive
+    # mrsoa remoting ports
+    # 9100-9102 = auth servers
+    cfg.vm.network "forwarded_port", guest: 9100, host: 9100+host_port_additive
+    cfg.vm.network "forwarded_port", guest: 9101, host: 9101+host_port_additive
+    cfg.vm.network "forwarded_port", guest: 9102, host: 9102+host_port_additive
+    # mrsoa remoting ports
+    # 9110-9112 = collector servers
+    cfg.vm.network "forwarded_port", guest: 9110, host: 9110+host_port_additive
+    cfg.vm.network "forwarded_port", guest: 9111, host: 9111+host_port_additive
+    cfg.vm.network "forwarded_port", guest: 9112, host: 9112+host_port_additive
+    # mrsoa remoting ports
+    # 9120-9122 = sync servers
+    cfg.vm.network "forwarded_port", guest: 9120, host: 9120+host_port_additive
+    cfg.vm.network "forwarded_port", guest: 9121, host: 9121+host_port_additive
+    cfg.vm.network "forwarded_port", guest: 9122, host: 9122+host_port_additive
+    # java profiler ports
+    # 10000-10002 = auth servers
+    cfg.vm.network "forwarded_port", guest: 10000, host: 10001+host_port_additive
+    cfg.vm.network "forwarded_port", guest: 10001, host: 10002+host_port_additive
+    cfg.vm.network "forwarded_port", guest: 10002, host: 10003+host_port_additive
+    # java profiler ports
+    # 10010-10012 = collector servers
+    cfg.vm.network "forwarded_port", guest: 10010, host: 10001+host_port_additive
+    cfg.vm.network "forwarded_port", guest: 10011, host: 10002+host_port_additive
+    cfg.vm.network "forwarded_port", guest: 10012, host: 10003+host_port_additive
+    # java profiler ports
+    # 10020-10022 = sync servers
+    cfg.vm.network "forwarded_port", guest: 10020, host: 10001+host_port_additive
+    cfg.vm.network "forwarded_port", guest: 10021, host: 10002+host_port_additive
+    cfg.vm.network "forwarded_port", guest: 10022, host: 10003+host_port_additive
+end
+
+Vagrant.configure(2) do |config|
+    VM_COUNT=1  # max of 7 VMs due to max port limitation
+    default_network_ips = `local/get_default_network_ip.sh -S`.split()
+    VM_HOST_DEFAULT_IPv4 = default_network_ips[0]
+    VM_HOST_DEFAULT_IPv6 = default_network_ips[1]
+    CLUSTER_PRIVATE_NETWORK_PREFIX="172.16.10"
+    CLUSTER_PRIVATE_NETWORK="#{CLUSTER_PRIVATE_NETWORK_PREFIX}.0/24"
+    CLUSTER_HOSTNAME_PREFIX="dev"
+    CLUSTER_DOMAIN_NAME="shoutgameplay.com"
+    CLUSTER_ENV_PATH="/etc/cluster_env"
+
+    config.vm.box = "bento/ubuntu-16.04"
+
+    (1..VM_COUNT).each do |i|
+        config.vm.define "#{CLUSTER_HOSTNAME_PREFIX}#{i}" do |sub_config|
+            sub_config.vm.hostname = "#{CLUSTER_HOSTNAME_PREFIX}#{i}.#{CLUSTER_DOMAIN_NAME}"
+            sub_config.vm.network "private_network", ip: "#{CLUSTER_PRIVATE_NETWORK_PREFIX}.#{i}"
+            forward_ports(sub_config, i)
+
+            config.vm.provision "shell", inline: "echo 'CLUSTER_HOST_COUNT=#{VM_COUNT}'                        >#{CLUSTER_ENV_PATH}"
+            config.vm.provision "shell", inline: "echo 'CLUSTER_PRIVATE_NETWORK=#{CLUSTER_PRIVATE_NETWORK}'   >>#{CLUSTER_ENV_PATH}"
+            config.vm.provision "shell", inline: "echo 'CLUSTER_HOST_PUBLIC_IPv4=#{VM_HOST_DEFAULT_IPv4}'     >>#{CLUSTER_ENV_PATH}"
+            if not VM_HOST_DEFAULT_IPv6.empty?() 
+                config.vm.provision "shell", inline: "echo 'CLUSTER_HOST_PUBLIC_IPv6=#{VM_HOST_DEFAULT_IPv6}' >>#{CLUSTER_ENV_PATH}"
+            end
+            config.vm.provision "shell", inline: "echo 'NOMAD_CLIENT_CPU_MHZ=100000'                          >>#{CLUSTER_ENV_PATH}"
+            config.vm.provision "file", source: "vagrant-bootstrap", destination: "/tmp/"
+            config.vm.provision "shell", inline: "/tmp/vagrant-bootstrap/provision.sh"
+        end
+    end
+
+    config.vm.synced_folder "../..", "/workspace"
+    config.vm.synced_folder "../../..", "/workspaces"
+    config.vm.synced_folder ".", "/vagrant", disabled: true
+
+    config.vm.synced_folder "./mnt/dnsmasq-hostsdir",      "/etc/nomad-dnsmasq/hostsdir"
+    config.vm.synced_folder "./mnt/docker-images-backups", "/mnt/host/docker-images-backups", mount_options: ["uid=0",  "gid=0"]
+    config.vm.synced_folder "./mnt/jobs-backups",          "/mnt/host/jobs-backups",          mount_options: ["uid=0",  "gid=0"]
+
+    config.vm.provision "docker"
+
+    # blech - stupid hack just to know whether to prompt for a password when provisioning
+    if ARGV.length > 0 && (ARGV[0] == "up" || ARGV[0] == "reload") ||
+            ARGV.length > 1 && ARGV[1].start_with?('--provision')
+        (1..VM_COUNT).each do |i|
+            if ARGV.length > 1 && ARGV[1].start_with?('--provision') ||
+                    Dir.glob("#{File.dirname(__FILE__)}/.vagrant/machines/dev#{i}/*/*").empty?
+                print "Shout Docker Registry Password [<skip>]: "
+                registry_password = STDIN.noecho(&:gets).chomp
+                puts
+                if not registry_password.empty?
+                    config.vm.provision "shell" do |s|
+                        s.inline = "docker login -u meinc -p \"$1\" scm.shoutgameplay.com:5000"
+                        s.args = [registry_password]
+                    end
+                end
+                break
+            end
+        end
+    end
+
+    # Increase resources for Virtualbox
+    config.vm.provider "virtualbox" do |vb|
+        vb.memory = "4096"
+        vb.cpus = 2
+    end
+end

@@ -1,0 +1,130 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>identity-service</artifactId>
+    <version>1.0</version>
+    <packaging>mrsoa-service</packaging>
+
+    <parent>
+        <groupId>meinc</groupId>
+        <artifactId>MeincOverlord-service-springmybatis</artifactId>
+        <version>3.0-mvnbuild</version>
+        <relativePath>../MeincOverlord/poms/parents/pom-service-springmybatis</relativePath>
+    </parent>
+
+    <properties>
+        <plugin.spring.annotation.classes.IdentityService>com.meinc.identity.service.SpringConfiguration</plugin.spring.annotation.classes.IdentityService>
+        <plugin.spring.bean.name.IdentityService>identityService</plugin.spring.bean.name.IdentityService>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>meinc</groupId>
+                <artifactId>service-assembler</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <clientJar>
+                        <includes>
+                            <include>com/meinc/identity/domain/*</include>
+                            <include>com/meinc/commons/persistence/*</include>
+                            <include>com/meinc/identity/exception/*</include>
+                            <include>com/meinc/identity/service/IIdentityService*.*</include>
+                        </includes>
+                    </clientJar>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    
+    <dependencies>
+
+        <!-- logging -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.8</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- json -->
+         <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+            <version>1.9.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.9.6</version>
+        </dependency>
+ 
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.7.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.7.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.7.2</version>
+        </dependency>
+ 
+        <!-- meinc http support -->
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>http-utils</artifactId>
+            <version>3.0</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>http-connector-service</artifactId>
+            <classifier>client</classifier>
+            <version>3.0</version>
+        </dependency>
+        
+        <!-- meinc services -->
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>encryption-service</artifactId>
+            <classifier>client</classifier>
+            <version>3.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>facebook-service</artifactId>
+            <classifier>client</classifier>
+            <version>2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.restfb</groupId>
+            <artifactId>restfb</artifactId>
+            <version>1.10.0</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <!-- <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>meinc-commons</artifactId>
+            <version>3.0-mvnbuild</version>
+        </dependency> -->
+
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>postoffice-service</artifactId>
+            <classifier>client</classifier>
+            <version>3.0</version>
+        </dependency>
+        
+    </dependencies>
+        
+</project>

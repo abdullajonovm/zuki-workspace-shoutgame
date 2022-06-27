@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;ActivityCategory.java&apos; to &apos;ShoutMillionaire/src/main/java/tv.shout.sm.domain&apos;&#x0A;- Original project: &apos;ShoutContestService&apos;&#x0A;- Destination element: &apos;ShoutMillionaire/src/main/java/tv.shout.sm.domain&apos;&#x0A;- Original element: &apos;tv.shout.sc.domain.ActivityCategory.java&apos;" description="Copy compilation unit" destination="=ShoutMillionaire/src\/main\/java&lt;tv.shout.sm.domain" element1="/src\/main\/java&lt;tv.shout.sc.domain{ActivityCategory.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1489425869161" units="1" version="1.0"/>
+</session>

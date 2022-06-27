@@ -1,0 +1,21 @@
+#!/bin/sh
+set -e
+
+MRSOA_USER="mrsoa"
+MRSOA_GROUP="mrsoa"
+
+case "$1" in
+    remove|purge)
+        # Remove auth to open privileged ports via authbind.
+        MRSOA_UID="`id -u $MRSOA_USER`"
+        if [ -f "/etc/authbind/byuid/$MRSOA_UID" ]; then
+            rm -f /etc/authbind/byuid/$MRSOA_UID
+        fi
+    ;;
+esac
+
+if [ -x "/etc/init.d/mrsoa" ]; then
+    echo "Stopping MrSOA" >&2
+    invoke-rc.d mrsoa stop || true
+fi
+

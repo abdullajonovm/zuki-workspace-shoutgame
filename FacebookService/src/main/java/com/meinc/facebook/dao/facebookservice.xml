@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.meinc.facebook.dao.IFacebookServiceDaoMapper">
+
+    <resultMap type="fbCallback" id="callbackMap">
+        <id property="id" column="id" />
+        <result property="endpoint.serviceName" column="service_name" />
+        <result property="endpoint.namespace" column="namespace" />
+        <result property="endpoint.version" column="version" />
+        <result property="methodName" column="method_name" />
+    </resultMap>
+    
+    <resultMap type="fbSubscriber" id="fbSubscriberMap">
+        <result property="fbId" column="facebook_id" />
+    </resultMap>
+    
+    <insert id="addCallback" parameterType="fbCallback">
+        <![CDATA[
+            INSERT INTO facebook.`callback` (`namespace`, `service_name`, `version`, `method_name`)
+            VALUES (#{endpoint.namespace}, #{endpoint.serviceName}, #{endpoint.version}, #{methodName})
+        ]]>
+        <selectKey keyProperty="id" resultType="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    
+    <select id="getCallbacks" resultMap="callbackMap">
+        <![CDATA[
+            SELECT * from facebook.`callback`
+        ]]>
+    </select>
+    
+    <select id="getCallbackForEndpoint" parameterType="fbCallback" resultMap="callbackMap">
+        <![CDATA[
+            SELECT * FROM facebook.`callback`
+            WHERE service_name = #{endpoint.serviceName}
+            AND   namespace = #{endpoint.namespace}
+            AND   version = #{endpoint.version}
+        ]]>
+    </select>
+    
+    <delete id="removeCallback" parameterType="fbCallback">
+        <![CDATA[
+            DELETE FROM facebook.`callback`
+            WHERE namespace = #{endpoint.namespace}
+            AND   service_name = #{endpoint.serviceName}
+            AND   version = #{endpoint.version}
+        ]]>
+    </delete>
+    
+    <insert id="insertAccessToken" parameterType="map">
+        <![CDATA[
+            INSERT INTO facebook.auth_subscriber (facebook_id, access_token)
+                VALUES (#{facebookId}, #{accessToken})
+                ON DUPLICATE KEY UPDATE facebook_id = #{facebookId}, access_token = #{accessToken}
+        ]]>
+    </insert>
+    
+    <update id="setSubscriberIdAndAccessToken" parameterType="map">
+        <![CDATA[
+            UPDATE facebook.auth_subscriber SET access_token = #{accessToken}
+            WHERE facebook_id = #{facebookId}
+        ]]>
+    </update>
+    
+    <!-- <update id="setFacebookId" parameterType="map">
+        <![CDATA[
+            UPDATE auth_subscriber SET facebook_id = #{facebookId}
+            WHERE subscriber_id = #{subscriberId}
+        ]]>
+    </update> -->
+    
+    <select id="getAccessTokenForFbId" parameterType="string" resultType="string">
+        <![CDATA[
+            SELECT access_token FROM facebook.auth_subscriber
+            WHERE facebook_id = #{value}
+        ]]>
+    </select>
+    
+    <!-- <select id="getSubscriberIdForFacebookId" parameterType="string" resultType="int">
+        <![CDATA[
+            SELECT subscriber_id FROM facebook.auth_subscriber
+            WHERE facebook_id = #{value}
+        ]]>
+    </select> -->
+    
+    <!-- <select id="getFacebookIdForSubscriber" parameterType="int" resultType="string">
+        <![CDATA[
+            SELECT facebook_id FROM facebook.auth_subscriber
+            WHERE subscriber_id = #{value}
+        ]]>
+    </select> -->
+    
+    <!-- <select id="getSubscriberIdForAccessToken" parameterType="string" resultType="int">
+        <![CDATA[
+            SELECT subscriber_id FROM facebook.auth_subscriber
+            WHERE access_token = #{value}
+        ]]>
+    </select> -->
+    
+    <delete id="removeAuthTokenForFacebookSubscriber" parameterType="string">
+        <![CDATA[
+            DELETE FROM facebook.auth_subscriber
+            WHERE facebook_id = #{value}
+        ]]>
+    </delete>
+    
+    <select id="getFbSubscribers" resultMap="fbSubscriberMap">
+        SELECT *
+          FROM `facebook`.`auth_subscriber`
+    </select>
+
+</mapper>

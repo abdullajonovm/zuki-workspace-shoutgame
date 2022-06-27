@@ -1,0 +1,15 @@
+<div class="buttonBar">
+    <button vx-button (click)="assignCodes()">Assign Codes To Subscriber</button>
+    <button vx-button (click)="cancelBatch()">Cancel Coupon Batch</button>
+</div>
+<h2>Coupon Codes</h2>
+<app-data-table [items]="codes" [loading]="loading" [filterable]="false" [selectable]="false">
+    <app-column header="Code" field="couponCode"></app-column>
+    <app-column header="Amount" field="amount">
+        <ng-template let-item>
+            {{item.amount | currency:'USD':'symbol':'1.0-2'}}
+        </ng-template>
+    </app-column>
+    <app-column header="Status" field="status">
+    </app-column>
+</app-data-table>

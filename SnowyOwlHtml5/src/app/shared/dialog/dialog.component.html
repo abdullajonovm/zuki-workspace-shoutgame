@@ -1,0 +1,19 @@
+<div class="wrapper">
+    <div class="overlay" *ngIf="!closing" (click)="_overlayClick()"></div>
+    <div #dialog class="content" [class.closing]="closing" [style.width]="dialogOptions.width"
+         [style.height]="dialogOptions.height"
+         [class.loading]="dialogOptions.loading">
+        <ng-template #content></ng-template>
+        <div *ngIf="!hasComponent">
+            <div class="title" *ngIf="dialogOptions.title">
+                {{ dialogOptions.title }}
+            </div>
+            <div class="icon-spinner" *ngIf="dialogOptions.loading"></div>
+            <p [class.loading]="dialogOptions.loading">{{ dialogOptions.body }}</p>
+            <div class="buttons" *ngIf="dialogOptions.buttons" #buttons>
+                <button *ngFor="let button of dialogOptions.buttons" (click)="close(button.value)">{{ button.text }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

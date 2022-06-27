@@ -1,0 +1,59 @@
+package com.meinc.mrsoa.service.stubs;
+
+import java.util.List;
+import java.util.ArrayList;
+
+import com.meinc.mrsoa.net.inbound.IMrSoaService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+
+public class OsgiActivator implements BundleActivator {
+    private static Log log = LogFactory.getLog(OsgiActivator.class);
+
+    private ArrayList<IMrSoaService> stubs = new ArrayList<IMrSoaService>();
+    private BundleContext context;
+    
+    public void start(BundleContext context) throws Exception {
+        this.context = context;
+
+        #foreach($stub_name in $service_stub_fq_names)
+        stubs.add(new $stub_name());
+        #end
+        
+        for (IMrSoaService stub : stubs) {
+            try {
+                stub.start();
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+    }
+
+    public void stop(BundleContext context) throws Exception {
+        for (IMrSoaService stub : stubs) {
+            try {
+                stub.stop();
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+        
+        stubs.clear();
+
+        this.context = null;
+    }
+    
+    public List<IMrSoaService> getServices() {
+        return stubs;
+    }
+    
+    public IMrSoaService getService(String serviceName) {
+        for (IMrSoaService stub : stubs) {
+            if (serviceName.equals(stub.getEndpoint().getServiceName()))
+                return stub;
+        }
+        return null;
+    }
+}

@@ -1,0 +1,6 @@
+1555899863421	Rename local variable 'bz2Files'
+1555939045652	Rename field '_isTarExtraction'
+1555947719491	Rename field '_fileExtensionsFromTarExtraction'
+1555947731276	Rename method 'getFileExtensionsFromTarExtraction'
+1555948035087	Rename local variable 'fileExtensions'
+1555948041170	Rename local variable 'fileExts'

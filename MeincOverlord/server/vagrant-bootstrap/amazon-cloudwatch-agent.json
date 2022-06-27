@@ -1,0 +1,213 @@
+{
+    "logs": {
+        "logs_collected": {
+            "files": {
+                "collect_list": [
+                    {
+                        "file_path": "/var/lib/nomad/alloc/*/alloc/logs/snowl-mysql-mysql.stderr.0",
+                        "log_group_name": "$[clustername]__snowl-mysql__job",
+                        "log_stream_name": "$[hostname]__stderr",
+                        "timestamp_format": "%Y-%m-%dT%H:%M:%S"
+                    },
+                    {
+                        "file_path": "/var/lib/nomad/alloc/*/alloc/logs/snowl-wds-origin-nginx.stdout.0",
+                        "log_group_name": "$[clustername]__snowl-wds-origin__job",
+                        "log_stream_name": "$[hostname]__stdout",
+                        "timestamp_format": "%Y/%m/%d %H:%M:%S"
+                    },
+                    {
+                        "file_path": "/var/lib/nomad/alloc/*/alloc/logs/snowl-wds-origin-nginx.stderr.0",
+                        "log_group_name": "$[clustername]__snowl-wds-origin__job",
+                        "log_stream_name": "$[hostname]__stderr"
+                    },
+                    {
+                        "file_path": "/mnt/host/snowl-wds-origin/*/log/access.log",
+                        "log_group_name": "$[clustername]__snowl-wds-origin__nginx",
+                        "log_stream_name": "$[hostname]__access",
+                        "timestamp_format": "[%d/%m/%Y:%H:%M:%S %z]"
+                    },
+                    {
+                        "file_path": "/mnt/host/snowl-wds-origin/*/log/error.log",
+                        "log_group_name": "$[clustername]__snowl-wds-origin__nginx",
+                        "log_stream_name": "$[hostname]__error",
+                        "timestamp_format": "%Y/%m/%d %H:%M:%S",
+                        "multi_line_start_pattern": "{timestamp_format}"
+                    },
+                    {
+                        "file_path": "/var/lib/nomad/alloc/*/alloc/logs/snowl-wms-origin-nginx.stdout.0",
+                        "log_group_name": "$[clustername]__snowl-wms-origin__job",
+                        "log_stream_name": "$[hostname]__stdout",
+                        "timestamp_format": "%Y/%m/%d %H:%M:%S"
+                    },
+                    {
+                        "file_path": "/var/lib/nomad/alloc/*/alloc/logs/snowl-wms-origin-nginx.stderr.0",
+                        "log_group_name": "$[clustername]__snowl-wms-origin__job",
+                        "log_stream_name": "$[hostname]__stderr"
+                    },
+                    {
+                        "file_path": "/mnt/host/snowl-wms-origin/*/log/access.log",
+                        "log_group_name": "$[clustername]__snowl-wms-origin__nginx",
+                        "log_stream_name": "$[hostname]__access",
+                        "timestamp_format": "[%d/%m/%Y:%H:%M:%S %z]"
+                    },
+                    {
+                        "file_path": "/mnt/host/snowl-wms-origin/*/log/error.log",
+                        "log_group_name": "$[clustername]__snowl-wms-origin__nginx",
+                        "log_stream_name": "$[hostname]__error",
+                        "timestamp_format": "%Y/%m/%d %H:%M:%S",
+                        "multi_line_start_pattern": "{timestamp_format}"
+                    },
+                    {
+                        "file_path": "/var/lib/nomad/alloc/*/alloc/logs/snowl-web-origin-nginx.stdout.0",
+                        "log_group_name": "$[clustername]__snowl-web-origin__job",
+                        "log_stream_name": "$[hostname]__stdout",
+                        "timestamp_format": "%Y/%m/%d %H:%M:%S"
+                    },
+                    {
+                        "file_path": "/var/lib/nomad/alloc/*/alloc/logs/snowl-web-origin-nginx.stderr.0",
+                        "log_group_name": "$[clustername]__snowl-web-origin__job",
+                        "log_stream_name": "$[hostname]__stderr"
+                    },
+                    {
+                        "file_path": "/mnt/host/snowl-web-origin/*/log/access.log",
+                        "log_group_name": "$[clustername]__snowl-web-origin__nginx",
+                        "log_stream_name": "$[hostname]__access",
+                        "timestamp_format": "[%d/%m/%Y:%H:%M:%S %z]"
+                    },
+                    {
+                        "file_path": "/mnt/host/snowl-web-origin/*/log/error.log",
+                        "log_group_name": "$[clustername]__snowl-web-origin__nginx",
+                        "log_stream_name": "$[hostname]__error",
+                        "timestamp_format": "%Y/%m/%d %H:%M:%S",
+                        "multi_line_start_pattern": "{timestamp_format}"
+                    },
+                    {
+                        "file_path": "/var/lib/nomad/alloc/*/alloc/logs/snowl-socketio.stdout.0",
+                        "log_group_name": "$[clustername]__snowl-socketio__job",
+                        "log_stream_name": "$[hostname]__stdout"
+                    },
+                    {
+                        "file_path": "/var/lib/nomad/alloc/*/alloc/logs/snowl-socketio.stderr.0",
+                        "log_group_name": "$[clustername]__snowl-socketio__job",
+                        "log_stream_name": "$[hostname]__stderr"
+                    },
+                    {
+                        "file_path": "/var/lib/nomad/alloc/*/alloc/logs/snowl-collector-mrsoa.stdout.0",
+                        "log_group_name": "$[clustername]__snowl-collector__job",
+                        "log_stream_name": "$[hostname]__stdout",
+                        "timestamp_format": "%Y/%m/%d %H:%M:%S"
+                    },
+                    {
+                        "file_path": "/var/lib/nomad/alloc/*/alloc/logs/snowl-collector-mrsoa.stderr.0",
+                        "log_group_name": "$[clustername]__snowl-collector__job",
+                        "log_stream_name": "$[hostname]__stderr"
+                    },
+                    {
+                        "file_path": "/mnt/host/snowl-collector/*/logs/meinc_debug.log",
+                        "log_group_name": "$[clustername]__snowl-collector__java",
+                        "log_stream_name": "$[hostname]__meinc_debug",
+                        "timestamp_format": "%m/%d %H:%M:%S",
+                        "multi_line_start_pattern": "{timestamp_format}"
+                    },
+                    {
+                        "file_path": "/mnt/host/snowl-collector/*/logs/stdout.log",
+                        "log_group_name": "$[clustername]__snowl-collector__java",
+                        "log_stream_name": "$[hostname]__stdout",
+                        "timestamp_format": "%m/%d %H:%M:%S",
+                        "multi_line_start_pattern": "{timestamp_format}"
+                    },
+                    {
+                        "file_path": "/mnt/host/snowl-collector/*/logs/stderr.log",
+                        "log_group_name": "$[clustername]__snowl-collector__java",
+                        "log_stream_name": "$[hostname]__stderr"
+                    },
+                    {
+                        "file_path": "/var/lib/nomad/alloc/*/alloc/logs/snowl-srd-server.stdout.0",
+                        "log_group_name": "$[clustername]__snowl-srd-server__job",
+                        "log_stream_name": "$[hostname]__stdout"
+                    },
+                    {
+                        "file_path": "/var/lib/nomad/alloc/*/alloc/logs/snowl-srd-server.stderr.0",
+                        "log_group_name": "$[clustername]__snowl-srd-server__job",
+                        "log_stream_name": "$[hostname]__stderr"
+                    },
+                    {
+                        "file_path": "/var/lib/nomad/alloc/*/alloc/logs/snowl-nomad-web-proxy-nginx.stdout.0",
+                        "log_group_name": "$[clustername]__snowl-nomad-web-proxy__job",
+                        "log_stream_name": "$[hostname]__stdout",
+                        "timestamp_format": "%Y/%m/%d %H:%M:%S"
+                    },
+                    {
+                        "file_path": "/var/lib/nomad/alloc/*/alloc/logs/snowl-nomad-web-proxy-nginx.stderr.0",
+                        "log_group_name": "$[clustername]__snowl-nomad-web-proxy__job",
+                        "log_stream_name": "$[hostname]__stderr"
+                    },
+                    {
+                        "file_path": "/mnt/host/snowl-nomad-web-proxy/*/log/access.log",
+                        "log_group_name": "$[clustername]__snowl-nomad-web-proxy__nginx",
+                        "log_stream_name": "$[hostname]__access",
+                        "timestamp_format": "[%d/%m/%Y:%H:%M:%S %z]"
+                    },
+                    {
+                        "file_path": "/mnt/host/snowl-nomad-web-proxy/*/log/error.log",
+                        "log_group_name": "$[clustername]__snowl-nomad-web-proxy__nginx",
+                        "log_stream_name": "$[hostname]__error",
+                        "timestamp_format": "%Y/%m/%d %H:%M:%S",
+                        "multi_line_start_pattern": "{timestamp_format}"
+                    }
+                ]
+            }
+        }
+    },
+    "metrics": {
+        "append_dimensions": {
+            "ServerName": "$[hostname]",
+            "ImageId": "${aws:ImageId}",
+            "InstanceId": "${aws:InstanceId}",
+            "InstanceType": "${aws:InstanceType}"
+        },
+        "metrics_collected": {
+            "cpu": {
+                "measurement": [
+                    "cpu_usage_idle",
+                    "cpu_usage_iowait",
+                    "cpu_usage_user",
+                    "cpu_usage_system"
+                ],
+                "metrics_collection_interval": 10,
+                "totalcpu": false
+            },
+            "disk": {
+                "measurement": [
+                    "used_percent",
+                    "inodes_free"
+                ],
+                "metrics_collection_interval": 10,
+                "resources": [
+                    "*"
+                ]
+            },
+            "diskio": {
+                "measurement": [
+                    "io_time"
+                ],
+                "metrics_collection_interval": 10,
+                "resources": [
+                    "*"
+                ]
+            },
+            "mem": {
+                "measurement": [
+                    "mem_used_percent"
+                ],
+                "metrics_collection_interval": 10
+            },
+            "swap": {
+                "measurement": [
+                    "swap_used_percent"
+                ],
+                "metrics_collection_interval": 10
+            }
+        }
+    }
+}

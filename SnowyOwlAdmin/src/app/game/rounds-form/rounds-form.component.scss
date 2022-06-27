@@ -1,0 +1,33 @@
+.hidden {
+    display: none;
+}
+
+
+.categories {
+    display: block;
+    width: 100%;
+}
+
+.selectedRound {
+    width: 160px;
+    margin: 0 5px 0 0;
+}
+
+.roundName {
+    width: 100%;
+}
+
+.copyButton {
+    float: right;
+}
+
+.innerTab {
+    margin-top: 15px;
+    vx-form-field {
+        margin: 0;
+    }
+}
+
+.roundCard {
+    margin-top: 15px;
+}

@@ -1,0 +1,6 @@
+1529336963136	Encapsulate field '_type'
+1529336973204	Encapsulate field '_category'
+1529438859408	Rename method 'addPayoutModelRoundToPayoutModel'
+1529499302453	Encapsulate field '_errorTypeCode'
+1529499662332	Encapsulate field '_errorDetails'
+1529525102553	Delete elements

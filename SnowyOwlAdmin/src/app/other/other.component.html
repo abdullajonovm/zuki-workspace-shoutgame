@@ -1,0 +1,7 @@
+<vx-slide-toggle [checked]="canSeeContent" (checkedChange)="setCanSeeContent($event)">
+    Allow users to see app content without logging in.
+</vx-slide-toggle>
+
+<div class="loader" *ngIf="loading">
+    <vx-spinner></vx-spinner>
+</div>

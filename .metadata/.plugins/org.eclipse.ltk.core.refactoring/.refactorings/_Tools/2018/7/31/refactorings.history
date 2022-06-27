@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Move package &apos;tv.shout.braintree&apos; to &apos;_StandaloneTester/src/main/java&apos;&#x0A;- Original project: &apos;_Tools&apos;&#x0A;- Destination element: &apos;_StandaloneTester/src/main/java&apos;&#x0A;- Original element: &apos;_Tools/src/main/java/tv.shout.braintree&apos;&#x0A;- Update references to refactored element" description="Move package" destination="=_StandaloneTester/src\/main\/java" element1="/src\/main\/java&lt;tv.shout.braintree" flags="589830" fragments="1" id="org.eclipse.jdt.ui.move" policy="org.eclipse.jdt.ui.movePackages" stamp="1532976463169" version="1.0"/>
+</session>

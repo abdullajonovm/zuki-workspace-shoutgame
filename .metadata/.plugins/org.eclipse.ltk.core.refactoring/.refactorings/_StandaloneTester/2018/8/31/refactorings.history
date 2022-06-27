@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;DirectoryChangeWatcher.java&apos; to &apos;SotaUtils/src/main/java/com.scotthawker.sota&apos;&#x0A;- Original project: &apos;_StandaloneTester&apos;&#x0A;- Destination element: &apos;SotaUtils/src/main/java/com.scotthawker.sota&apos;&#x0A;- Original element: &apos;test.DirectoryChangeWatcher.java&apos;" description="Copy compilation unit" destination="=SotaUtils/src\/main\/java&lt;com.scotthawker.sota" element1="/src\/main\/java&lt;test{DirectoryChangeWatcher.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1533311769248" units="1" version="1.0"/>
+</session>

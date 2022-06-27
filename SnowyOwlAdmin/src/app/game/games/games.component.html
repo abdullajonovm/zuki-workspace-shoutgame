@@ -1,0 +1,73 @@
+<button vx-button (click)="findGames()" [disabled]="!selectedTypes.length">
+    <i class="fa fa-search"></i>
+    Find Games
+</button>
+
+<button vx-button [disabled]="!selectedGame" class="viewGame" (click)="viewGame()">
+    View Game
+</button>
+
+<button vx-button routerLink="/game/create">Create Game</button>
+
+
+<app-expansion-panel title="Search Options">
+    <vx-checkbox *ngFor="let type of gameTypes" (checkedChange)="toggleType(type, $event)"
+                 [checked]="selectedTypes.indexOf(type) !== -1">
+        {{ type }}
+    </vx-checkbox>
+</app-expansion-panel>
+
+<app-data-table [items]="games" [(selectedItem)]="selectedGame" (rowDoubleClick)="viewGame()" [loading]="loading"
+                [sortColumn]="date" sortDirection="down">
+    <app-column>
+        <ng-template let-selected="selected">
+            <i [vxMenuTrigger]="drop" class="fa fa-cog" tabindex="0"></i>
+        </ng-template>
+    </app-column>
+    <app-column header="Name" field="gameNames.en">
+    </app-column>
+    <app-column header="Status" field="gameStatus2">
+    </app-column>
+    <app-column header="Invite Code" field="inviteCode" defaultValue="None">
+    </app-column>
+    <app-column header="Create Date" field="pendingDate" #date>
+        <ng-template let-game>
+            {{game.pendingDate | date}}
+        </ng-template>
+    </app-column>
+    <app-column header="Start Date" field="expectedStartDate" #date>
+        <ng-template let-game>
+            {{game.expectedStartDate | date:'short'}}
+        </ng-template>
+    </app-column>
+</app-data-table>
+
+<vx-menu #drop>
+    <vx-item (select)="showDialog()">Clone Game</vx-item>
+    <vx-item *ngIf="selectedGame?.gameStatus === 'PENDING'" (select)="openGame()"> Open Game
+    </vx-item>
+    <vx-item *ngIf="selectedGame?.gameStatus === 'OPEN' && selectedGame?.hasPoolPlayStarted" (select)="notifyFreeplayers()">
+        Notify Freeplayers
+    </vx-item>
+    <vx-item
+        *ngIf="selectedGame?.gameStatus === 'OPEN' && !selectedGame.autoStartPoolPlay && !selectedGame?.hasPoolPlayStarted && !selectedGame?.hasNoPoolRounds"
+        (select)="startPoolPlay()"> Start Pool Play
+    </vx-item>
+    <vx-item *ngIf="selectedGame?.hasPoolPlayStarted || selectedGame?.gameStatus === 'CLOSED'" (select)="getPlayerInfo()">
+        View Player Info.
+    </vx-item>
+    <vx-item *ngIf="selectedGame?.gameStatus === 'OPEN'" (select)="addSponsorPlayers()">
+        Add Sponsor Players
+    </vx-item>
+    <vx-item
+        *ngIf="selectedGame?.gameStatus === 'OPEN' && !selectedGame.autoStartBracketPlay && (selectedGame?.hasPoolPlayStarted || selectedGame?.hasNoPoolRounds)"
+        (select)="startTournament()"> Start Tournament
+    </vx-item>
+    <vx-item *ngIf="selectedGame?.gameStatus !== 'CANCELLED' && selectedGame?.gameStatus !== 'CLOSED'"
+             (select)="cancelGame()"> Cancel Game
+    </vx-item>
+    <vx-item *ngIf="selectedGame?.gameStatus === 'CLOSED'" (select)="viewWinners();">
+        View Winners
+    </vx-item>
+    <vx-item *ngIf="selectedGame" (select)="showGameUrl()">Get Play Url</vx-item>
+</vx-menu>

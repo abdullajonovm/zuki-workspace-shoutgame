@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tv.shout.shoutcontestaward.dao.IXmlEventProcessorDaoMapper">
+
+    <resultMap id="gameInteractionEventMap" type="tv.shout.shoutcontestaward.domain.GameInteractionEvent">
+		<result property="gameInteractionEventId" column="game_interaction_event_id" />
+		<result property="contextId" column="context_id" />
+		<result property="eventTypeKey" column="event_type_key" />
+		<result property="gameId" column="game_id" />
+		<result property="roundId" column="round_id" />
+		<result property="levelId" column="level_id" />
+		<result property="levelValue" column="level_value" />
+		<result property="subscriberId" column="subscriber_id" />		
+		<result property="associationId" column="association_id" />
+		<result property="associationDescription" column="association_description" />
+		<result property="targetType" column="target_type" /> 		
+		<result property="pointsValue" column="points_value" />
+		<result property="purchaseAmount" column="purchase_amount" /> 
+		<result property="awardAmount" column="award_amount" />
+		<result property="receivedPayload" column="received_payload" />
+		<result property="deliveredPayload" column="delivered_payload" /> 
+		<result property="isNotification" column="is_notification" /> 
+		<result property="isPersisted" column="is_persisted" /> 		
+		<result property="isBadge" column="is_badge" />
+		<result property="isQuestionWon" column="is_question_won" /> 
+		<result property="isQuestionLost" column="is_question_lost" />
+		<result property="isRoundWon" column="is_round_won" />
+		<result property="isRoundLost" column="is_round_lost" /> 
+		<result property="createdDate" column="created_date" />    
+    </resultMap>
+    
+    <resultMap id="gamePayoutMap" type="tv.shout.shoutcontestaward.domain.GamePayout">
+		<result property="gamePayoutId" column="game_payout_id" />                          
+		<result property="prizeKey" column="prize_key" />
+		<result property="contextId" column="context_id" />
+		<result property="gameId" column="game_id"/>
+		<result property="levelId" column="level_id" />
+		<result property="levelNumber" column="level_number" />
+		<result property="subscriberId" column="subscriber_id"/>
+		<result property="subscriberDetails" column="subscriber_details" />
+		<result property="payoutKey" column="payout_key" />
+		<result property="payoutEmail" column="payout_email" />
+		<result property="payoutChannel" column="payout_channel" />
+		<result property="payoutDescription" column="payout_description" />
+		<result property="payoutStatus" column="payout_status"/>
+		<result property="payoutProcessorStatus" column="payout_processor_status"/>
+		<result property="payoutRequestAmount" column="payout_request_amount"/>
+		<result property="payoutActualAmount" column="payout_actual_amount" />
+		<result property="payoutCurrency" column="payout_currency"/>
+		<result property="finalizedDate" column="finalized_date" />
+		<result property="updatedDate" column="updated_date" />
+		<result property="createdDate" column="created_date" /> 
+    </resultMap>
+    
+    <resultMap id="gameBadgeMap" type="tv.shout.shoutcontestaward.domain.GameInteractionEvent$GameBadge">
+		<result property="gameBadgeId"      column="game_badge_id" />    
+		<result property="contextId"        column="context_id" />    
+		<result property="subscriberId"     column="subscriber_id" />    
+		<result property="associationId"    column="association_id" />
+		<result property="eventTypeKey"     column="event_type_key" />
+        <result property="badgeKey"         column="badge_key" />
+        <result property="badgeName"        column="badge_name" />
+        <result property="badgeOverlayThreshold"  column="badge_overlay_threshold" />
+		<result property="badgeDescription" column="badge_description" />
+		<result property="badgePhotoUrl"    column="badge_photo_url" />
+        <result property="badgeSetKey"      column="badge_set_key" />
+		<result property="createDate"       column="created_date" />
+    </resultMap>
+    
+    <resultMap id="subscriberStatsMap" type="tv.shout.shoutcontestaward.domain.GameInteractionEvent$SubscriberStats">
+	    <result property="subscriberId"         column="subscriber_id"          />
+   	    <result property="totalXp"              column="total_xp"               />    
+	    <result property="totalPoints"          column="total_points"           />
+   	    <result property="totalEventPoints"     column="total_event_points"     />    	    
+	    <result property="totalPurchasedAmount" column="total_purchased_amount" />
+	    <result property="totalAwardedAmount"   column="total_awarded_amount"   />
+	    <result property="totalQuestionsWon"    column="total_questions_won"    />
+	    <result property="totalQuestionsLost"   column="total_questions_lost"   />
+	    <result property="totalRoundsWon"       column="total_rounds_won"       />
+	    <result property="totalRoundsLost"      column="total_rounds_lost"      />
+    </resultMap>
+    
+</mapper>

@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    remove|purge)
+        # Nothing to do here
+    ;;
+esac
+
+invoke-rc.d nginx stop || true
+

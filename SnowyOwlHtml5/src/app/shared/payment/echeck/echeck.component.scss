@@ -1,0 +1,16 @@
+input:not(.m0), select:not(.m0) {
+    margin-top: 10px;
+    margin-left: 5px;
+}
+
+.flex {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -5px;
+    :first-child {
+        flex-grow: 1;
+    }
+    :not(:first-child) {
+        flex: 1;
+    }
+}

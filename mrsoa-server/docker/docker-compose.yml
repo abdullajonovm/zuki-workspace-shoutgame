@@ -1,0 +1,6 @@
+version: '3'
+services:
+    mrsoa:
+        image: scm.shoutgameplay.com:5000/mrsoa:1.3
+        build:
+            context: .

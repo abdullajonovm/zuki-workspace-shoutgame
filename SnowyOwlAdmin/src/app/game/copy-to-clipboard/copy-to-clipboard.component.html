@@ -1,0 +1,12 @@
+<h2 vxDialogTitle>Game Url</h2>
+<div vxDialogContent>
+    <vx-form-field>
+        <input vxFormField label="Username (optional)" [(ngModel)]="userName">
+    </vx-form-field>
+
+    <a class="url" [href]="url">{{url}}</a>
+</div>
+<div vxDialogActions>
+    <button vx-button (click)="copy()">Copy to Clipboard</button>
+    <button vx-button (click)="close()">Close</button>
+</div>

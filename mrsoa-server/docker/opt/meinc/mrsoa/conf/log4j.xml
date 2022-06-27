@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+    <appender name="stdout_debug" class="org.apache.log4j.rolling.RollingFileAppender">
+        <param name="Threshold" value="debug"/>
+        <rollingPolicy class="org.apache.log4j.rolling.TimeBasedRollingPolicy">
+            <param name="ActiveFileName" value="${log.dir}/stdout.log"/>
+            <param name="FileNamePattern" value="${log.dir}/stdout.log.%d"/>
+        </rollingPolicy>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{MM/dd HH:mm:ss.SSS} %-5p [%c{1}] %m%n"/>
+        </layout>
+    </appender>
+
+    <root>
+        <level value="info"/>
+        <appender-ref ref="stdout_debug"/>
+    </root>
+</log4j:configuration>

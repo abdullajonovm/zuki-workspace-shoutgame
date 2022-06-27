@@ -1,0 +1,18 @@
+<h1 vxDialogTitle>Winners</h1>
+<div vxDialogContent>
+    <app-data-table [items]="winners" [loading]="loading">
+        <app-column header="Email" field="email">
+        </app-column>
+        <app-column header="Nickname" field="nickname">
+        </app-column>
+        <app-column header="Amount" field="amount">
+            <ng-template let-item>
+                {{item.amount | currency:'USD':'symbol':'1.0-2'}}
+            </ng-template>
+        </app-column>
+    </app-data-table>
+</div>
+<div vxDialogActions>
+    <button (click)="download()" vx-button>Download CSV</button>
+    <button vx-button (click)="dialog.close();">Close</button>
+</div>

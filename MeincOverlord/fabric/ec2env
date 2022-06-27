@@ -1,0 +1,4 @@
+export JAVA_HOME=$(/usr/libexec/java_home)
+export EC2_HOME=~/Dev/ec2-api-tools-1.6.10.0
+export EC2_PRIVATE_KEY=~/.ssh/pk-KOAZYNO7ZY3FOEDBSFNSCKTUPFP6BP6O.pem
+export EC2_CERT=~/.ssh/cert-KOAZYNO7ZY3FOEDBSFNSCKTUPFP6BP6O.pem

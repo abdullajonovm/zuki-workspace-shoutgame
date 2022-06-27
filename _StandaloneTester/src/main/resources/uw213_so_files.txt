@@ -1,0 +1,2 @@
+./usr/src/common/volbin/4.10/public/unix/libbtrv.so
+./usr/src/common/volbin/4.10/public/unix/libcomm.so

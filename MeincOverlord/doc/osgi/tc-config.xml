@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tc:tc-config xmlns:tc="http://www.terracotta.org/config"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://www.terracotta.org/schema/terracotta-4.xsd">
+
+   <servers>
+      <server>
+         <dso>
+            <garbage-collection>
+               <enabled>true</enabled>
+               <verbose>false</verbose>
+               <interval>3600</interval>
+            </garbage-collection>
+         </dso>
+      </server>
+   </servers>
+
+   <clients>
+      <logs>tc-logs</logs>
+      <dso>
+         <!--fault-count>0</fault-count-->
+         <debugging>
+            <!--instrumentation-logging>
+               <class>true</class>
+               <locks>true</locks>
+               <transient-root>false</transient-root>
+               <roots>true</roots>
+               <distributed-methods>false</distributed-methods>
+            </instrumentation-logging-->
+
+            <!--runtime-logging>
+               <non-portable-dump>true</non-portable-dump>
+               <lock-debug>true</lock-debug>
+               <wait-notify-debug>false</wait-notify-debug>
+               <distributed-method-debug>false</distributed-method-debug>
+               <new-object-debug>true</new-object-debug>
+            </runtime-logging>
+
+            <runtime-output-options>
+               <auto-lock-details>true</auto-lock-details>
+               <caller>true</caller>
+               <full-stack>true</full-stack>
+            </runtime-output-options-->
+         </debugging>
+      </dso>
+      <modules>
+         <!--module name="tc-kf-configmodule" version="2.0.0-1.0.0"/-->
+         <!--module name="clustered-jetty" version="6.1-1.0.0"/-->
+      </modules>
+   </clients>
+
+   <application>
+      <dso>
+         <additional-boot-jar-classes>
+            <include>java.net.InetAddress</include>
+            <include>java.net.Inet4Address</include>
+            <include>java.net.SocketAddress</include>
+            <include>java.net.InetSocketAddress</include>
+         </additional-boot-jar-classes>
+
+         <instrumented-classes>
+            <include>
+               <class-expression>com.meinc.mrsoa.monitor.MrSoaServer</class-expression>
+            </include>
+            <include>
+               <class-expression>com.meinc.mrsoa.service.ServiceEndpoint</class-expression>
+            </include>
+            <include>
+               <class-expression>com.meinc.mrsoa.monitor.ServiceEndpointPair</class-expression>
+            </include>
+         </instrumented-classes>
+
+         <roots>
+            <root>
+               <field-expression>* com.meinc.mrsoa.monitor.MrSoaServerMonitor.serviceToServers</field-expression>
+               <root-name>serviceToServers</root-name>
+            </root>
+            <root>
+               <field-expression>* com.meinc.mrsoa.monitor.MrSoaServerMonitor.serverToServerSets</field-expression>
+               <root-name>serverToServerSets</root-name>
+            </root>
+            <root>
+               <field-expression>* com.meinc.mrsoa.monitor.MrSoaServiceMonitor.mrsoaRunMonitor</field-expression>
+               <root-name>mrsoaRunMonitor</root-name>
+            </root>
+            <root>
+               <field-expression>* com.meinc.mrsoa.monitor.MrSoaServiceMonitor.serviceInterfaceToServices</field-expression>
+               <root-name>serviceInterfaceToServices</root-name>
+            </root>
+            <root>
+               <field-expression>* com.meinc.mrsoa.monitor.MrSoaServiceMonitor.liveServices</field-expression>
+               <root-name>liveServices</root-name>
+            </root>
+         </roots>
+
+         <locks>
+            <autolock>
+               <method-expression>* com.meinc.mrsoa.monitor.MrSoaServerMonitor.getNetAddressToEndpoint(..)</method-expression>
+               <lock-level>read</lock-level>
+            </autolock>
+            <autolock>
+               <method-expression>* com.meinc.mrsoa.monitor.MrSoaServerMonitor.registerService(..)</method-expression>
+               <lock-level>write</lock-level>
+            </autolock>
+            <autolock>
+               <method-expression>* com.meinc.mrsoa.monitor.MrSoaServerMonitor.unregisterLocalService(..)</method-expression>
+               <lock-level>write</lock-level>
+            </autolock>
+            <autolock>
+               <method-expression>* com.meinc.mrsoa.monitor.MrSoaServerMonitor.handleConnectionFailedToEndpoint(..)</method-expression>
+               <lock-level>write</lock-level>
+            </autolock>
+            <autolock>
+               <method-expression>* com.meinc.mrsoa.monitor.MrSoaServerMonitor.serverScoreUpdated(..)</method-expression>
+               <lock-level>read</lock-level>
+            </autolock>
+            <autolock>
+               <method-expression>* com.meinc.mrsoa.monitor.MrSoaServerMonitor.updateServerInSet(..)</method-expression>
+               <lock-level>write</lock-level>
+            </autolock>
+
+            <autolock>
+               <method-expression>* com.meinc.mrsoa.monitor.MrSoaServiceMonitor.run(..)</method-expression>
+               <lock-level>write</lock-level>
+            </autolock>
+            <autolock>
+               <method-expression>* com.meinc.mrsoa.monitor.MrSoaServiceMonitor.registerNewService(..)</method-expression>
+               <lock-level>write</lock-level>
+            </autolock>
+            <autolock>
+               <method-expression>* com.meinc.mrsoa.monitor.MrSoaServiceMonitor.deregisterService(..)</method-expression>
+               <lock-level>write</lock-level>
+            </autolock>
+            <autolock>
+               <method-expression>* com.meinc.mrsoa.monitor.MrSoaServiceMonitor.registerInterfaceListener(..)</method-expression>
+               <lock-level>write</lock-level>
+            </autolock>
+            <autolock>
+               <method-expression>* com.meinc.mrsoa.monitor.MrSoaServiceMonitor.getEndpointsImplementingInterface(..)</method-expression>
+               <lock-level>read</lock-level>
+            </autolock>
+            <autolock>
+               <method-expression>* com.meinc.mrsoa.monitor.MrSoaServiceMonitor.registerServiceListener(..)</method-expression>
+               <lock-level>write</lock-level>
+            </autolock>
+
+            <!-- *** ConcurrentReadWriteHashMap Locks *** -->
+
+            <!--autolock>
+               <method-expression>void com.sco.ecp.service.remoting.utils.ConcurrentReadWriteHashMap.clear()</method-expression>
+               <lock-level>write</lock-level>
+            </autolock>
+            <autolock>
+               <method-expression>Object com.sco.ecp.service.remoting.utils.ConcurrentReadWriteHashMap.clone()</method-expression>
+               <lock-level>read</lock-level>
+            </autolock>
+            <autolock>
+               <method-expression>boolean com.sco.ecp.service.remoting.utils.ConcurrentReadWriteHashMap.containsKey(Object)</method-expression>
+               <lock-level>read</lock-level>
+            </autolock>
+            <autolock>
+               <method-expression>boolean com.sco.ecp.service.remoting.utils.ConcurrentReadWriteHashMap.containsValue(Object)</method-expression>
+               <lock-level>read</lock-level>
+            </autolock>
+            <autolock>
+               <method-expression>Set com.sco.ecp.service.remoting.utils.ConcurrentReadWriteHashMap.entrySet()</method-expression>
+               <lock-level>read</lock-level>
+            </autolock>
+            <autolock>
+               <method-expression>boolean com.sco.ecp.service.remoting.utils.ConcurrentReadWriteHashMap.equals(Object)</method-expression>
+               <lock-level>read</lock-level>
+            </autolock>
+            <autolock>
+               <method-expression>* com.sco.ecp.service.remoting.utils.ConcurrentReadWriteHashMap.get(Object)</method-expression>
+               <lock-level>read</lock-level>
+            </autolock>
+            <autolock>
+               <method-expression>int com.sco.ecp.service.remoting.utils.ConcurrentReadWriteHashMap.hashCode()</method-expression>
+               <lock-level>read</lock-level>
+            </autolock>
+            <autolock>
+               <method-expression>boolean com.sco.ecp.service.remoting.utils.ConcurrentReadWriteHashMap.isEmpty()</method-expression>
+               <lock-level>read</lock-level>
+            </autolock>
+            <autolock>
+               <method-expression>Set com.sco.ecp.service.remoting.utils.ConcurrentReadWriteHashMap.keySet()</method-expression>
+               <lock-level>read</lock-level>
+            </autolock>
+            <autolock>
+               <method-expression>* com.sco.ecp.service.remoting.utils.ConcurrentReadWriteHashMap.put(..)</method-expression>
+               <lock-level>write</lock-level>
+            </autolock>
+            <autolock>
+               <method-expression>void com.sco.ecp.service.remoting.utils.ConcurrentReadWriteHashMap.putAll(Map)</method-expression>
+               <lock-level>write</lock-level>
+            </autolock>
+            <autolock>
+               <method-expression>* com.sco.ecp.service.remoting.utils.ConcurrentReadWriteHashMap.remove(Object)</method-expression>
+               <lock-level>write</lock-level>
+            </autolock>
+            <autolock>
+               <method-expression>int com.sco.ecp.service.remoting.utils.ConcurrentReadWriteHashMap.size()</method-expression>
+               <lock-level>read</lock-level>
+            </autolock>
+            <autolock>
+               <method-expression>String com.sco.ecp.service.remoting.utils.ConcurrentReadWriteHashMap.toString()</method-expression>
+               <lock-level>read</lock-level>
+            </autolock>
+            <autolock>
+               <method-expression>Collection com.sco.ecp.service.remoting.utils.ConcurrentReadWriteHashMap.values()</method-expression>
+               <lock-level>read</lock-level>
+            </autolock-->
+         </locks>
+
+      </dso>
+   </application>
+
+</tc:tc-config>

@@ -1,0 +1,5 @@
+<h2 vxDialogTitle>{{data.title}}</h2>
+<p vxDialogContent>{{data.body}}</p>
+<div vxDialogActions>
+    <button *ngFor="let button of data.buttons" vx-button (click)="dialog.close(button)">{{button}}</button>
+</div>

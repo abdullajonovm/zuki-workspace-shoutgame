@@ -1,0 +1,5 @@
+    location /.well-known/acme-challenge/ {
+        proxy_pass       http://scm.shoutgameplay.com;
+        resolver         ${NAMESERVER_IP} valid=300s;
+        resolver_timeout 10s;
+    }

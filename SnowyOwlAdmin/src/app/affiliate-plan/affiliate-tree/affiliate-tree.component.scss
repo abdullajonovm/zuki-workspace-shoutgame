@@ -1,0 +1,82 @@
+@import "../../vars";
+:host {
+    max-width: 500px;
+    display: block;
+}
+.info {
+    //border-top: 2px solid $lightBorderColor;
+    background: $mainColor;
+    color: $background;
+    font-size: 15px;
+}
+
+.nickname {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+    position: relative;
+}
+
+.loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0, .25);
+    padding-top: 15px;
+    text-align: center;
+    z-index: 100;
+}
+
+.amounts {
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+}
+
+.amount {
+    text-align: center;
+    flex: 1;
+    padding: 8px;
+    font-size: 14px;
+    div {
+        font-weight: bold;
+        margin-bottom: 3px;
+    }
+
+    &:not(:last-child) {
+        border-right: 1px solid #ccc;
+    }
+}
+
+.child {
+    display: flex;
+    align-items: center;
+}
+.event {
+    padding: 8px 15px;
+    background: white;
+    font-size: 15px;
+
+    border-top: 2px solid #ccc;
+}
+
+.fa-chevron-right {
+    transform: scaleY(1.4);
+    color: #ccc;
+    padding: 5px;
+}
+
+.back {
+    display: inline-flex;
+    align-items: center;
+    position: absolute;
+    left: 10px;
+}
+
+.date {
+    font-size: 12px;
+    margin-bottom: 3px;
+    color: #464646;
+}

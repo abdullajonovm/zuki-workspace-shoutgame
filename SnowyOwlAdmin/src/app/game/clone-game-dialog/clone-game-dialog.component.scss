@@ -1,0 +1,24 @@
+vx-form-field {
+    min-width: 170px;
+    display: block;
+    &:not(:first-child) {
+        margin-top: 10px;
+    }
+}
+vx-tabs {
+    margin-top: 15px;
+    vx-form-field {
+        width: 100%;
+    }
+}
+@media screen and (max-width: 374px) {
+    vx-form-field {
+        display: block;
+        width: 100%;
+        margin-top: 3px;
+        &:nth-child(2) {
+            width: 100%;
+            margin-left: 0;
+        }
+    }
+}

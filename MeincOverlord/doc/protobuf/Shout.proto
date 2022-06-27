@@ -1,0 +1,503 @@
+option java_package = "com.meinc.gameplay.domain";
+
+message ResponseStatus {
+    enum Error {
+        NoError    = 0;
+        Unknown    = 1;
+        ServerDown = 2;
+        Throttled  = 3;
+        AppVersion = 4;
+    }
+
+    optional bool   success     = 1 [default=true];
+    optional Error  error       = 2;
+    optional string userMessage = 3; //If present, this message must be displayed to the user
+}
+
+message HttpHeaderPair {
+    required string name  = 1;
+    required string value = 2;
+}
+
+message PayloadLock {
+    optional Key         key        = 1;
+    optional DateTime    expiration = 2;
+    optional PayloadLock next       = 3;
+}
+
+message Key {
+    enum Type {
+        CLEAR     = 0;
+        AES128_1  = 100;
+        DES3_1    = 200;
+        RSA1024_1 = 300;
+        ARC4_1    = 400;
+        TWOFISH_1 = 500;
+        XXTEA_1   = 600;
+    }
+    optional Type   type = 1;
+    optional string key  = 2;
+    optional Key    next = 3;
+}
+
+message Ref {
+    optional string         url         = 1;
+    repeated HttpHeaderPair httpHeaders = 2;
+    optional PayloadLock    lock        = 3;
+    optional uint32         delayMs     = 4; //Delay using this URL
+}
+
+message ObjectRef<T> {
+    optional T      obj = 1; //Optional embedded instance of referenced object.
+                             //Used for optimizing client-server communication.
+    optional uint32 id  = 2;
+    optional Ref    ref = 3;
+}
+
+message PagedList<T> {
+    repeated ObjectRef<T> objects = 1; //The Objects in this Page
+    optional Ref          next    = 2; //The next PagedList
+}
+
+message Color {
+    optional string rgbHex = 1;
+}
+
+message DateTime {
+    optional string val = 1; // ISO-8601 representation of date/time
+}
+
+message Currency {
+    optional string currencyCode = 1  [default="USD"]; //ISO-4217 currency code
+    optional int32  integer      = 2;
+    optional uint32 fraction     = 3;
+}
+
+message Coupon {
+    enum Type {
+        URL_FULFILLMENT_TYPE                       = 0; //take the user to a url to fulfill prize
+        MANUAL_FULFILLMENT_TYPE                    = 1; //user should be told instructions on getting the prize will be sent him/her
+        UNIQUE_URL_FULFILLMENT_TYPE                = 2; //user will be taken to url unique to him/her to fulfill the deal/prize
+        MANUAL_COUPON_CODE_FULFILLMENT_TYPE        = 3; //users must have coupon code and will be sent instructions on getting deal/prize
+        UNIQUE_MANUAL_COUPON_CODE_FULFILLMENT_TYPE = 4; //each user receives a unique code he/she must present to get prize/deal (usually via email)
+        CONCESSION_FULFILLMENT_TYPE                = 5; //user will have to present a screen of the app to a concession stand at the event location to claim prize/deal.
+    }
+    optional uint32   couponId           = 1;
+    optional Currency msrp               = 2;
+    optional uint32   totalCoupons       = 3;
+    optional uint32   numRemaining       = 4;
+    optional Currency price              = 5;
+    optional bool     percentOff         = 6;
+    optional DateTime expirationDate     = 7;
+    optional string   offerText          = 8;
+    optional string   offerDescription   = 9;
+    optional string   redeemUrl          = 10;
+    optional Ref      mobileBanner       = 11;
+    optional Ref      webBanner          = 12;
+    optional Ref      mobileDealImage    = 13;
+    optional Ref      webDealImage       = 14;
+    optional Type     type               = 15;
+    optional string   fulfillmentMessage = 16;
+    optional string   couponCode         = 17;
+}
+
+message Deal {
+    optional uint32            dealId  = 1;
+    optional string            name    = 2;
+    optional Campaign.Sponsor  sponsor = 3;
+    optional PagedList<Coupon> coupons = 4; //List of Coupon objects
+}
+
+message Campaign {
+    message Sponsor {
+        optional uint32 sponsorId = 1;
+        optional string name      = 2;
+    }
+    message Ad {
+        enum Type {
+            QUESTION    = 0;
+            CLOCK       = 1;
+            GAME        = 2;
+            NATIONAL    = 3;
+            LEADERBOARD = 4;
+        }
+        message AdInstance {
+            enum ConsumerType {
+                WEB    = 0;
+                MOBILE = 1;
+            }
+            optional uint32           adInstanceId        = 1;
+            optional Campaign.Ad.Type type                = 2;
+            optional ConsumerType     consumerType        = 3;
+            optional uint32           width               = 4;
+            optional uint32           height              = 5;
+            optional string           offerText           = 6;
+            optional string           detailedInformation = 7;
+            optional Ref              image               = 8;
+            optional Ref              link                = 9;
+        }
+        optional uint32                            adId       = 1;
+        optional Type                              type       = 2;
+        repeated ObjectRef<Campaign.Ad.AdInstance> adInstance = 3;
+    }
+    optional uint32  campaignId = 1;
+    optional Sponsor sponsor    = 2;
+    optional string  name       = 3;
+    optional Ad      ad         = 4;
+    optional Deal    deal       = 5;
+}
+
+message Leaderboard {
+    message Row {
+        optional uint32 subscriberId   = 1;
+        optional string subscriberName = 2;
+        optional uint32 rank           = 3;
+        optional uint32 score          = 4;
+    }
+    optional PagedList<Leaderboard.Row> rows = 1; //Paged list of Row objects
+}
+
+message ShoutFeed {
+    enum ImageSource {
+        NONE     = 0;
+        TWITTER  = 1;
+        FACEBOOK = 2;
+    }
+    message Row {
+        optional uint32                rowId               = 1;
+        optional string                authorName          = 2;
+        optional uint32                authorSubId         = 3;
+        optional Ref                   authorPhoto         = 4;
+        optional DateTime              postDate            = 5;
+        optional Ref                   attachedImage       = 6;
+        optional ShoutFeed.ImageSource attachedImageSource = 7;
+    }
+    optional PagedList<ShoutFeed.Row> rows = 1;
+}
+
+message Event {
+    enum Status {
+        NEW        = 0;
+        INPROGRESS = 1;
+        COMPLETE   = 2;
+    }
+
+    message Team {
+        message Metadata {
+            optional uint32 metadataId     = 1;
+            optional uint32 metadataTypeId = 2; //The metadata type id. Examples of metadata types: logo-24x24, logo64x64, etc.
+            optional string value          = 3; //The value of this piece of metadata
+        }
+        optional uint32   teamId   = 1;
+        optional uint32   parentId = 2; //The teamId of the parent Team
+        optional string   name     = 3; //The name of the team
+        repeated Metadata metadata = 4; //The metadata associated with the team, mostly different logo
+                                                       //sizes and their associated urls. Clients must now how to pull
+                                                       //out the images desired by the metadata type.
+    }
+
+    message Question {
+        message Answer {
+            optional uint32 answerId               = 1;
+            optional string answer                 = 2;
+            optional string answerCode             = 3; //The answer code used by text messaging players to select the
+                                                        //answer and on other clients, appears next to the answer to act
+                                                        //as its answer number.
+            optional bool   correct                = 4; //Whether this is the correct answer for a given question. If not
+                                                        //known, this will not be present.
+            optional float  percentChoseThisAnswer = 5; //Answers may return the percent of time players chose this answer
+                                                        //when answering the associated questions, depending on the
+                                                        //context in which the question/answer is requested.
+        }
+        optional uint32                            questionId  = 1;
+        optional Status                            status      = 2;
+        optional string                            question    = 3; //The text of the question itself.
+        repeated Answer                            answers     = 4; //The answers someone may pick for a question. May be empty.
+        optional ObjectRef<Campaign>               campaign    = 5; //The Campaign object associated with this question.
+        repeated ObjectRef<Campaign.Ad.AdInstance> adInstances = 6; //Ad instance objects associated with this question.
+    }
+
+    optional uint32                 eventId           = 1;
+    optional Status                 status            = 2;
+    optional string                 name              = 3;  //The name to show to users
+    optional bool                   isPrivate         = 4;  //Private event
+    optional string                 keyword           = 5;  //The short, unique, human-readble, url-safe (no spaces or
+                                                            //punctuation) name by which this event is referred.
+    optional DateTime               expectedStartDate = 6;  //The date/time of when the event is expected to start.
+    optional DateTime               actualStartDate   = 7;  //The date/time the event actually started.
+    optional bool                   highlighted       = 8;  //Whether or not the event has been marked as highlighted.
+    optional double                 minimumGamePurse  = 9;  //The minimum amount (in total cash) that will be given away during the event.
+    optional string                 sponsor           = 10; //The sponsor of the event; has been hijacked and now contains promo text for
+                                                            //pre-event messages
+    repeated Team                   teams             = 11; //The "teams" playing. This may be just a single team in the case of an
+                                                            //entertainment event such as the Oscars.
+    repeated Question               questions         = 12; //The questions for the event. It can be an empty array.
+    optional ObjectRef<ShoutFeed>   eventFeed         = 13; //Contents of user Shout-outs
+    optional ObjectRef<Leaderboard> leaderBoard       = 14; //Leaderboard object
+}
+
+message VipBox {
+    message Member {
+        enum Role {
+            OWNER  = 0; //An owner of the VIP Box with rights to inactivate/delete the vip box and all of the admins rights
+            ADMIN  = 1; //Rights to add/remove members from the vip box and add/remove a vip box explicitly from an event if "autoCreate" is false on the VipBox
+            MEMBER = 2; //Rights to show up as a public member of the vip box (shows up on leaderboard and other members may shout out to/from member)
+            VIEWER = 3; //May view the activity inside a vip box (leaderboard/shout out posts) but doesn't show up as a
+                        //member of the vip box (not on leaderboard or someone who may be shouted out to/from)
+        }
+
+        enum Status {
+            ACTIVE           = 0; //Active member of the vip box
+            INACTIVE         = 1; //Inactive member of the vip box
+            PENDING_ADDITION = 2; //Member waiting to be added to vip box
+            PENDING_REMOVAL  = 3; //Member waiting to be removed from vip box
+            PENDING_APPROVAL = 4; //We're waiting for the member to approve the request to join the VIP Box
+        }
+
+        optional uint32 subscriberId = 1;
+        optional string name         = 2;
+        optional Ref    avatarImage  = 3;
+        optional bool   hiddenMember = 4;
+        optional Role   role         = 5;
+        optional Status status       = 6;
+    }
+
+    message Location {
+        optional uint32 locationId  = 1;
+        optional string name        = 2;
+        optional string addr1       = 3;
+        optional string addr2       = 4;
+        optional string city        = 5;
+        optional string state       = 6;
+        optional string postalCode  = 7;
+        optional uint32 countryCode = 8;
+        optional float  longitude   = 9;
+        optional float  latitude    = 10;
+        optional uint32 radiusM     = 11;
+    }
+
+    message Organization {
+        optional uint32                         orgId       = 1;
+        optional ObjectRef<VipBox.Organization> parentOrg   = 2;
+        optional string                         name        = 3;
+        optional string                         addr1       = 4;
+        optional string                         addr2       = 5;
+        optional string                         city        = 6;
+        optional string                         state       = 7;
+        optional string                         postalCode  = 8;
+        optional uint32                         countryCode = 9;
+        optional Location                       location    = 10;
+    }
+
+    enum Status {
+        ACTIVE           = 0; //Active vip box
+        INACTIVE         = 1; //Inactive vip box
+        PENDING_ADDITION = 2; //Vip box waiting to be added
+        PENDING_REMOVAL  = 3; //Vip box waiting to be removed
+        DELETED          = 4; //Vip box that is deleted
+    }
+
+    optional uint32                   vipBoxId                = 1;
+    optional string                   name                    = 2;
+    optional string                   inviteCode              = 3;
+    optional Ref                      avatarUrl               = 4;
+    optional Color                    color                   = 5;
+    optional uint32                   ownerId                 = 6;
+    optional string                   payoutRuleEngineName    = 7;
+    optional string                   dealEngineName          = 8;
+    optional uint32                   numMembers              = 9;
+    optional Status                   status                  = 10;
+    optional bool                     openMembership          = 11;
+    optional bool                     locationCheckinRequired = 12;
+    optional bool                     autoCreate              = 13;
+    optional PagedList<VipBox.Member> members                 = 14; //Paged list of Member objects
+    repeated Organization             org                     = 15; //Mutually exclusive with location
+    repeated Location                 location                = 16; //Mutually exclusive with org
+    optional ObjectRef<ShoutFeed>     shoutFeed               = 17; //Shout Out content
+}
+
+message Category {
+    optional uint32 categoryId = 1;
+    optional string name       = 2;
+}
+
+message League {
+    optional uint32              leagueId = 1;
+    optional string              name     = 2;
+    repeated Event.Team.Metadata metadata = 3;
+    repeated ObjectRef<League>   children = 4; //Children League objects
+}
+
+message DomainRoot {
+    optional PagedList<Event>    eventList  = 1; //All events in all states sorted by reverse start date
+    optional PagedList<Category> categories = 4; //Global list of Top-level Category objects
+    optional PagedList<League>   leagues    = 5; //Global list of League objects
+    //TODO:
+    //optional PagedList<Channel> channels = 6;   //Global list of Channel objects
+}
+
+message Subscriber {
+    enum Role {
+        USER  = 0;
+        ADMIN = 1;
+    }
+    optional uint32 subscriberId        = 1;
+    optional string firstName           = 2;
+    optional string lastName            = 3;
+    optional string username            = 4;
+    optional bool   userSetUsername     = 5;
+    optional string email               = 6;
+    optional string mintRegistrationUrl = 7;
+    optional Role   role                = 8;
+    optional string photoUrl            = 9;
+}
+
+message SubscriberSession {
+    optional string     sessionKey = 1;
+    optional Subscriber subscriber = 2;
+}
+
+message ClientInfo {
+    optional string deviceId           = 5; //The device ID of the device - may just be a UUID not really tied to device.
+    optional string deviceToken        = 6; //If the user allowed, the unique ID used to push to the device.
+    optional string applicationId      = 7; //If authenticating from mobile app, it's the ID of the mobile application (such as ShoutTV)
+    optional string applicationVersion = 8; //If authenticating from mobile app, it's the version number of the mobile app
+    optional string deviceModel        = 9; //If authenticating from a mobile app, it's the device model.
+    optional string deviceName         = 10; //If authenticating from a mobile app, it's the device name.
+    optional string deviceOsName       = 11; //If authenticating from a mobile app, it's the device os name.
+    optional string deviceOsType       = 12; //If authenticating from a mobile app, it's the device os type.
+    optional string deviceVersion      = 13; //If authenticating from a mobile app, it's the device version.
+    optional string rsaPublicKey       = 14;
+}
+
+message SignupRequest {
+    optional string     fbAccessToken = 1; //If provided, facebook login is active and this is the access token to use
+                                           //for the new subscriber. Email/username will be taken from facebook.
+                                           //Password will be auto generated (unless specified in the params).
+    optional string     email         = 2; //Email address to use for subscriber.
+    optional string     password      = 3; //Subscriber's Shout password. If not provided, a default will be generated.
+    optional string     username      = 4; //Optional username to use for subscriber. If not provided, a default will be generated.
+    optional ClientInfo client        = 5;
+}
+
+message SignupResponse {
+    // extends ResponseStatus.Error
+    enum Error {
+        FacebookSubscriberExists = 100;
+        EmailAlreadyUsed         = 101;
+        EmailInvalid             = 102;
+        UsernameAlreadyUsed      = 103;
+        UsernameInvalid          = 104;
+        UsernameLength           = 105;
+    }
+
+    optional ResponseStatus    status            = 1;
+    optional SubscriberSession subscriberSession = 2; //required if status.success
+    optional Ref               domainRoot        = 3;
+    optional Ref               userRoot          = 4;
+}
+
+message AuthenticateViaUsernamePasswordRequest {
+    optional string     email  = 1; //The email of the user to validate.
+    optional string     passwd = 2; //The password of the user to validate
+    optional ClientInfo client = 3;
+}
+
+message AuthenticateViaUsernamePasswordReponse {
+    // extends ResponseStatus.Error
+    enum Error {
+        FailedAuth        = 100;
+        MustResetPassword = 101;
+    }
+
+    optional ResponseStatus    status            = 1;
+    optional SubscriberSession subscriberSession = 2; //required if status.success
+    optional Ref               domainRoot        = 3;
+    optional Ref               userRoot          = 4;
+}
+
+message AuthenticateViaFacebookRequest {
+    optional string     accessToken = 1; //The FB accessToken to map to a valid subscriber.
+    optional ClientInfo client      = 2;
+}
+
+message AuthenticateViaFacebookReponse {
+    // extends ResponseStatus.Error
+    enum Error {
+        FailedAuth = 100;
+    }
+
+    optional ResponseStatus    status            = 1;
+    optional SubscriberSession subscriberSession = 2; //required if status.success
+    optional Ref               domainRoot        = 3;
+    optional Ref               userRoot          = 4;
+}
+
+// Collector message
+message AddSubscriberToEventRequest {
+    optional uint32 subscriberId = 1;
+    optional string sessionKey   = 2;
+    optional uint32 eventId      = 3;
+}
+
+message AddSubscriberToEventResponse {
+    optional ResponseStatus status = 1;
+    optional Ref            event  = 2;
+}
+
+// Collector message
+message RemoveSubscriberFromEventRequest {
+    optional uint32 subscriberId = 1;
+    optional string sessionKey   = 2;
+    optional uint32 eventId      = 3;
+}
+
+message RemoveSubscriberFromEventResponse {
+    optional ResponseStatus status = 1;
+    optional Ref event = 2;
+}
+
+// Collector message
+message QuestionAnswerRequest {
+    optional uint32 subscriberId = 1;
+    optional string sessionKey   = 2;
+    optional uint32 questionId   = 3;
+    optional uint32 answerId     = 4;
+}
+
+message QuestionAnswerResponse {
+    optional ResponseStatus status   = 1;
+    optional Ref            question = 2;
+}
+
+// Collector message
+message PostToFeedRequest {
+    optional uint32                subscriberId        = 1;
+    optional string                sessionKey          = 2;
+    optional uint32                eventId             = 3;
+    optional uint32                vipBoxId            = 4;
+    optional string                message             = 5;
+    optional string                attachedImageUrl    = 6;
+    optional ShoutFeed.ImageSource attachedImageSource = 7;
+}
+
+message PostToFeedResponse {
+    optional ResponseStatus       status = 1;
+    optional ObjectRef<ShoutFeed> feed   = 2;
+}
+
+message PublishObjectRequest {
+    enum ObjectType {
+        USER     = 0;
+        EVENT    = 1;
+        CATEGORY = 2;
+        LEAGUE   = 3;
+    }
+    optional ObjectType objectType = 1;
+    optional string     objectId   = 2;
+}
+
+message PublishObjectResponse {
+    optional ResponseStatus status = 1;
+    optional Ref            object = 2;
+}

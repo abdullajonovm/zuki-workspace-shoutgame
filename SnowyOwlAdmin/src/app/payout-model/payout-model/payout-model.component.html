@@ -1,0 +1,52 @@
+<form ngForm #form="ngForm" (submit)="submit()" autocomplete="nope">
+    <div class="mBottom15">
+        <button type="submit" vx-button [disabled]="!editable">Submit</button>
+    </div>
+    <div class="inputs mBottom15">
+        <vx-form-field>
+            <input vxFormField label="Model Name" name="Model Name" autocomplete="nope" [(ngModel)]="model.name" [disabled]="!editable" required>
+        </vx-form-field>
+
+        <vx-form-field>
+            <input vxFormField label="Base Player Count" ngModel [(appNumber)]="model.basePlayerCount"
+                   [disabled]="!editable" autocomplete="nope" min="2"
+                   (appNumberChange)="playerCountChange.next()" name="Base Player Count" [appMask]="{mask: numberMask}"
+                   required>
+        </vx-form-field>
+
+        <vx-form-field>
+            <input vxFormField label="Entrance Fee Amount" ngModel [disabled]="!editable"
+                   [appMask]="{mask: moneyMask}" [(appNumber)]="model.entranceFeeAmount"
+                   name="Entrance Fee Amount" required autocomplete="nope" min="0">
+        </vx-form-field>
+    </div>
+
+    <div *ngIf="!loading">
+        <div *ngIf="model.basePlayerCount && model.entranceFeeAmount" class="mBottom15 textCenter">
+            <div>Total Money: <b>{{totalMoney | currency:'USD'}}</b></div>
+            <div>Paying Out: <b>{{payoutAmount | currency:'USD'}}</b></div>
+        </div>
+
+        <div class="inputs">
+            <vx-form-field *ngFor="let round of model.payoutModelRounds; let i = index;">
+                <input vxFormField [name]="round.description" [(appNumber)]="round.eliminatedPayoutAmount" ngModel
+                       #input
+                       [disabled]="!editable"
+                       [appMask]="{mask: moneyMask}" [label]="round.description"
+                       (paste)="onPaste($event, i)" min="0"
+                       (focus)="handleInputFocus()" required>
+
+                <span vxSuffix *ngIf="round.eliminatedPayoutAmount" class="totalAmount" (click)="input.focus()">
+                    ${{round.eliminatedPayoutAmount * round.eliminatedPlayerCount | number}} Total
+                </span>
+            </vx-form-field>
+        </div>
+        <div class="mTop15" *ngIf="model.basePlayerCount">
+            <b>Total Saves: </b> {{numSaves | number}}
+        </div>
+    </div>
+
+    <div *ngIf="loading" class="textCenter">
+        <vx-spinner></vx-spinner>
+    </div>
+</form>

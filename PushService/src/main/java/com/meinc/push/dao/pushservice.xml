@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.meinc.push.dao.IPushServiceDaoMapper">
+    
+    <resultMap id="tokenMap" type="token">
+    	<id property="tokenId" column="token_id" />
+        <result property="subscriberId" column="subscriber_id" />
+        <result property="deviceUuid" column="device_uuid" />
+        <result property="deviceType" column="device_type" />
+        <result property="appBundleId" column="app_bundle_id" />
+        <result property="deviceToken" column="device_token" />
+        <result property="lastRegistration" column="last_registration" />
+        <result property="deviceActive" column="device_active" />
+    </resultMap>
+    
+    <insert id="deleteToken" parameterType="token">
+        <![CDATA[
+        	DELETE FROM push.token_subscriber WHERE device_token=#{deviceToken}
+        ]]>
+    </insert>
+    
+    <delete id="deleteUsingDeviceToken" parameterType="string">
+        DELETE FROM push.token_subscriber WHERE device_token=#{value}
+    </delete>
+    
+    <insert id="insertToken" parameterType="token">
+        <![CDATA[
+            INSERT INTO push.token_subscriber (subscriber_id, app_bundle_id, device_uuid, device_token, device_type, last_registration, device_active)
+                VALUES (#{subscriberId}, #{appBundleId}, #{deviceUuid}, #{deviceToken}, #{deviceType}, NOW(), #{deviceActive})
+                ON DUPLICATE KEY UPDATE
+                    subscriber_id = #{subscriberId},
+                    app_bundle_id = #{appBundleId},
+                    device_uuid = #{deviceUuid},
+                    last_registration = NOW(),
+                    device_active = #{deviceActive},
+                    device_token = #{deviceToken},
+                    device_type = #{deviceType}
+        ]]>
+    </insert>
+    
+    <select id="getSubscriberToken" parameterType="token" resultMap="tokenMap">
+        SELECT * from push.token_subscriber
+         WHERE subscriber_id = #{subscriberId} AND
+               device_token = #{deviceToken} AND
+               device_type = #{deviceType}
+    </select>
+    
+    <select id="getAllActiveSubscriberTokens" parameterType="int" resultMap="tokenMap">
+        SELECT * from push.token_subscriber
+         WHERE subscriber_id = #{value}
+           AND device_active = 1
+    </select>
+    
+    <select id="getTokensBySubscriberIdAndDeviceUuid" parameterType="map" resultMap="tokenMap">
+        SELECT * from push.token_subscriber
+         WHERE device_uuid = #{deviceUuid} AND
+               subscriber_id = #{subscriberId}
+    </select>
+    
+    <delete id="removeTokensForSubscriberIdAndDeviceUuid" parameterType="map">
+        DELETE from push.token_subscriber
+         WHERE device_uuid = #{deviceUuid} AND
+               subscriber_id = #{subscriberId}
+    </delete>
+    
+    <delete id="removeTokensForDeviceUuidExceptForThisSubscriber" parameterType="map">
+    <![CDATA[
+		delete from push.token_subscriber
+		where device_uuid = #{deviceUuid} and subscriber_id <> #{subscriberId}
+	]]>
+    </delete>
+    
+    <delete id="removeTokensForDeviceUuid" parameterType="string">
+		delete from push.token_subscriber
+		where device_uuid = #{value}
+    </delete>
+    
+    <select id="getTokensForDeviceOrToken" parameterType="map" resultMap="tokenMap">
+    	select * from push.token_subscriber
+    	where device_uuid = #{deviceUuid} or device_token = #{deviceToken}
+    </select>
+    
+    <select id="getTokensForSubscriber" parameterType="map" resultMap="tokenMap">
+        SELECT * from push.token_subscriber
+         WHERE subscriber_id = #{subscriberId}
+           AND device_type = #{deviceType}
+           AND device_active = 1
+    </select>
+    
+    <select id="getTokensForSubscriberAndBundleIds" parameterType="map" resultMap="tokenMap">
+        SELECT * from push.token_subscriber
+         WHERE subscriber_id = #{subscriberId}
+           AND device_type = #{deviceType}
+           AND app_bundle_id IN
+           <foreach item="item" index="index" collection="bundleIds" open="(" separator="," close=")">#{item}</foreach>
+           AND device_active = 1
+    </select>
+    
+    <select id="getTokensForSubscriberList" parameterType="map" resultMap="tokenMap">
+        SELECT *
+          FROM push.token_subscriber
+         WHERE subscriber_id IN
+            <foreach item="item" index="index" collection="subscriberIds" open="(" separator="," close=")">#{item}</foreach>
+            AND device_active = 1 AND device_type = #{deviceType}
+    </select>
+    
+    <select id="getTokensForSubscriberListAndBundleId" parameterType="map" resultMap="tokenMap">
+        SELECT *
+          FROM push.token_subscriber
+         WHERE subscriber_id IN
+            <foreach item="item" index="index" collection="subscriberIds" open="(" separator="," close=")">#{item}</foreach>
+            AND app_bundle_id = #{appBundleId}
+            AND device_active = 1 AND device_type = #{deviceType}
+    </select>
+    
+    <select id="getTokensForSubscriberListAndBundleIdList" parameterType="map" resultMap="tokenMap">
+        SELECT *
+          FROM push.token_subscriber
+         WHERE subscriber_id IN
+            <foreach item="item" index="index" collection="subscriberIds" open="(" separator="," close=")">#{item}</foreach>
+           AND app_bundle_id IN
+           <foreach item="item" index="index" collection="bundleIds" open="(" separator="," close=")">#{item}</foreach>
+            AND device_active = 1 AND device_type = #{deviceType}
+    </select>
+    
+    <select id="getTokensForDeviceUuidList" parameterType="list" resultMap="tokenMap">
+        SELECT *
+          FROM push.token_subscriber
+         WHERE device_active = 1 AND
+               device_uuid IN
+               <foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item}</foreach>
+    </select>
+    
+    <select id="getToken" parameterType="string" resultMap="tokenMap">
+        SELECT *
+          FROM push.token_subscriber
+         WHERE device_token = #{value}
+    </select>
+    
+    <update id="setDeviceInactive" parameterType="string">
+        UPDATE push.token_subscriber
+           SET device_active = 0
+         WHERE device_token = #{value}
+    </update>
+
+    <select id="getC2dmAuthToken" parameterType="string" resultType="string">
+        SELECT auth_token
+          FROM push.c2dm_config
+         WHERE os_type = #{value}
+    </select>
+    
+    <insert id="insertc2dmAuthToken" parameterType="map">
+        INSERT INTO push.c2dm_config (os_type, auth_token, last_update_date) 
+        VALUES (#{osType}, #{authToken}, NOW())
+    </insert>
+    
+    <update id="upateC2dmAuthToken" parameterType="map">
+        UPDATE push.c2dm_config
+           SET auth_token = #{authToken}, last_update_date = NOW()
+         WHERE os_type = #{osType}
+    </update>
+    
+    <select id="getSubscriberIdsByType" parameterType="string" resultType="long">
+        select distinct subscriber_id
+        from push.token_subscriber
+        where device_type = #{value}
+    </select>
+    
+    <update id="updateDeviceToken" parameterType="map">
+        UPDATE push.token_subscriber
+           SET device_token = #{newDeviceToken}
+         WHERE device_token = #{oldDeviceToken}
+    </update>
+    
+    <update id="updateToken" parameterType="token">
+    	UPDATE push.token_subscriber
+    	   SET subscriber_id = #{subscriberId},
+               app_bundle_id = #{appBundleId},
+               device_uuid = #{deviceUuid},
+               last_registration = NOW(),
+               device_active = #{deviceActive},
+               device_token = #{deviceToken},
+               device_type = #{deviceType}
+         WHERE token_id = #{tokenId}
+    	   
+    </update>
+    
+    <delete id="removeToken" parameterType="int">
+    	DELETE from push.token_subscriber
+    	 WHERE token_id = #{value}
+    </delete>
+    
+    <select id="getSubscribersWithPushToken" resultType="long">
+        SELECT distinct(subscriber_id) FROM push.token_subscriber where device_active=1
+    </select>
+    
+<!--
+        
+    <cacheModel id="exclusiveAdsContextCache" type="LRU"> <flushInterval 
+        hours="12" /> <property name="size" value="100" /> <flushOnExecute statement="insertAd" 
+        /> <flushOnExecute statement="updateAdDestination" /> <flushOnExecute statement="deactivateChannel" 
+        /> <flushOnExecute statement="activateChannel" /> <flushOnExecute statement="updateChannel" 
+        /> <flushOnExecute statement="insertChannel" /> <flushOnExecute statement="deleteChannel" 
+        /> </cacheModel>
+    
+-->
+    
+</mapper>

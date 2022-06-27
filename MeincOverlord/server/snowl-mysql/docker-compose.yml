@@ -1,0 +1,6 @@
+version: '3'
+services:
+    shout-mysql:
+        image: scm.shoutgameplay.com:5000/snowl-mysql:1.0
+        build:
+            context: .

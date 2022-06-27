@@ -1,0 +1,26 @@
+.slider {
+    margin: 5px 15px 15px;
+    display: flex;
+    align-items: center;
+
+    vx-slider {
+        flex: 1;
+        max-width: 250px;
+    }
+}
+
+.sliderTitle {
+    font-weight: bold;
+}
+
+.loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0, .25);
+    padding-top: 15px;
+    text-align: center;
+    z-index: 100;
+}

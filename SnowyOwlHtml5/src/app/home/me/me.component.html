@@ -1,0 +1,66 @@
+<div class="top">
+    <div class="textCenter">
+        <div class="imgWrap" routerLink="/home/me/edit" *ngIf="loggedIn">
+            <img [default]="subscriber.photoUrl" alt=""
+                 src="./assets/profile.jpg">
+            <div class="icon-pencil"></div>
+        </div>
+        <div class="imgWrap" *ngIf="!loggedIn">
+            <img src="./assets/profile.jpg">
+        </div>
+        <!--<div class="full">Aidan Grant{{ subscriber.firstName }} {{ subscriber.lastName }}</div>-->
+        <div *ngIf="loggedIn">
+            <div class="email">{{ subscriber.email }}</div>
+            <div class="nick">"{{ subscriber.nickname }}"</div>
+        </div>
+        <div *ngIf="!loggedIn">
+            <div class="nick">"Anonymous"</div>
+            <div>
+                <button class="light" routerLink="/login">Log In</button>
+                <button class="light" routerLink="/login" fragment="signup">Sign Up</button>
+            </div>
+        </div>
+    </div>
+    <div class="tabs">
+        <div class="tab">
+            {{ subscriber.gamePlayers.length | number }}
+            <div>Games</div>
+        </div>
+        <div class="tab center pointer" routerLink="/home/me/edit" fragment="wallet" *ngIf="loggedIn">
+            <b class="textAccent">${{ subscriber.wallet | number }}</b>
+            <div>Wallet</div>
+        </div>
+        <div class="tab center" *ngIf="!loggedIn">
+            <b class="textAccent">$0</b>
+            <div>Wallet</div>
+        </div>
+        <div class="tab">
+            {{numWins | number}}
+            <div>Game Wins</div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="loadingSubscriberGames && loggedIn" class="textCenter mTop10">
+    <span class="icon-spinner"></span>
+</div>
+<ng-container *ngIf="!loadingSubscriberGames && !!subscriber.games.length && loggedIn">
+    <div class="past">Past Games:</div>
+    <div class="scroller">
+        <div class="game" *ngFor="let game of subscriber.games" (click)="gotoGame(game)">
+            <div class="title">{{game.gameNames | i18n}}</div>
+            <div class="gameImg" [default]="game.gamePhotoUrl" backgroundImage="assets/img/confetti.jpg"></div>
+            <div class="categories">
+                Categories:
+                <span *ngFor="let category of game.categoryIds; let last= last;">
+                    {{ category | categoryName | async | i18n }}
+                    <span *ngIf="!last">,</span>
+            </span>
+            </div>
+            <div class="description">{{game.gameDescriptions | i18n}}</div>
+
+        </div>
+    </div>
+</ng-container>
+
+<div class="version" (click)="versionClick()" [class.hasNew]="hasNewChangelog">Version: {{version}}</div>

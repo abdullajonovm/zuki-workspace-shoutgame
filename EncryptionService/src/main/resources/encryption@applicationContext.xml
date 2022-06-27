@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                         classpath:/org/springframework/beans/factory/xml/spring-beans-3.0.xsd
+                         http://www.springframework.org/schema/tx
+                         classpath:/org/springframework/transaction/config/spring-tx-3.0.xsd">
+
+	<!-- ********************************************************************** -->
+	<!-- * JDBC SETTINGS ****************************************************** -->
+	<!-- ********************************************************************** -->
+
+	<!-- Configurer that replaces ${...} placeholders with values from properties files -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+        <value>classpath:/encryption@jdbc.properties</value>
+			</list>
+		</property>
+    <property name="properties">
+      <bean class="com.meinc.launcher.serverprops.ServerPropertyHolder" factory-method="getProps" />
+    </property>
+	</bean>
+
+  <bean id="dataSource" class="com.meinc.bonecp.BoneCpDataSource" factory-method="getInstance" />
+  
+    <!-- enable the configuration of transactional behavior based on annotations -->
+    <tx:annotation-driven transaction-manager="transactionManager" />
+  
+
+	<!-- Transaction manager for a single JDBC DataSource -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<property name="dataSource" ref="dataSource"/>
+	</bean>
+
+	<!-- SqlMap setup for iBATIS Database Layer -->
+	
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="configLocation" value="classpath:/encryption@sql-map-config.xml"/>
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    
+    <bean class="org.mybatis.spring.SqlSessionTemplate" id="sqlSessionTemplate">
+        <constructor-arg ref="sqlSessionFactory" />
+    </bean>
+	
+	<!-- ********************************************************************** -->
+	<!-- * DAO BEANS ********************************************************** -->
+	<!-- ********************************************************************** -->
+
+    <bean class="org.mybatis.spring.mapper.MapperFactoryBean" id="encryptionDaoMapper">
+        <property name="sqlSessionTemplate" ref="sqlSessionTemplate" />
+        <property name="mapperInterface" value="com.meinc.commons.encryption.IEncryptionDaoMapper" />
+    </bean>
+
+	<bean id="teamDao" class="com.meinc.commons.encryption.EncryptionDaoSqlMap">
+		<property name="mapper" ref="encryptionDaoMapper"/>
+	</bean>
+
+   <bean id="encryptionService" class="com.meinc.commons.encryption.EncryptionService">
+      <property name="teamDao" ref="teamDao"/>
+   </bean>
+
+</beans>

@@ -1,0 +1,6 @@
+version: '3'
+services:
+    snowl-collector:
+        image: scm.shoutgameplay.com:5000/snowl-collector:${DOCKER_IMAGE_TAG:-dev}
+        build:
+            context: .

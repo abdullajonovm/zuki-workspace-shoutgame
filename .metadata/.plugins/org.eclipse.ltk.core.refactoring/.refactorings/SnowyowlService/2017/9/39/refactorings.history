@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;GameHandler.java&apos; to &apos;tv.shout.snowyowl.collector.GameHandler.java&apos;&#x0A;- Original project: &apos;SnowyowlService&apos;&#x0A;- Destination element: &apos;tv.shout.snowyowl.collector.GameHandler.java&apos;&#x0A;- Original element: &apos;tv.shout.snowyowl.collector.GameHandler.java&apos;" description="Copy compilation unit" destination="/src\/main\/java&lt;tv.shout.snowyowl.collector{GameHandler.java" element1="/src\/main\/java&lt;tv.shout.snowyowl.collector{GameHandler.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1506704118619" units="1" version="1.0"/>
+</session>

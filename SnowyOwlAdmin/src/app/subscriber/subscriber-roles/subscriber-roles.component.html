@@ -1,0 +1,16 @@
+<form #form="ngForm" ngForm (submit)="save()">
+    <h1 vxDialogTitle>Change Subscriber's Roles</h1>
+    <div vxDialogContent>
+        <div class="loader" *ngIf="loading">
+            <vx-spinner></vx-spinner>
+        </div>
+        <vx-autocomplete [(ngModel)]="roles" [multiple]="true" name="roles" label="Roles" defaultText="No More Roles Found.">
+            <vx-item *ngFor="let role of allRoles" [value]="role" >{{role}}</vx-item>
+            <vx-item disabled value="SUPERUSER">SUPERUSER</vx-item>
+        </vx-autocomplete>
+    </div>
+    <div vxDialogActions vxFocusInitial>
+        <button vx-button type="submit" [disabled]="form.invalid || form.pristine">Save Roles</button>
+        <button vx-button type="button" (click)="dialog.close()">Cancel</button>
+    </div>
+</form>

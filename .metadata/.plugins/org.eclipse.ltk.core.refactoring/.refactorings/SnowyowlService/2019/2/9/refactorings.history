@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename method &apos;tv.shout.sm.test.QuestionStats.getQuestionStats()&apos; to &apos;calculateQuestionStats&apos;&#x0A;- Original project: &apos;SnowyowlService&apos;&#x0A;- Original element: &apos;tv.shout.sm.test.QuestionStats.getQuestionStats()&apos;&#x0A;- Renamed element: &apos;tv.shout.sm.test.QuestionStats.calculateQuestionStats()&apos;&#x0A;- Update references to refactored element" delegate="false" deprecate="false" description="Rename method &apos;getQuestionStats&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.method" input="/src\/test\/java&lt;tv.shout.sm.test{QuestionStats.java[QuestionStats~getQuestionStats" name="calculateQuestionStats" references="true" stamp="1551113302138" version="1.0"/>
+</session>

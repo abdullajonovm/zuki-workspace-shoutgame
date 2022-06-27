@@ -1,0 +1,13 @@
+<form class="container" (submit)="login()">
+    <div class="title">Login</div>
+
+    <vx-form-field>
+        <input vxFormField label="Username" [(ngModel)]="username" name="username" type="email" required>
+    </vx-form-field>
+
+    <vx-form-field class="password">
+        <input vxFormField label="Password" [(ngModel)]="password" name="password" type="password" required>
+    </vx-form-field>
+
+    <button vx-button type="submit" [disabled]="!username || !password">Login</button>
+</form>

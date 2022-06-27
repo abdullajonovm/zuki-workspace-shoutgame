@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+    <!-- ********************************************************************** -->
+    <!-- * JDBC SETTINGS ****************************************************** -->
+    <!-- ********************************************************************** -->
+
+    <!-- Configurer that replaces ${...} placeholders with values from properties 
+        files -->
+    <bean id="propertyConfigurer"
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:/notificationservice@jdbc.properties</value>
+            </list>
+        </property>
+        <property name="properties">
+            <bean class="com.meinc.launcher.serverprops.ServerPropertyHolder"
+                factory-method="getProps" />
+        </property>
+    </bean>
+
+  <bean id="dataSource" class="com.meinc.bonecp.BoneCpDataSource" factory-method="getInstance" />
+
+    <!-- Transaction manager for a single JDBC DataSource -->
+    <bean id="transactionManager"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <!-- SqlMap setup for iBATIS Database Layer -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="configLocation" value="classpath:/notificationservice@sql-map-config.xml"/>
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    
+    <bean class="org.mybatis.spring.SqlSessionTemplate" id="sqlSessionTemplate">
+        <constructor-arg ref="sqlSessionFactory" />
+    </bean>
+    
+    <!-- - A parent bean definition which is a base definition for transaction 
+        proxies. - It's marked as abstract, since it's not supposed to be instantiated 
+        itself. - We set shared transaction attributes here, following our naming 
+        patterns. - The attributes can still be overridden in child bean definitions. -->
+    <bean id="baseTransactionProxy"
+        class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"
+        abstract="true">
+        <property name="transactionManager">
+            <ref bean="transactionManager" />
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="*">PROPAGATION_NESTED</prop> <!-- ,readOnly -->
+            </props>
+        </property>
+    </bean>
+
+    <!-- <bean name="commons"
+          class="com.meinc.commons.PhoenixCommonsFactory"
+          factory-method="getInstance">
+    </bean> -->
+
+	<bean id="identityService" class="clientproxy.identityservice.IdentityServiceClientProxy" />
+    <bean id="pushService" class="com.meinc.notification.service.DynamicServicesFactory" factory-method="pushServiceFactory" />
+
+    <bean id="notificationServiceProxy" parent="baseTransactionProxy">
+        <property name="target">
+            <ref bean="notificationService"></ref>
+        </property>
+    </bean>
+    
+    <bean class="org.mybatis.spring.mapper.MapperFactoryBean" id="notificationDaoMapper">
+        <property name="sqlSessionTemplate" ref="sqlSessionTemplate" />
+        <property name="mapperInterface" value="com.meinc.notification.dao.INotificationServiceDaoMapper" />
+    </bean>
+
+    <bean id="dao" class="com.meinc.notification.dao.NotificationServiceDaoSqlMap">
+        <property name="mapper" ref="notificationDaoMapper" />
+    </bean>
+    
+    <bean id="notificationService" class="com.meinc.notification.service.NotificationService">
+	    <!-- <property name="commons" ref="commons" /> -->
+	    <property name="identityService" ref="identityService" />
+        <property name="dao" ref="dao" />
+        <property name="pushService" ref="pushService" />
+    </bean>
+    
+</beans>

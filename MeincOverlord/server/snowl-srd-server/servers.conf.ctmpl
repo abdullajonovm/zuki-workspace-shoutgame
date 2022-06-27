@@ -1,0 +1,70 @@
+# Format:
+#     <Server Type 1>:
+#     <Tab><Server Name 1>:
+#     <Tab><Tab><Base URL>:
+#     <Tab><Tab><Optional Alternate Base URL>:
+#     <Tab><Server Name 2>:
+#         ...
+#     <Server Type 2>
+#         ...
+
+{{- define "++"}}
+    {{- $key := (print "++:" .)}}
+    {{- if scratch.Key $key}}
+        {{- scratch.Set $key (add 1 (scratch.Get $key))}}
+    {{- else}}
+        {{- scratch.Set $key 0}}
+    {{- end}}
+    {{- print (scratch.Get $key)}}
+{{- end}}
+
+{{- define "build-maps-for-service"}}
+    {{- $serviceName := .}}
+    {{- if not ((scratch.MapValues "service-names") | contains $serviceName)}}
+        {{- $i := executeTemplate "++" "i"}}
+        {{- scratch.MapSet "service-names" $i $serviceName}}
+        {{- range $_,$service := service $serviceName}}
+            {{- range $_,$tag := .Tags}}
+                {{- $j := executeTemplate "++" "j"}}
+                {{- scratch.MapSet (print "service-tags:" $service.Name) $j $tag}}
+            {{- end}}
+        {{- end}}
+    {{- end}}
+{{- end}}
+
+{{- range nodes}}
+    {{- with node .Node}}
+        {{- range .Services}}
+            {{- template "build-maps-for-service" .Service}}
+        {{- end}}
+    {{- end}}
+{{- end}}
+
+{{- scratch.Set "proxy-scheme" "http"}}
+{{- scratch.Set "proxy-port" (key "cluster/domain/port/http")}}
+{{- if keyExists "cluster/domain/ssl/cert"}}
+    {{- $clusterKeyName := key "cluster/domain/ssl/cert"}}
+    {{- if (keyExists (printf "ssl/cert/%s/pem/cert/value" $clusterKeyName)) | and (keyExists (printf "ssl/cert/%s/pem/key/value" $clusterKeyName))}}
+        {{- scratch.Set "proxy-scheme" "https"}}
+        {{- scratch.Set "proxy-port" (key "cluster/domain/port/https")}}
+    {{- end}}
+{{- end}}
+
+{{range scratch.MapValues "service-names"}}
+    {{- $serviceName := .}}
+    {{- range service $serviceName}}
+        {{- $nodeHostname := .Node}}
+        {{- $tags := scratch.MapValues (print "service-tags:" .Name)}}
+        {{- if ($tags | contains "http") or ($tags | contains "https")}}
+            {{- $serviceIdParts := $serviceName | split "--"}}
+            {{- if len $serviceIdParts | eq 2}}
+                {{- $serviceType := index $serviceIdParts 0}}
+                {{- $serviceIndex := index $serviceIdParts 1}}
+                {{- printf "%s:\n" $serviceType}}
+                {{- printf "\t%s:\n" $serviceName}}
+                {{- printf "\t\t%s://%s--%s.%s:%s\n" (scratch.Get "proxy-scheme") $serviceName $nodeHostname (key "cluster/domain") (scratch.Get "proxy-port")}}
+            {{- end}}
+        {{- end}}
+        {{- scratch.Set (print "service-tags:" $serviceName) ""}}
+    {{- end}}
+{{- end}}

@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<appender name="android_purchase" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${mrsoa.home}/logs/android_purchase.log"/>
+		<param name="Threshold" value="debug"/>
+		<param name="MaxFileSize" value="50MB"/>
+		<param name="MaxBackupIndex" value="100"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{MM/dd/yyyy HH:mm:ss:SSS} %-5p [%c{1}] %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="stdout_info" class="org.apache.log4j.ConsoleAppender">
+		<param name="Threshold" value="info"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{MM/dd/yyyy HH:mm:ss:SSS} %-5p [%c{1}] %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="meinc_logfile_info" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${mrsoa.home}/logs/meinc.log"/>
+		<param name="Threshold" value="info"/>
+		<param name="MaxFileSize" value="50MB"/>
+		<param name="MaxBackupIndex" value="100"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{MM/dd/yyyy HH:mm:ss:SSS} %-5p [%c{1}] %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="meinc_debug_logfile_debug" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${mrsoa.home}/logs/meinc_debug.log"/>
+		<param name="Threshold" value="debug"/>
+		<param name="MaxFileSize" value="50MB"/>
+		<param name="MaxBackupIndex" value="100"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{MM/dd/yyyy HH:mm:ss:SSS} %-5p [%c{1}] %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="sm_sub_events" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${mrsoa.home}/logs/sm_sub_events.log"/>
+		<param name="Threshold" value="debug"/>
+		<param name="MaxFileSize" value="50MB"/>
+		<param name="MaxBackupIndex" value="10"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{MM/dd/yyyy HH:mm:ss:SSS} %-5p [%c{1}] %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="trigger_logfile" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${mrsoa.home}/logs/trigger.log"/>
+		<param name="Threshold" value="info"/>
+		<param name="MaxFileSize" value="50MB"/>
+		<param name="MaxBackupIndex" value="100"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{MM/dd/yyyy HH:mm:ss:SSS} %-5p [%c{1}] %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="get_leaderboard_debug" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${mrsoa.home}/logs/get_leaderboard.log"/>
+		<param name="Threshold" value="debug"/>
+		<param name="MaxFileSize" value="50MB"/>
+		<param name="MaxBackupIndex" value="100"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{MM/dd/yyyy HH:mm:ss:SSS} %-5p [%c{1}] %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="score_log" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${mrsoa.home}/logs/score.log"/>
+		<param name="Threshold" value="debug"/>
+		<param name="MaxFileSize" value="50MB"/>
+		<param name="MaxBackupIndex" value="100"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{MM/dd/yyyy HH:mm:ss:SSS} %-5p [%c{1}] %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="meinc_debug_logfile_info" class="com.sco.log4j.tools.appender.ChainAppender">
+		<param name="Threshold" value="info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+	</appender>
+
+	<appender name="meinc_mrsoa_logfile_debug" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${mrsoa.home}/logs/meinc_mrsoa.log"/>
+		<param name="Threshold" value="debug"/>
+		<param name="MaxFileSize" value="50MB"/>
+		<param name="MaxBackupIndex" value="100"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{MM/dd/yyyy HH:mm:ss:SSS} %-5p [%c{1}] %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="meinc_mrsoa_logfile_info" class="com.sco.log4j.tools.appender.ChainAppender">
+		<param name="Threshold" value="info"/>
+		<appender-ref ref="meinc_mrsoa_logfile_debug"/>
+	</appender>
+
+	<appender name="sql_logfile_debug" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${mrsoa.home}/logs/sql.log"/>
+		<param name="Threshold" value="debug"/>
+		<param name="MaxFileSize" value="100MB"/>
+		<param name="MaxBackupIndex" value="2"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{MM/dd/yyyy HH:mm:ss:SSS} %-5p [%c{1}] %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="mybatis_logfile" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${mrsoa.home}/logs/mybatis.log"/>
+		<param name="Threshold" value="debug"/>
+		<param name="MaxFileSize" value="100MB"/>
+		<param name="MaxBackupIndex" value="2"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{MM/dd/yyyy HH:mm:ss:SSS} %-5p [%c{1}] %m%n"/>
+		</layout>
+	</appender>
+
+        <appender name="jetty_logfile_debug" class="org.apache.log4j.RollingFileAppender">
+                <param name="File" value="${mrsoa.home}/logs/jetty.log"/>
+                <param name="Threshold" value="debug"/>
+                <param name="MaxFileSize" value="50MB"/>
+                <param name="MaxBackupIndex" value="100"/>
+                <layout class="org.apache.log4j.PatternLayout">
+                        <param name="ConversionPattern" value="%d{MM/dd/yyyy HH:mm:ss:SSS} %-5p [%c{1}] %m%n"/>
+                </layout>
+        </appender>
+
+        <appender name="hazelcast_logfile_debug" class="org.apache.log4j.RollingFileAppender">
+                <param name="File" value="${mrsoa.home}/logs/hazelcast.log"/>
+                <param name="Threshold" value="debug"/>
+                <param name="MaxFileSize" value="5MB"/>
+                <param name="MaxBackupIndex" value="100"/>
+                <layout class="org.apache.log4j.PatternLayout">
+                        <param name="ConversionPattern" value="%d{MM/dd/yyyy HH:mm:ss:SSS} %-5p [%c{1}] %m%n"/>
+                </layout>
+        </appender>
+
+        <appender name="admin_logfile_debug" class="org.apache.log4j.RollingFileAppender">
+                <param name="File" value="${mrsoa.home}/logs/admin.log"/>
+                <param name="Threshold" value="debug"/>
+                <param name="MaxFileSize" value="50MB"/>
+                <param name="MaxBackupIndex" value="100"/>
+                <layout class="org.apache.log4j.PatternLayout">
+                        <param name="ConversionPattern" value="%d{MM/dd/yyyy HH:mm:ss:SSS} %-5p [%c{1}] %m%n"/>
+                </layout>
+        </appender>
+        
+	<appender name="message_bus" class="org.apache.log4j.RollingFileAppender">
+                <param name="File" value="${mrsoa.home}/logs/messagebus.log"/>
+		<param name="Threshold" value="debug"/>
+		<param name="MaxFileSize" value="100MB"/>
+		<param name="MaxBackupIndex" value="2"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{MM/dd/yyyy HH:mm:ss:SSS} %-5p [%c{1}] %m%n"/>
+		</layout>
+	</appender>
+
+        <logger name="messagebus" additivity="false">
+                <level value="debug"/>
+                <appender-ref ref="message_bus"/>
+        </logger>
+
+        <logger name="AndroidPurchase" additivity="false">
+                <level value="debug"/>
+                <appender-ref ref="android_purchase"/>
+        </logger>
+
+        <logger name="getObjectByInternalId" additivity="false">
+                <level value="info"/>
+                <appender-ref ref="meinc_debug_logfile_debug"/>
+        </logger>
+
+        <logger name="updateObject" additivity="false">
+                <level value="info"/>
+                <appender-ref ref="meinc_debug_logfile_debug"/>
+        </logger>
+
+        <logger name="com.hazelcast" additivity="false">
+                <level value="info"/>
+                <appender-ref ref="hazelcast_logfile_debug"/>
+        </logger>
+
+        <logger name="NodeMulticastListener" additivity="false">
+                <level value="warn"/>
+                <appender-ref ref="hazelcast_logfile_debug"/>
+        </logger>
+
+	<logger name="com.meinc.nosql" additivity="false">
+		<level value="debug"/>
+		<appender-ref ref="sql_logfile_debug"/>
+	</logger>
+
+	<!-- Log Shout2 events -->
+	<logger name="subeventlogger" additivity="false">
+		<level value="debug"/>
+		<appender-ref ref="sm_sub_events"/>
+	</logger>
+	<logger name="com.meinc.trigger" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="trigger_logfile"/>
+	</logger>
+	<logger name="shout2" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+	</logger>
+	<logger name="getLeaderboardLogger" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="get_leaderboard_debug"/>
+	</logger>
+	<logger name="scoreLog" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="score_log"/>
+	</logger>
+	<!-- Log Me Inc events to all appenders to give context to all logs -->
+	<logger name="com.meinc" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_info"/>
+	</logger>
+	<logger name="com.virnetx" additivity="false">
+		<level value="debug"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_info"/>
+	</logger>
+	<logger name="com.meinc.http" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_info"/>
+	</logger>
+	<logger name="com.meinc.gameplay.service" additivity="false">
+		<level value="debug"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_info"/>
+	</logger>
+	<logger name="com.meinc.notification.service" additivity="false">
+		<level value="debug"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_info"/>
+	</logger>
+	<logger name="com.meinc.gameplay.metrics" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_info"/>
+	</logger>
+	<logger name="com.meinc.gameplay.powerup" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_info"/>
+	</logger>
+	<logger name="com.meinc.tools" additivity="false">
+		<level value="debug"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_info"/>
+	</logger>
+	<logger name="com.meinc.analytics" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_info"/>
+	</logger>
+	<logger name="com.meinc.store" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_info"/>
+	</logger>
+	<!--<logger name="com.meinc.gameplay.cchallenge" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_info"/>
+	</logger>-->
+	<logger name="com.meinc.gameplay.web" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_info"/>
+	</logger>
+	<logger name="com.meinc.gameplay.score" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_info"/>
+	</logger>
+	<logger name="com.meinc.gameplay.trigger" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_info"/>
+	</logger>
+	<logger name="com.meinc.gameplay.wds" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_info"/>
+	</logger>
+	<logger name="com.meinc.gameplay" additivity="false">
+		<level value="debug"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_info"/>
+	</logger>
+	<logger name="com.meinc.push" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_info"/>
+	</logger>
+	<logger name="com.meinc.deal" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_info"/>
+	</logger>
+	<logger name="com.meinc.identity" additivity="false">
+		<level value="debug"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_info"/>
+	</logger>
+	<logger name="tv.shout.snowyowl" additivity="false">
+		<level value="debug"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_info"/>
+	</logger>
+	<logger name="tv.shout.snowyowl.engine" additivity="false">
+		<level value="debug"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_info"/>
+	</logger>
+	<logger name="com.meinc.facebook" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_info"/>
+	</logger>
+	<logger name="com.meinc.community" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_info"/>
+	</logger>
+	<logger name="com.meinc.gameplay.cchallenge" additivity="false">
+		<level value="debug"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_info"/>
+	</logger>
+        <logger name="com.meinc.gameplay.media" additivity="false">
+                <level value="trace"/>
+                <appender-ref ref="stdout_info"/>
+                <appender-ref ref="meinc_logfile_info"/>
+                <appender-ref ref="meinc_debug_logfile_debug"/>
+                <appender-ref ref="meinc_mrsoa_logfile_info"/>
+        </logger>
+	<logger name="com.meinc.commons.postoffice" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_info"/>
+	</logger>
+	<!-- Log MrSOA adaptor layer events-->
+	<logger name="com.meinc.mrsoa" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="meinc_mrsoa_logfile_debug"/>
+	</logger>
+        <logger name="com.meinc.mrsoa.distdata" additivity="false">
+                <level value="info"/>
+                <appender-ref ref="stdout_info"/>
+                <appender-ref ref="meinc_logfile_info"/>
+                <appender-ref ref="meinc_debug_logfile_debug" />
+                <appender-ref ref="meinc_mrsoa_logfile_info" />
+        </logger>
+	<logger name="com.meinc.mrsoa.distdata.visor" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug" />
+		<appender-ref ref="meinc_mrsoa_logfile_info" />
+	</logger>
+	<logger name="com.meinc.mrsoa.service" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_debug"/>
+	</logger>
+	<!-- Log Service Stub events to all appenders to give context to all logs -->
+	<logger name="com.meinc.mrsoa.service.stubs" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_info"/>
+		<appender-ref ref="meinc_mrsoa_logfile_debug"/>
+	</logger>
+	<logger name="com.meinc.mrsoa.net.osgi" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_debug"/>
+		<appender-ref ref="meinc_mrsoa_logfile_debug"/>
+	</logger>
+
+        <logger name="org.eclipse.jetty" additivity="false">
+                <level value="info"/>
+                <appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_info"/>
+                <appender-ref ref="jetty_logfile_debug"/>
+        </logger>
+        <logger name="org.eclipse.jetty.io.nio" additivity="false">
+                <level value="error"/>
+                <appender-ref ref="stdout_info"/>
+                <appender-ref ref="meinc_logfile_info"/>
+                <appender-ref ref="meinc_debug_logfile_info"/>
+                <appender-ref ref="jetty_logfile_debug"/>
+        </logger>
+        <logger name="com.meinc.jetty" additivity="false">
+                <level value="info"/>
+                <appender-ref ref="jetty_logfile_debug"/>
+        </logger>
+
+        <logger name="com.amazonaws.http" additivity="false">
+                <level value="warn"/>
+                <appender-ref ref="meinc_logfile_info"/>
+                <appender-ref ref="meinc_debug_logfile_debug"/>
+        </logger>
+	<logger name="com.amazonaws.request" additivity="false">
+		<level value="warn"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_info"/>
+	</logger>
+
+<!--
+ jdbc.sqlonly     Logs only SQL. SQL executed within a prepared statement is
+                  automatically shown with it's bind arguments replaced with
+                  the data bound at that position, for greatly increased
+                  readability.
+ jdbc.sqltiming   Logs the SQL, post-execution, including timing statistics on
+                  how long the SQL took to execute.
+ jdbc.audit       Logs ALL JDBC calls except for ResultSets. This is a very
+                  voluminous output, and is not normally needed unless
+                  tracking down a specific JDBC problem.
+ jdbc.resultset   Even more voluminous, because all calls to ResultSet objects
+                  are logged.
+ jdbc.connection  Logs connection open and close events as well as dumping all
+                  open connection numbers. This is very useful for hunting
+                  down connection leak problems.
+ DEBUG  Includes the class name and line number (if available) at which the SQL
+        was executed. Use DEBUG level with extra care, as this imposes an
+        additional performance penalty when in use.
+ INFO   Includes the SQL (or other information as applicable.)
+ ERROR  Will show the stack traces in the log output when SQLExceptions occur.  -->
+        <logger name="jdbc.sqlonly" additivity="false">
+                <level value="off"/>
+                <appender-ref ref="sql_logfile_debug"/>
+        </logger>
+        <logger name="jdbc.sqltiming" additivity="false">
+                <level value="info"/>
+                <appender-ref ref="sql_logfile_debug"/>
+        </logger>
+        <logger name="jdbc.audit" additivity="false">
+                <level value="off"/>
+                <appender-ref ref="sql_logfile_debug"/>
+        </logger>
+        <logger name="jdbc.resultset" additivity="false">
+                <level value="off"/>
+                <appender-ref ref="sql_logfile_debug"/>
+        </logger>
+        <logger name="jdbc.connection" additivity="false">
+                <level value="off"/>
+                <appender-ref ref="sql_logfile_debug"/>
+        </logger>
+        <logger name="com.meinc.jdbc" additivity="false">
+                <level value="info"/>
+                <appender-ref ref="sql_logfile_debug"/>
+        </logger>
+	<logger name="com.meinc.bonecp" additivity="false">
+                <level value="info"/>
+                <appender-ref ref="sql_logfile_debug"/>
+        </logger>
+
+	<logger name="com.virnetx.gabriel.sdns.dao.ISDNSDaoMapper" additivity="false">
+                <appender-ref ref="mybatis_logfile"/>
+        </logger>
+	<logger name="com.meinc.identity.dao.ISubscriberDaoMapper" additivity="false">
+                <appender-ref ref="mybatis_logfile"/>
+        </logger>
+	<logger name="com.meinc.vwallet.dao.IVirtualWalletServiceDaoMapper" additivity="false">
+                <appender-ref ref="mybatis_logfile"/>
+        </logger>
+	<logger name="com.meinc.store.dao.IStoreServiceDaoMapper" additivity="false">
+                <appender-ref ref="mybatis_logfile"/>
+        </logger>
+	<logger name="com.meinc.deal.dao.IDealServiceDaoMapper" additivity="false">
+                <appender-ref ref="mybatis_logfile"/>
+        </logger>
+	<logger name="com.meinc.gameplay.dao.IGamePlayServiceDaoMapper2" additivity="false">
+                <appender-ref ref="mybatis_logfile"/>
+        </logger>
+	<logger name="com.meinc.trigger.dao.ITriggerDaoMapper" additivity="false">
+                <appender-ref ref="mybatis_logfile"/>
+        </logger>
+	<logger name="com.meinc.gameplay.dao.IGamePlayServiceDaoMapper" additivity="false">
+                <appender-ref ref="mybatis_logfile"/>
+        </logger>
+	<logger name="com.meinc.gameplay.metrics.IMetricsServiceDaoMapper" additivity="false">
+                <appender-ref ref="mybatis_logfile"/>
+        </logger>
+	<logger name="com.meinc.gameplay.cchallenge.IChampionsChallengeDaoMapper" additivity="false">
+                <appender-ref ref="mybatis_logfile"/>
+        </logger>
+	<logger name="com.meinc.hosted.account.IAccountDaoMapper" additivity="false">
+                <appender-ref ref="mybatis_logfile"/>
+        </logger>
+	<logger name="com.meinc.notification.dao.INotificationServiceDaoMapper" additivity="false">
+                <appender-ref ref="mybatis_logfile"/>
+        </logger>
+	<logger name="com.meinc.gameplay.vipbox.IVipBoxDaoMapper" additivity="false">
+                <appender-ref ref="mybatis_logfile"/>
+        </logger>
+	<logger name="com.meinc.commons.team.IHostedTeamDaoMapper" additivity="false">
+                <appender-ref ref="mybatis_logfile"/>
+        </logger>
+	<logger name="com.meinc.mint2.dao.IMint2ServiceDaoMapper" additivity="false">
+                <appender-ref ref="mybatis_logfile"/>
+        </logger>
+	<logger name="com.meinc.push.dao.IPushServiceDaoMapper" additivity="false">
+                <appender-ref ref="mybatis_logfile"/>
+        </logger>
+	<logger name="com.meinc.gameplay.contest.IContestDaoMapper" additivity="false">
+                <appender-ref ref="mybatis_logfile"/>
+        </logger>
+	<logger name="com.meinc.webcollector.message.handler.IMessageHandlerDaoMapper" additivity="false">
+                <appender-ref ref="mybatis_logfile"/>
+        </logger>
+	<logger name="com.meinc.webcollector.message.handler.addanswer.IAddAnswerDaoMapper" additivity="false">
+                <appender-ref ref="mybatis_logfile"/>
+        </logger>
+        <logger name="com.meinc.gameplay.media.dao.IGameplayMediaDaoMapper" additivity="false">
+                <appender-ref ref="mybatis_logfile"/>
+        </logger>
+        <logger name="com.meinc.webdatastore.dao.IWebDataStoreDaoMapper" additivity="false">
+                <appender-ref ref="mybatis_logfile"/>
+        </logger>
+        <logger name="tv.shout.snowyowl.dao" additivity="false">
+                <appender-ref ref="mybatis_logfile"/>
+        </logger>
+        <logger name="tv.shout.sc.dao.IContestDaoMapper" additivity="false">
+                <appender-ref ref="mybatis_logfile"/>
+        </logger>
+
+	<logger name="com.meinc.gameplay.web.log" additivity="false">
+                <level value="info"/>
+                <appender-ref ref="meinc_debug_logfile_debug"/>
+                <appender-ref ref="meinc_mrsoa_logfile_debug"/>
+        </logger>
+
+	<logger name="com.meinc.webcollector" additivity="false">
+                <level value="info"/>
+                <appender-ref ref="meinc_logfile_info"/>
+                <appender-ref ref="meinc_debug_logfile_debug"/>
+                <appender-ref ref="meinc_mrsoa_logfile_debug"/>
+        </logger>
+	<logger name="com.meinc.webcollector.message" additivity="false">
+                <level value="debug"/>
+                <!--<appender-ref ref="meinc_logfile_info"/>-->
+                <!--<appender-ref ref="meinc_debug_logfile_debug"/>-->
+                <appender-ref ref="meinc_mrsoa_logfile_debug"/>
+        </logger>
+	<logger name="com.meinc.webcollector.service.WebCollectorJettyHandler" additivity="false">
+                <level value="debug"/>
+                <appender-ref ref="meinc_logfile_info"/>
+                <appender-ref ref="meinc_debug_logfile_debug"/>
+                <appender-ref ref="meinc_mrsoa_logfile_debug"/>
+        </logger>
+
+        <logger name="com.meinc.webdatastore" additivity="false">
+                <level value="info"/>
+                <appender-ref ref="meinc_logfile_info"/>
+                <appender-ref ref="meinc_debug_logfile_debug"/>
+                <appender-ref ref="meinc_mrsoa_logfile_debug"/>
+        </logger>
+
+        <logger name="admin" additivity="false">
+                <level value="info"/>
+                <appender-ref ref="admin_logfile_debug"/>
+        </logger>
+
+	<root>
+		<level value="trace"/>
+		<appender-ref ref="stdout_info"/>
+		<appender-ref ref="meinc_logfile_info"/>
+		<appender-ref ref="meinc_debug_logfile_info"/>
+	</root>
+
+</log4j:configuration>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.meinc.notification.dao.INotificationServiceDaoMapper">
+
+    <resultMap type="notificationCallback" id="callbackMap">
+        <id property="id" column="id" />
+        <result property="endpoint.serviceName" column="service_name" />
+        <result property="endpoint.namespace" column="namespace" />
+        <result property="endpoint.version" column="version" />
+        <result property="methodName" column="method_name" />
+        <result property="type" column="notification_type" />
+    </resultMap>
+    
+    <resultMap type="notification" id="notificationMap">
+        <id property="id" column="id" />
+        <result property="status" column="status" />
+        <result property="type" column="type" />
+        <result property="contextId" column="context_id" />
+        <result property="actionType" column="action_type" />
+        <result property="actionTaken" column="action_taken" />
+        <result property="message" column="message" />
+        <result property="description" column="description" />
+        <result property="sender" column="sender" />
+        <result property="recipient" column="recipient" />
+        <result property="payload" column="payload" />
+        <result property="extrasAsString" column="extras" />
+        <result property="created" column="created" />
+        <result property="lastUpdatedBy" column="last_updated_by" />
+        <result property="lastUpdated" column="last_updated" />
+    </resultMap>
+    
+    <resultMap type="notificationPref" id="prefMap">
+        <result property="prefType" column="pref_type" />
+        <result property="name" column="name" />
+        <result property="description" column="description" />
+        <result property="possibleValuesString" column="possible_values" />
+        <result property="subscriberId" column="subscriber_id" />
+        <result property="value" column="value" />
+        <result property="created" column="created" />
+        <result property="lastUpdated" column="last_updated" />
+    </resultMap>
+    
+    <insert id="addCallback" parameterType="notificationCallback">
+        <![CDATA[
+            INSERT INTO notification.`callback` (`namespace`, `service_name`, `version`, `method_name`, `notification_type`)
+            VALUES (#{endpoint.namespace}, #{endpoint.serviceName}, #{endpoint.version}, #{methodName}, #{type})
+        ]]>
+        <selectKey keyProperty="id" resultType="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    
+    <select id="getCallbackForEndpoint" parameterType="notificationCallback" resultMap="callbackMap">
+        <![CDATA[
+            SELECT * FROM notification.`callback`
+            WHERE service_name = #{endpoint.serviceName}
+            AND   namespace = #{endpoint.namespace}
+            AND   version = #{endpoint.version}
+            AND   notification_type = #{type}
+        ]]>
+    </select>
+    
+    <select id="getCallbacksForType" parameterType="string" resultMap="callbackMap">
+        <![CDATA[
+            SELECT * FROM notification.`callback`
+            WHERE notification_type = #{value}
+        ]]>
+    </select>
+    
+    <delete id="removeCallback" parameterType="notificationCallback">
+        <![CDATA[
+            DELETE FROM notification.`callback`
+            WHERE namespace = #{endpoint.namespace}
+            AND   service_name = #{endpoint.serviceName}
+            AND   version = #{endpoint.version}
+            AND   notification_type = #{type}
+        ]]>
+    </delete>
+    
+    <insert id="addNotification" parameterType="notification">
+        <![CDATA[
+            INSERT INTO notification.`notification` (`type`, `context_id`, `sender`, `recipient`, `status`, `message`,
+                `description`, `action_type`, `action_taken`, `payload`, `extras`, `created`, `last_updated_by`, `last_updated`)
+            VALUES (#{type}, #{contextId}, #{sender}, #{recipient}, #{status}, #{message},
+                #{description}, #{actionType}, #{actionTaken}, #{payload}, #{extrasAsString}, #{created}, #{lastUpdatedBy}, #{lastUpdated})
+        ]]>
+        <selectKey keyProperty="id" resultType="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    
+    <select id="getNotificationsByRecipient" parameterType="map" resultMap="notificationMap">
+            SELECT * from notification.`notification`
+            WHERE recipient = #{subscriberId}
+            <if test="status != null">AND status <![CDATA[=]]> #{status}</if>
+            <if test="startDate != null">AND created <![CDATA[>=]]> #{startDate}</if>
+            <if test="endDate != null">AND created <![CDATA[<=]]> #{endDate}</if>
+            ORDER BY created DESC
+            LIMIT 100
+    </select>
+    
+    <select id="getNotificationById" parameterType="int" resultMap="notificationMap">
+        <![CDATA[
+            SELECT * from notification.`notification`
+            WHERE id = #{value}
+        ]]>
+    </select>
+    
+    <update id="updateNotification" parameterType="notification">
+        <![CDATA[
+            UPDATE notification.`notification` SET
+                status = #{status},
+                action_taken = #{actionTaken},
+                last_updated_by = #{lastUpdatedBy},
+                last_updated = #{lastUpdated}
+            WHERE `id` = #{id}
+        ]]>
+    </update>
+    
+    <select id="getPrefsForSubscriber" parameterType="long" resultMap="prefMap">
+        <![CDATA[
+            SELECT * from notification.`pref` p, notification.`pref_types` t
+            WHERE p.subscriber_id = #{value}
+            AND t.id = p.pref_type
+        ]]>
+    </select>
+    
+    <select id="getPrefForSubscriberByType" parameterType="map" resultMap="prefMap">
+        <![CDATA[
+            SELECT * from notification.`pref` p, notification.`pref_types` t
+            WHERE p.subscriber_id = #{subscriberId}
+            AND p.pref_type = #{prefType}
+            AND t.id = p.pref_type
+        ]]>
+    </select>
+    
+    <insert id="setPrefForSubscriber" parameterType="notificationPref">
+        <![CDATA[
+            INSERT into notification.`pref` (pref_type, subscriber_id, `value`, created, last_updated)
+            VALUES (#{prefType}, #{subscriberId}, #{value}, #{created}, #{lastUpdated})
+            ON DUPLICATE KEY UPDATE `value` = #{value}, last_updated = #{lastUpdated}
+        ]]>
+    </insert>
+    
+    <select id="hasSubscriberBeenNotifiedOfLeaderboardTop50ForEvent" parameterType="map" resultType="boolean">
+    	select count(*)
+    	from notification.on_leaderboard_notified
+    	where subscriber_id = #{subscriberId} and event_id = #{eventId}
+    </select>
+    
+    <insert id="setSubscriberNotifiedOfLeaderboardTop50ForEvent" parameterType="map">
+    	insert into notification.on_leaderboard_notified (subscriber_id, event_id)
+    	values (#{subscriberId}, #{eventId})
+    </insert>
+    
+</mapper>

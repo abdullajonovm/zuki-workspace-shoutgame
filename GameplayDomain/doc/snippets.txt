@@ -1,0 +1,41 @@
+//TODO: debug BEGIN            
+            else if ("gtfl".equals(tags[0])) {
+                int leagueId = Integer.parseInt(tags[1]);
+                List<Team> teams = getTeamsForLeague(leagueId);
+                StringBuilder buf = new StringBuilder();
+                buf.append("Teams:");
+                for (Team team : teams) {
+                    buf.append(" '").append(team.getName()).append("'");
+                }
+                long queueId = System.currentTimeMillis();
+                _txtwireService.sendMessageToSubscriber(queueId, phone, buf.toString());
+                _txtwireService.doQueuedOperations(queueId);
+                return;
+            }
+            
+            else if ("gtm".equals(tags[0])) {
+                int teamId = Integer.parseInt(tags[1]);
+                List<TeamMetadata> metadata = getTeamMetadata(teamId);
+                StringBuilder buf = new StringBuilder();
+                buf.append("Metadata:");
+                for (TeamMetadata tm : metadata) {
+                    buf.append(tm.getName()).append(":").append(tm.getValue());
+                    buf.append(", ");
+                }
+                long queueId = System.currentTimeMillis();
+                _txtwireService.sendMessageToSubscriber(queueId, phone, buf.toString());
+                _txtwireService.doQueuedOperations(queueId);
+                return;
+            }
+            
+            else if ("gtsm".equals(tags[0])) {
+                int teamId = Integer.parseInt(tags[1]);
+                String metadataName = tags[2];
+                String metadata = getTeamSpecificMetadata(teamId, metadataName);
+                long queueId = System.currentTimeMillis();
+                _txtwireService.sendMessageToSubscriber(queueId, phone, "metadata " + metadataName + " = " + metadata);
+                _txtwireService.doQueuedOperations(queueId);
+                return;
+            }
+//TODO: debug END
+            

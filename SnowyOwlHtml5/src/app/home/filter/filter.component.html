@@ -1,0 +1,11 @@
+<span class="icon-filter" [vxDropdownTrigger]="drop"></span>
+<vx-dropdown #drop [autoClose]="false" (visibleChange)="handleVisibilityChange($event)">
+    <vx-item (onSelect)="toggleAllCategories()">
+        <vx-checkbox [checked]="allCategories">All Categories</vx-checkbox>
+    </vx-item>
+    <vx-item *ngFor="let category of categories" (onSelect)="toggleCategory(category)" [disabled]="allCategories">
+        <vx-checkbox [checked]="selectedCategories.indexOf(category) !== -1">
+            {{category.categoryName | i18n}}
+        </vx-checkbox>
+    </vx-item>
+</vx-dropdown>

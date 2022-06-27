@@ -1,0 +1,180 @@
+<form #form="ngForm">
+    <button type="submit" vx-button (click)="validate()" *ngIf="editable">Submit</button>
+
+    <div class="topInputs">
+        <vx-autocomplete label="Languages" multiple [disabled]="!editable"
+                         [(ngModel)]="game.allowableLanguageCodes" (ngModelChange)="refreshLanguages()" name="Languages"
+                         required search="false">
+            <vx-item value="en">English</vx-item>
+            <vx-item value="es">Spanish</vx-item>
+        </vx-autocomplete>
+
+        <vx-autocomplete label="Applications" [disabled]="!editable" multiple [(ngModel)]="game.allowableAppIds"
+                         name="Applications"
+                         required search="false">
+            <vx-item [value]="1">Shout</vx-item>
+            <vx-item [value]="5">Tipping Point</vx-item>
+            <vx-item [value]="6">Vote</vx-item>
+            <vx-item [value]="7">Shout Trivia</vx-item>
+        </vx-autocomplete>
+    </div>
+
+    <vx-tabs>
+        <vx-tab label="Overview">
+            <vx-tabs>
+                <vx-tab *ngFor="let code of game.allowableLanguageCodes;" [label]="code | languageName">
+                    <div class="inputs">
+                        <vx-form-field class="gameName">
+                            <input vxFormField [(ngModel)]="game.gameNames[code]" label="Game Name"
+                                   [name]="(code | languageName) + ' Game Name'" [disabled]="!editable"
+                                   required>
+                        </vx-form-field>
+                        <vx-form-field class="gameDescription">
+                            <textarea vxFormField [(ngModel)]="game.gameDescriptions[code]" [disabled]="!editable"
+                                      [name]="(code | languageName) + ' Game Description'"
+                                      label="Game Description" required></textarea>
+                        </vx-form-field>
+                        <vx-form-field>
+                            <input vxFormField [(ngModel)]="game.fetchingActivityTitles[code]" label="Fetching Title"
+                                   [name]="(code | languageName) + ' Fetching Title'" required [disabled]="!editable">
+                        </vx-form-field>
+                        <vx-form-field>
+                            <input vxFormField [(ngModel)]="game.submittingActivityTitles[code]"
+                                   label="Submitting Title" [disabled]="!editable"
+                                   [name]="(code | languageName) + ' Submitting Title'" required>
+                        </vx-form-field>
+                    </div>
+                </vx-tab>
+            </vx-tabs>
+
+            <app-image-upload (blobChange)="imageBlob = $event" [disabled]="!editable"
+                              [image]="game.gamePhotoUrl"></app-image-upload>
+        </vx-tab>
+
+        <vx-tab label="Details">
+            <div class="inputs">
+                <vx-form-field>
+                    <input vxFormField label="Pool Start Date" required
+                           [disabled]="!editable || roundsForm.numPoolRounds === 0"
+                           [(appDate)]="expectedStartDateForPoolPlay" ngModel name="Pool Start Date"
+                           [appMask]="dateMask">
+                </vx-form-field>
+
+                <vx-form-field>
+                    <input vxFormField label="Tournament Start Date" [disabled]="!editable"
+                           [(appDate)]="expectedStartDateForBracketPlay" ngModel name="Tournament Start Date"
+                           [appMask]="dateMask" required
+                           appTooltip="Notifications will be sent at this time, then the grace period starts.">
+                </vx-form-field>
+
+                <vx-checkbox [(checked)]="game.autoStartPoolPlay">Auto Start Pool Play</vx-checkbox>
+                <vx-checkbox [(checked)]="game.autoStartBracketPlay">Auto Start Tournament</vx-checkbox>
+                <vx-form-field>
+                    <input vxFormField label="Tournament Grace Time" [(ngModel)]="bracketPlayCountdownMins"
+                           [appMask]="{mask: numberMaskMinutes}" required [min]="1"
+                           appTooltip="Grace time to allow players open the app after getting the Tournament Start notification. Min 1"
+                           [disabled]="!editable || !game.autoStartBracketPlay" name="Tournament Play Countdown">
+                </vx-form-field>
+
+                <vx-autocomplete [(ngModel)]="game.startingLivesCount" label="Starting Num Lives"
+                                 name="Starting Num Lives" [disabled]="!editable">
+                    <vx-item [value]="1">1</vx-item>
+                    <vx-item [disabled]="game.maxLivesCount < 2" [value]="2">2</vx-item>
+                    <vx-item [disabled]="game.maxLivesCount < 3" [value]="3">3</vx-item>
+                    <vx-item [disabled]="game.maxLivesCount < 4" [value]="4">4</vx-item>
+                    <vx-item [disabled]="game.maxLivesCount < 5" [value]="5">5</vx-item>
+                    <vx-item [disabled]="game.maxLivesCount < 6" [value]="6">6</vx-item>
+                    <vx-item [disabled]="game.maxLivesCount < 7" [value]="7">7</vx-item>
+                    <vx-item [disabled]="game.maxLivesCount < 8" [value]="8">8</vx-item>
+                    <vx-item [disabled]="game.maxLivesCount < 9" [value]="9">9</vx-item>
+                    <vx-item [disabled]="game.maxLivesCount < 10" [value]="10">10</vx-item>
+                </vx-autocomplete>
+                <vx-autocomplete [(ngModel)]="game.maxLivesCount" [disabled]="!editable" label="Max Num Lives"
+                                 name="Max Num Lives">
+                    <vx-item [disabled]="game.startingLivesCount > 2" [value]="2">2</vx-item>
+                    <vx-item [disabled]="game.startingLivesCount > 3" [value]="3">3</vx-item>
+                    <vx-item [disabled]="game.startingLivesCount > 4" [value]="4">4</vx-item>
+                    <vx-item [disabled]="game.startingLivesCount > 5" [value]="5">5</vx-item>
+                    <vx-item [disabled]="game.startingLivesCount > 6" [value]="6">6</vx-item>
+                    <vx-item [disabled]="game.startingLivesCount > 7" [value]="7">7</vx-item>
+                    <vx-item [disabled]="game.startingLivesCount > 8" [value]="8">8</vx-item>
+                    <vx-item [disabled]="game.startingLivesCount > 9" [value]="9">9</vx-item>
+                    <vx-item [disabled]="game.startingLivesCount > 10" [value]="10">10</vx-item>
+                </vx-autocomplete>
+
+                <vx-form-field>
+                    <input vxFormField ngModel [(appNumber)]="game.additionalLivesCost" [appMask]="{mask: moneyMask}" required
+                           label="Extra Life Cost" name="Extra Life Cost" [disabled]="!editable">
+                </vx-form-field>
+                <hr>
+                <!--<vx-form-field>-->
+                <!--<input vxFormField label="Num Bracket Lives" type="number" min="0"-->
+                <!--[(ngModel)]="game.bracketEliminationCount" [disabled]="!editable"-->
+                <!--appTooltip="(1=single elimination, 2=double elimination, etc)"-->
+                <!--appTooltip name="Num Bracket Lives" required>-->
+                <!--</vx-form-field>-->
+
+                <vx-autocomplete [(ngModel)]="payoutModelId" required label="Payout Model" name="Payout Model"
+                                 [disabled]="!editable">
+                    <vx-item *ngFor="let model of payoutModels" [value]="model.payoutModelId" >
+                        {{model.name}}
+                    </vx-item>
+                </vx-autocomplete>
+
+                <vx-form-field>
+                    <input vxFormField label="Minimum Payout Amount" min="0" [disabled]="!editable"
+                           [(appNumber)]="minimumPayoutAmount" [appMask]="{mask: moneyMaskNoDec}" ngModel name="Minimum Payout Amount" required>
+                </vx-form-field>
+
+                <vx-form-field>
+                    <input vxFormField label="Maximum Player Count" [(ngModel)]="maximumPlayerCount"
+                           [appMask]="{mask: numberMask}" [disabled]="!editable"
+                           name="Maximum Player Count" required min="2">
+                </vx-form-field>
+
+                <button vx-button (click)="generatePayoutTable()" type="button">Generate Payout Table</button>
+
+                <vx-checkbox [(checked)]="game.includeActivityAnswersBeforeScoring" [disabled]="!editable"
+                             appTooltip="For development use only.">
+                    Show Correct Answers Before Scoring Questions
+                </vx-checkbox>
+                <vx-checkbox (checkedChange)="game.gameType = $event ? 'TESTER' : 'DEFAULT'"
+                             [checked]="game.gameType === 'TESTER'" [disabled]="!editable"
+                             appTooltip="For subscribers with 'TESTER' role.">
+                    Test event
+                </vx-checkbox>
+                <vx-checkbox [(checked)]="game.speedUpBots" [disabled]="!editable"
+                             appTooltip="Uncheck to make bots simulate human play time">
+                    Speed up bots
+                </vx-checkbox>
+                <vx-checkbox [(checked)]="game.productionGame" [disabled]="!editable"
+                             appTooltip="Game uses real payouts, prevents employees from playing.">
+                    Production Game
+                </vx-checkbox>
+                <vx-checkbox [(checked)]="game.pairImmediately" [disabled]="!editable"
+                             appTooltip="Don't wait for a human in pool play, use a bot.">
+                    Pair Immediately
+                </vx-checkbox>
+                <vx-checkbox [(checked)]="game.privateGame" [disabled]="!editable"
+                             appTooltip="Require an invite code to play this game.">
+                    Private Game
+                </vx-checkbox>
+                <vx-checkbox [(checked)]="game.fillWithBots" [disabled]="!editable"
+                             appTooltip="Will fill the game up to the Max Player Count with bots">
+                    Fill With Bots
+                </vx-checkbox>
+            </div>
+        </vx-tab>
+        <vx-tab label="Rounds">
+            <app-rounds-form [editable]="editable" [categories]="categoryService.categories"></app-rounds-form>
+        </vx-tab>
+        <vx-tab label="Guide">
+            <app-game-guide [game]="game" [editable]="editable"></app-game-guide>
+        </vx-tab>
+    </vx-tabs>
+</form>
+
+<div *ngIf="loading" class="loading">
+    <h2>Loading Game...</h2>
+    <vx-spinner></vx-spinner>
+</div>

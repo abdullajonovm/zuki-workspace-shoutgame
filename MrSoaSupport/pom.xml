@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>mrsoa-support</artifactId>
+    <version>1.0</version>
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>meinc</groupId>
+        <artifactId>MeincOverlord-root</artifactId>
+        <version>3.0-mvnbuild</version>
+        <relativePath>../MeincOverlord/poms/parents/pom-root</relativePath>
+    </parent>
+
+    <properties>
+        <!-- <osgi.require.bundle>
+            meinc.webcollector-service;bundle-version=1.0,
+            osgi-bonecp;bundle-version=0.8,
+            osgi-spring;bundle-version=3.2.2.RELEASE
+        </osgi.require.bundle> -->
+        
+        <!-- <org.springframework.version>3.2.2.RELEASE</org.springframework.version> -->
+        <skipTests>true</skipTests>
+    </properties>
+
+    <dependencies>
+            <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.4.0</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.7.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.7.2</version>
+        </dependency>
+    
+       <!--  <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.8</version>
+            <scope>provided</scope>
+        </dependency> -->
+    
+        <!-- <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>osgi-bonecp</artifactId>
+            <version>0.8</version>
+            <scope>provided</scope>
+        </dependency> -->
+            
+        <!-- <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>org.springframework.jdbc</artifactId>
+            <version>${org.springframework.version}</version>
+            <scope>provided</scope>
+        </dependency> -->
+                    
+        <!-- <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>webcollector-service</artifactId>
+            <classifier>client</classifier>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency> -->
+    
+         <!-- <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>webdatastore-service</artifactId>
+            <classifier>client</classifier>
+            <version>1.0</version>
+        </dependency> -->
+    
+        <!-- <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>identity-service</artifactId>
+            <classifier>client</classifier>
+            <version>1.0</version>
+        </dependency> -->
+
+    </dependencies>
+</project>

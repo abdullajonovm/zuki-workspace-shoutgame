@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;RoundQuestionRetriever.java&apos; to &apos;SnowyowlService/src/test/java/tv.shout.so.question&apos;&#x0A;- Original project: &apos;SnowyowlService&apos;&#x0A;- Destination element: &apos;SnowyowlService/src/test/java/tv.shout.so.question&apos;&#x0A;- Original element: &apos;tv.shout.snowyowl.engine.RoundQuestionRetriever.java&apos;" description="Copy compilation unit" destination="/src\/test\/java&lt;tv.shout.so.question" element1="/src\/main\/java&lt;tv.shout.snowyowl.engine{RoundQuestionRetriever.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1519917438473" units="1" version="1.0"/>
+</session>

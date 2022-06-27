@@ -1,0 +1,6 @@
+1528214904054	Encapsulate field '_assignedPayoutsFromTop'
+1528215339238	Encapsulate field '_payoutType'
+1528215342007	Encapsulate field '_payoutAmount'
+1528219820821	Encapsulate field '_minimumPayoutAmount'
+1528300980087	Encapsulate field '_fillWithBots'
+1528302233661	Encapsulate field '_pairImmediately'

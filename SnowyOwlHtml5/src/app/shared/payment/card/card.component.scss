@@ -1,0 +1,40 @@
+
+input:not(.m0), select:not(.m0) {
+    margin-top: 10px;
+    margin-left: 5px;
+}
+
+.flex {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -5px;
+    :first-child {
+        flex-grow: 1;
+    }
+    :not(:first-child) {
+        flex: 1;
+    }
+}
+
+
+input[name="cvc"], input[name="exp-date"] {
+    width: 130px;
+}
+
+input[name="cardNumber"] {
+    background-size: 40px !important;
+    background-repeat: no-repeat !important;
+    background-position: right 6px center !important;
+    padding-right: 45px;
+}
+
+input[name="zip"] {
+    width: 100px;
+}
+
+
+vx-checkbox {
+    margin-top: 10px;
+    display: block;
+    margin-left: 5px;
+}

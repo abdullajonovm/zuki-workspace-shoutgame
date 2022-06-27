@@ -1,0 +1,58 @@
+#!/bin/sh
+set -e
+
+MRSOA_USER="mrsoa"
+MRSOA_GROUP="mrsoa"
+
+case "$1" in
+    configure)
+        if ! getent group "$MRSOA_GROUP" > /dev/null 2>&1 ; then
+            addgroup --system "$MRSOA_GROUP" --quiet
+        fi
+        if ! id $MRSOA_USER > /dev/null 2>&1 ; then
+            adduser --system --home /opt/meinc/mrsoa --no-create-home \
+                --ingroup "$MRSOA_GROUP" "$MRSOA_USER"
+        fi
+
+        chown -Rh $MRSOA_USER:$MRSOA_GROUP /opt/meinc
+
+        chown -Rh $MRSOA_USER:$MRSOA_GROUP /var/run/mrsoa
+        chmod 770 /var/run/mrsoa
+
+        chmod 755 /usr/local/bin/clean_logs.sh
+ 
+        # Authorize user to open privileged ports via authbind.
+        MRSOA_UID="`id -u $MRSOA_USER`"
+        if [ ! -f "/etc/authbind/byuid/$MRSOA_UID" ]; then
+            if [ ! -d "/etc/authbind/byuid" ]; then
+                    mkdir -p /etc/authbind/byuid
+                    chmod 755 /etc/authbind
+                    chmod 755 /etc/authbind/byuid
+            fi
+            echo '0.0.0.0/32:1,1023' >/etc/authbind/byuid/$MRSOA_UID
+            chown $MRSOA_USER:$MRSOA_GROUP /etc/authbind/byuid/$MRSOA_UID
+            chmod 700 /etc/authbind/byuid/$MRSOA_UID
+        fi
+
+        # Make sure mrsoa_java alias exists
+        JAVA_DIR="$(dirname $(readlink -f $(which java)))"
+        MRSOA_JAVA="$JAVA_DIR/mrsoa_java"
+        if [ ! -x "$MRSOA_JAVA" ]; then
+            if [ ! -d "$JAVA_DIR" -o ! -x "$JAVA_DIR/java" ]; then
+                echo "Could not find Java executable!" >&2
+                exit 1
+            fi
+            ln "$JAVA_DIR/java" "$MRSOA_JAVA"
+            if [ ! -x "$MRSOA_JAVA" ]; then
+                echo "Java does not exist at expected location $MRSOA_JAVA" >&2
+                exit 1
+            fi
+        fi
+    ;;
+esac
+
+if [ -x "/etc/init.d/mrsoa" ]; then
+    update-rc.d mrsoa defaults 91 09 >/dev/null
+    #invoke-rc.d mrsoa start || true
+fi
+

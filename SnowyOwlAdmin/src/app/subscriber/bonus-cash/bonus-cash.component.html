@@ -1,0 +1,13 @@
+<form #form="ngForm">
+    <h1 vxDialogTitle>{{type === 'bonus' ? 'Send Bonus Cash' : 'Add Sponsor Cash'}}</h1>
+    <div vxDialogContent>
+        <vx-form-field>
+            <input vxFormField [label]="type === 'bonus' ? 'Amount to Give Subscriber' : 'Amount to Give Sponsor'" [appMask]="{mask: numberMask}"
+                   [(ngModel)]="bonusAmount" required name="amount">
+        </vx-form-field>
+    </div>
+    <div vxDialogActions>
+        <button vx-button type="submit" [disabled]="form.invalid" (click)="send()">Send</button>
+        <button vx-button type="button" (click)="dialog.close()">Cancel</button>
+    </div>
+</form>

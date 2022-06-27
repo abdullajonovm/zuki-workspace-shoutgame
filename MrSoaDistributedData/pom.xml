@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>mrsoa-distributed-data</artifactId>
+    <version>1.0</version>
+    <packaging>osgi-bundle</packaging>
+
+    <parent>
+        <groupId>meinc</groupId>
+        <artifactId>MeincOverlord-osgi</artifactId>
+        <version>1.0-mvnbuild</version>
+        <relativePath>../MeincOverlord/poms/parents/pom-osgi</relativePath>
+    </parent>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>meinc</groupId>
+                <artifactId>service-assembler</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <osgi>
+                        <require>osgi-bonecp;bundle-version=0.8</require>
+                        <export>
+                            com.meinc.mrsoa.distdata.visor,
+                            com.meinc.mrsoa.distdata.simple
+                        </export>
+                    </osgi>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>meinc-launcher</artifactId>
+            <version>1.1-mvnbuild</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>meinc</groupId>
+            <artifactId>osgi-bonecp</artifactId>
+            <version>0.8</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+</project>

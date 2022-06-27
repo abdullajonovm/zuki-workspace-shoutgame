@@ -1,0 +1,26 @@
+1500562545571	Delete elements
+1500563253090	Rename resource 'sha256_test.py.~1~'
+1500563268538	Rename resource 'uuid_test.py.~1~'
+1500563291961	Rename resource 'test_sha256.py.~1~'
+1500563297646	Rename resource 'test_uuid.py.~1~'
+1500563318030	Rename resource 'srd_test.py.~1~'
+1500563329414	Rename resource 'sort_test.py.~1~'
+1500563350467	Rename resource 'login_test.py.~1~'
+1500563578900	Rename resource 'iso8601_test.py.~1~'
+1500563596618	Rename resource 'aes_test.py.~1~'
+1500565567078	Rename resource 'zz_test_fileio.py'
+1500601789322	Delete element
+1500727166252	Delete element
+1500740853497	Rename type 'Game'
+1500740856694	Rename type 'GamePlayer'
+1500740859789	Rename type 'Match'
+1500740865561	Rename type 'MatchPlayer'
+1500740872460	Rename type 'MatchQuestion'
+1500740875458	Rename type 'Question'
+1500740881138	Rename type 'QuestionAnswer'
+1500740885902	Rename type 'Round'
+1500740889359	Rename type 'RoundPlayer'
+1500740892125	Rename type 'SubscriberQuestionAnswer'
+1500740913246	Delete element
+1500740932179	Delete element
+1500740947043	Move compilation units

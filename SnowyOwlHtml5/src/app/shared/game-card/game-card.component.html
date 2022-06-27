@@ -1,0 +1,64 @@
+<div class="card">
+    <div class="header" (click)="onMoreInfo.emit()"><img src="assets/img/game-type.png">
+        <span class="gameName">{{ game.gameNames|i18n }}</span>
+        <span class="purse">{{'game.purse' | i18n:(game.payout | number)}}</span>
+    </div>
+    <div class="gameImg" (click)="onMoreInfo.emit()" [default]="game.gamePhotoUrl"
+         backgroundImage="assets/img/confetti.jpg"></div>
+    <div class="content">
+        <div class="description">{{ game.gameDescriptions | i18n }}</div>
+        <div class="buttons">
+            <button class="playNow" *ngIf="playNow" (click)="onPlayNow.emit()">{{ playNow }}</button>
+            <button class="light moreInfo" *ngIf="moreInfo && !game.hasNoPoolRounds" (click)="onMoreInfo.emit()">More
+                Info
+            </button>
+            <button class="playNow" *ngIf="game.hasNoPoolRounds && moreInfo" (click)="onMoreInfo.emit()">
+                Starts {{game.expectedStartDateForBracketPlay | shdate}}
+            </button>
+        </div>
+
+        <!--<div class="costToJoin">-->
+        <!--Price: ${{ game.costToJoin | number }}-->
+        <!--</div>-->
+    </div>
+    <table>
+        <tr>
+            <td colspan="3" class="categories">
+                <span class="small">{{ 'game.categories' | i18n }}: </span>
+                <span *ngFor="let category of game.categoryIds; let last= last;">
+                    {{ category | categoryName | async | i18n }}
+                    <span *ngIf="!last">,</span>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="small">Top Prize</div>
+                <div class="payout">${{ game.payoutLevels[0]?.val | number }}</div>
+            </td>
+            <td>
+                <div class="small">
+                    Ticket Price
+                </div>
+                ${{ game.costToJoin | number }}
+            </td>
+            <td>
+                <div class="small">
+                    Game Status
+                </div>
+                <div [ngSwitch]="game.gameStatus">
+                    <span *ngSwitchCase="'OPEN'" [ngSwitch]="game.hasPoolPlayStarted">
+                        <span *ngSwitchCase="true">{{ 'core.poolPlay' | i18n }}</span>
+                        <span *ngSwitchCase="false">{{ 'game.upcoming' | i18n }}</span>
+                    </span>
+                    <span *ngSwitchCase="'INPLAY'">
+                        {{'core.bracketPlay' | i18n}}
+                    </span>
+                    <span *ngSwitchCase="'CLOSED'">
+                        {{'game.over' | i18n}}
+                    </span>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

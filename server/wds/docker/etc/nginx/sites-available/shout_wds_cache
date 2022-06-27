@@ -1,0 +1,123 @@
+proxy_cache_path       /var/cache/nginx/cache levels=1:2 keys_zone=cache_zone:100m max_size=10000m;
+proxy_temp_path        /var/cache/nginx/tmp 1 2;
+
+lua_code_cache on;
+
+# the 'set' directive doesn't work in http context so this is a workaround
+map $host $shout_lua_path { default '/etc/nginx/sites-available/shout_lua'; }
+
+upstream origin_server {
+    #server ms1-wds-origin1.shoutgameplay.com;
+    server 10.0.0.15;
+    keepalive 15000;
+}
+
+server {
+    listen 81 default_server;
+    listen [::]:81 default_server ipv6only=on;
+
+    location ~ /PURGE(/.*) {
+        proxy_cache_purge  cache_zone $1;
+    }
+
+    location ~ /PRECACHE/(.*) {
+        set $op_uri_path '$1';
+        content_by_lua_file  '$shout_lua_path/precache.lua';
+    }
+
+    location ~ /GET/(.*) {
+        proxy_pass 'http://127.0.0.1/$1';
+    }
+
+    location / {
+        deny all;
+    }
+}
+
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server ipv6only=on;
+
+    listen 443 default_server ssl;
+    listen [::]:443 default_server ssl ipv6only=on;
+
+    ssl_certificate /etc/ssl/certs/cluster_domain_ssl_cert.crt;
+    ssl_certificate_key /etc/ssl/private/cluster_domain_ssl_key.pem;
+
+    location ~* ^/(.*) {
+        set $origin_host      'wds-origin1.shout.tv';
+        set $url_full         '$1';
+
+        gzip on;
+        gzip_types text/plain text/html application/json;
+
+        proxy_http_version     1.1;
+        proxy_set_header       Host $origin_host;
+        proxy_set_header       Authorization '';
+        proxy_set_header       Connection "";
+        #proxy_hide_header      x-amz-id-2;
+        #proxy_hide_header      x-amz-request-id;
+        proxy_hide_header      Set-Cookie;
+        proxy_hide_header      Access-Control-Allow-Origin;
+        proxy_hide_header      Access-Control-Allow-Methods;
+        proxy_hide_header      Access-Control-Max-Age;
+        proxy_hide_header      Access-Control-Allow-Credentials;
+        proxy_hide_header      Connection;
+        proxy_hide_header      Keep-Alive;
+        proxy_ignore_headers   "Set-Cookie" "Cache-Control" "Expires";
+        proxy_buffering        on;
+        proxy_buffers          32 4k;
+        #proxy_intercept_errors on;
+
+        proxy_cache_key        "$uri";
+        proxy_cache_lock       on;
+        proxy_cache_use_stale  error timeout updating http_500;
+        #proxy_cache_valid      404 1s;
+        proxy_cache_valid      any 1s;
+        proxy_cache_revalidate on;
+        proxy_cache            cache_zone;
+
+        resolver               172.16.0.23 valid=300s;
+        resolver_timeout       10s;
+
+        #proxy_pass             http://$origin_host/$url_full;
+        proxy_pass             http://origin_server/$url_full;
+        if_modified_since      before;
+
+        # Handle CORS requests - see http://enable-cors.org/server_nginx.html for detailed comments
+        set $cors "";
+        if ($http_origin ~* (https?://.*?\.shout\.tv(:[0-9]+)?)) {
+            set $cors "true";
+        }
+        if ($http_origin ~* (ms-appx-web://.*)) {
+            set $cors "true";
+        }
+        if ($request_method = 'OPTIONS') {
+            set $cors "${cors}options";  
+        }
+        if ($request_method = 'GET') {
+            set $cors "${cors}get";  
+        }
+        if ($request_method = 'POST') {
+            set $cors "${cors}post";
+        }
+        if ($cors = "trueget") {
+            more_set_headers "Access-Control-Allow-Origin: $http_origin";
+            more_set_headers "Access-Control-Allow-Credentials: true";
+        }
+        if ($cors = "truepost") {
+            more_set_headers "Access-Control-Allow-Origin: $http_origin";
+            more_set_headers "Access-Control-Allow-Credentials: true";
+        }
+        if ($cors = "trueoptions") {
+            add_header 'Access-Control-Allow-Origin' "$http_origin";
+            add_header 'Access-Control-Allow-Credentials' 'true';
+            add_header 'Access-Control-Max-Age' 1728000;
+            add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+            add_header 'Access-Control-Allow-Headers' 'Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Control,X-Mx-ReqToken,Keep-Alive,X-Requested-With,If-Modified-Since';
+            add_header 'Content-Length' 0;
+            add_header 'Content-Type' 'text/plain charset=UTF-8';
+            return 200;
+        }
+    }
+}

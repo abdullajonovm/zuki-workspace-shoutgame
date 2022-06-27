@@ -1,0 +1,128 @@
+<div *ngIf="state === 'NotEnoughMoney'">
+    {{'payment.notEnough' | i18n}}
+    <div>
+        <button (click)="dialog?.close(); onClose.emit()" class="light">{{ (dialog ? 'core.close' : 'core.back') | i18n
+            }}
+        </button>
+        <button (click)="goToState('Add')">{{ 'payment.addMoney' | i18n }}</button>
+    </div>
+
+</div>
+<div *ngIf="state === 'Default'">
+    <p class="purse">You have <br> ${{ subscriber.wallet | number }} <br> in your wallet.</p>
+    <button class="action" (click)="goToState('Add')">Add Money</button>
+    <button class="action" (click)="goToState('Withdraw')">Withdraw Money</button>
+    <button class="action" (click)="goToState('Coupon')">Redeem Coupon Code</button>
+
+    <button (click)="dialog?.close(); onClose.emit()" class="light">{{ (dialog ? 'core.close' : 'core.back') | i18n }}
+    </button>
+</div>
+<div *ngIf="state === 'Add'">
+    <vx-stepper [vertical]="true" [linear]="true">
+        <vx-step label="Choose Amount" [stepControl]="itemSelected">
+            <p class="mTop0">How much would you like to add?</p>
+            <div class="loader">
+                <div class="icon-spinner" *ngIf="!venueItems.length"></div>
+            </div>
+            <vx-radio-group [(ngModel)]="selectedItem" #itemSelected="ngModel" required>
+                <vx-radio-button *ngFor="let item of venueItems" [value]="item">{{item.description}}</vx-radio-button>
+            </vx-radio-group>
+            <button vxStepperNext="" [disabled]="itemSelected.invalid">Next</button>
+            <button type="button" (click)="goBack()" class="light">{{ 'core.back' |i18n }}</button>
+        </vx-step>
+        <vx-step label="Choose Payment Method" [stepControl]="PM">
+            <vx-radio-group [(ngModel)]="selectedPaymentMethod" #PM="ngModel" required>
+                <vx-radio-button *ngFor="let card of paymentService.customerProfile?.creditCardsOnFile" [value]="card">
+                    Existing Card: {{card.number}}
+                </vx-radio-button>
+                <vx-radio-button [value]="echeck">Use E-Check</vx-radio-button>
+                <vx-radio-button [value]="card">
+                    Use {{paymentService.customerProfile?.creditCardsOnFile.length ? 'New'  : ''}} Credit Card
+                </vx-radio-button>
+            </vx-radio-group>
+
+            <button type="button" vxStepperNext [disabled]="PM.invalid">Next</button>
+            <button type="button" vxStepperBack="" class="light">{{ 'core.back' |i18n }}</button>
+        </vx-step>
+        <vx-step label="Fill out Credit Card" *ngIf="selectedPaymentMethod === card" [stepControl]="cardForm.form">
+            <sh-card #cardForm [card]="card" (saveCardChange)="saveCard = $event"></sh-card>
+            <button type="button" vxStepperNext [disabled]="cardForm.form.invalid">Next</button>
+            <button type="button" vxStepperBack="" class="light">{{ 'core.back' |i18n }}</button>
+        </vx-step>
+        <vx-step label="Fill out E-Check" *ngIf="selectedPaymentMethod === echeck" [stepControl]="stepEcheck.form">
+            <sh-echeck #stepEcheck [echeck]="echeck" [bank]="bank" [address]="address"></sh-echeck>
+            <button type="button" vxStepperNext [disabled]="stepEcheck.form.invalid">Next</button>
+            <button type="button" vxStepperBack class="light">{{ 'core.back' |i18n }}</button>
+        </vx-step>
+        <vx-step label="Review Order">
+            <p class="mTop0"><b>Order Amount:</b> {{selectedItem?.description}}</p>
+            <div [ngSwitch]="selectedPaymentMethod">
+                <div *ngSwitchCase="echeck">
+                    <p><b>{{bank.checkingAccountName}}</b> {{echeck.phone}}</p>
+                    <p>{{address.addr1}},
+                        {{address.city}},
+                        {{address.state}} {{address.zip}}</p>
+                    <p><b>Bank: </b> {{bank.bankName}}</p>
+                    <p><b>Bank Routing Number: </b> {{bank.routingNumber}}</p>
+                    <p><b>Account Number: </b> {{bank.accountNumber}}</p>
+                </div>
+                <div *ngSwitchDefault>
+                    <p><b>Using Card:</b> {{maskCard(selectedPaymentMethod)}}</p>
+                </div>
+            </div>
+
+            <button (click)="purchase()">Buy</button>
+            <button type="button" vxStepperBack class="light">{{ 'core.back' |i18n }}</button>
+        </vx-step>
+    </vx-stepper>
+</div>
+<div *ngIf="state === 'Withdraw'">
+    <vx-stepper [linear]="true" [vertical]="true">
+        <vx-step label="Select Withdraw Amount" [stepControl]="wModel">
+            <div class="flex withdrawInfo">
+                <div>
+                    <div>${{subscriber.wallet}}</div>
+                    Wallet
+                </div>
+                <div>
+                    <div>${{subscriber.availableWallet}}</div>
+                    My Cash <span class="icon-question" (click)="explainWithdraw()"></span>
+                </div>
+            </div>
+            <div class="cardLine"></div>
+            <p>How much would you like to withdraw?</p>
+            <input type="text" name="withdraw" class="m0" ngModel [textMask]="{mask: moneyMask}"
+                   (ngModelChange)="checkWithdraw(withdraw, wModel)" #withdraw #wModel="ngModel" required
+                   placeholder="Withdraw Amount">
+            <br class="clear">
+            <button vxStepperNext="" [disabled]="wModel.invalid">Next</button>
+            <button type="button" (click)="goBack()" class="light">{{ 'core.back' |i18n }}</button>
+        </vx-step>
+        <vx-step label="Fill out E-Check Form" [stepControl]="withdrawEcheck.form">
+            <sh-echeck #withdrawEcheck [echeck]="echeck" [bank]="bank" [address]="address" [withdrawing]="true"></sh-echeck>
+            <button type="button" vxStepperNext [disabled]="withdrawEcheck.form.invalid">Next</button>
+            <button type="button" vxStepperBack class="light">{{ 'core.back' |i18n }}</button>
+        </vx-step>
+        <vx-step label="Confirm Withdrawal">
+            <p><b>Withdraw Amount: </b> {{withdrawAmount | currency:'USD'}}</p>
+            <p><b>{{bank.checkingAccountName}}</b> {{echeck.phone}}</p>
+            <p>{{address.addr1}},
+                {{address.city}},
+                {{address.state}} {{address.zip}}</p>
+            <p><b>Bank: </b> {{bank.bankName}}</p>
+            <p><b>Bank Routing Number: </b> {{bank.routingNumber}}</p>
+            <p><b>Account Number: </b> {{bank.accountNumber}}</p>
+            <button type="button" (click)="withdrawMoney()">Confirm Withdrawal</button>
+            <button type="button" vxStepperBack class="light">{{ 'core.back' |i18n }}</button>
+        </vx-step>
+    </vx-stepper>
+</div>
+<div *ngIf="state === 'Coupon'">
+    <form>
+        <input type="text" placeholder="Coupon Code" required #code="ngModel" [(ngModel)]="couponCode" name="couponCode">
+        <div>
+            <button type="button" (click)="goBack()" class="light">{{ 'core.back' |i18n }}</button>
+            <button (click)="redeemCouponCode()" [disabled]="code.invalid">Redeem Code</button>
+        </div>
+    </form>
+</div>

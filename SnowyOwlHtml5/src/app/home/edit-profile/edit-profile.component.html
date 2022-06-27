@@ -1,0 +1,123 @@
+<sh-page [noRefresh]="true">
+    <div shHeaderLeft (click)="goToHome()" *ngIf="deviceService.isMobile">
+        <span class="icon-chevron-left"></span>
+
+        <span *ngIf="navigationService.lastNavigation">Back</span>
+        <span *ngIf="!navigationService.lastNavigation">Home</span>
+    </div>
+    <div shHeaderRight>
+        ${{ subscriberService.subscriber?.wallet | number }}
+    </div>
+    <div shNavItem routerLink="/home/all" *ngIf="!deviceService.isMobile">
+        {{'home.allGames'|i18n}}
+    </div>
+    <div shNavItem routerLink="/home/my" *ngIf="!deviceService.isMobile">
+        {{'home.myGames'|i18n}}
+    </div>
+    <div shNavItem routerLink="/home/me" *ngIf="!deviceService.isMobile">
+        {{'home.me'|i18n}}
+    </div>
+
+    <div shPageBody [ngSwitch]="state">
+        <ng-template ngSwitchCase="DEFAULT">
+            <div class="top">
+                <div class="imgWrap" (click)="state = 'IMAGE'">
+                    <img [default]="subscriber.photoUrl" alt=""
+                         src="./assets/profile.jpg">
+                    <div class="icon-pencil"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="item" (click)="state = 'EMAIL'">
+                    <div>Email</div>
+                    {{subscriber.email}}
+                    <span class="icon-chevron-left"></span>
+                </div>
+                <div class="item" (click)="state = 'NAME'">
+                    <div>Username</div>
+                    {{subscriber.nickname}}
+                    <span class="icon-chevron-left"></span>
+                </div>
+                <div class="item" (click)="state = 'NOTIFICATION'">
+                    <div>Notification Preference</div>
+                    <span [ngSwitch]="subscriber.roundNotificationPref">
+                            <span *ngSwitchCase="'SMS'">You will be notified by text message using this number: {{ subscriber.phone | phone }}</span>
+                            <span *ngSwitchCase="'EMAIL'">You will be notified by email.</span>
+                            <span *ngSwitchCase="'NONE'">You are NOT receiving notifications.</span>
+                            <span *ngSwitchDefault>None set</span>
+                        </span>
+                    <span class="icon-chevron-left"></span>
+                </div>
+                <div class="item" (click)="state = 'PAYMENT'">
+                    <div>Wallet</div>
+                    <b class="textAccent">${{ subscriber.wallet | number }}</b>
+                    <span class="icon-chevron-left"></span>
+                </div>
+            </div>
+
+            <button type="button" class="accent" (click)="subscriberService.logout()">Logout {{ subscriber.nickname }}
+            </button>
+
+            <div class="links">
+                <a routerLink="/termsAndConditions">Terms and Conditions</a>
+                <a routerLink="/privacy">Privacy</a>
+            </div>
+        </ng-template>
+        <ng-template ngSwitchCase="EMAIL">
+            <form class="card edit" #form="ngForm" (submit)="$event.preventDefault()">
+                <h1>Change Email</h1>
+                <input type="email" placeholder="Email" name="email" [(ngModel)]="email" required email>
+
+                <button type="button" [disabled]="form.invalid" (click)="saveEmail()">Save</button>
+                <button type="button" (click)="state = 'DEFAULT'">Cancel</button>
+                <div class="clear"></div>
+            </form>
+        </ng-template>
+        <ng-template ngSwitchCase="NAME">
+            <form class="card edit" #form="ngForm" (submit)="$event.preventDefault()">
+                <h1>Change Username</h1>
+                <input placeholder="Username" name="username" [(ngModel)]="username" required>
+
+                <button type="button" [disabled]="form.invalid" (click)="saveUsername()">Save</button>
+                <button type="button" (click)="state = 'DEFAULT'">Cancel</button>
+                <div class="clear"></div>
+            </form>
+        </ng-template>
+
+        <ng-template ngSwitchCase="NOTIFICATION">
+
+            <div class="card edit">
+                <sh-notification (onFinish)="state = 'DEFAULT'"></sh-notification>
+                <div class="clear"></div>
+            </div>
+        </ng-template>
+        <ng-template ngSwitchCase="IMAGE">
+            <div class="top">
+                <div class="imgWrap">
+                    <img [default]="image || subscriber.photoUrl" alt=""
+                         src="./assets/profile.jpg">
+                </div>
+            </div>
+
+            <form class="card edit" (submit)="$event.preventDefault()">
+                <h1>Change Image</h1>
+                <input type="file" name="myImage" accept="image/*" hidden (change)="handleFile(input.files[0])" #input/>
+                <button type="button" (click)="input.click()" class="centered">Upload Image</button>
+
+                <button type="button" [disabled]="!input.files.length" (click)="saveImage()">Save</button>
+                <button type="button" (click)="state = 'DEFAULT'">Cancel</button>
+                <div class="clear"></div>
+            </form>
+        </ng-template>
+
+        <ng-template ngSwitchCase="PAYMENT">
+            <div class="card edit">
+                <sh-payment (onClose)="state = 'DEFAULT'">
+
+                </sh-payment>
+            </div>
+        </ng-template>
+
+    </div>
+</sh-page>

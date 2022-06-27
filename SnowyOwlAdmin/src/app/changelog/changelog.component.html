@@ -1,0 +1,10 @@
+<h2 vxDialogTitle="">Changelog</h2>
+<div vxDialogContent="">
+    <div *ngFor="let version of versions; let first = first" [class.first]="first">
+        <h4>Version {{version.number}}</h4>
+        <ul>
+            <li *ngFor="let change of version.changes">{{change}}</li>
+        </ul>
+    </div>
+</div>
+<button vxDialogActions vx-button (click)="dialog.close()">Close</button>
